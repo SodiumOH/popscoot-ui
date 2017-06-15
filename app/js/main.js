@@ -423,7 +423,7 @@ angular.module('app.payment.ctrl', ['app.service'])
 
 .controller('PaymentCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is PaymentCtrl');
-	$scope.url = "http://test.popscoot.com/popscoot/service/payments"+$routeParams.id;
+	$scope.url = "http://test.popscoot.com/popscoot/service/paymesnts"+$routeParams.id;
 	$scope.payment;
 
 	httpService.httpGet($scope.url, 'GET_PAYMENT');
