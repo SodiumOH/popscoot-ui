@@ -1,0 +1,15 @@
+<div>
+	<div class="col-md-10">
+      
+
+      <ul class="promotions">
+        <li ng-repeat="promotion in promotions | orderBy: promotion.account.username"
+            class="thumbnail promotion-list-item">
+          <p>
+          <md-button ng-href="{{path+promotion.promotionId}}">{{promotion.name}}:{{promotion.promotionId}}</md-button>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+</div>

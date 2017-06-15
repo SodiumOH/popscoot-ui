@@ -1,0 +1,19 @@
+<div>
+	<div class="col-md-10">
+      
+
+      <ul class="accounts">
+        <li ng-repeat="account in accounts"
+            class="thumbnail account-list-item">
+          <p>
+          <md-button ng-href="{{path+account.accountId}}">{{account.username}}:{{account.accountId}}</md-button>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+
+	
+
+</div>
+    

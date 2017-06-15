@@ -1,0 +1,15 @@
+<div>
+	<div class="col-md-10">
+      
+
+      <ul class="banks">
+        <li ng-repeat="bank in banks | orderBy: bank.account.username"
+            class="thumbnail bank-list-item">
+          <p>
+          <md-button ng-href="{{path+bank.bankId}}">{{bank.account.username}}:{{bank.bankId}}</md-button>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div>
+	<div class="col-md-10">
+      <!--Body content-->
+
+      <ul class="enquiries">
+        <li ng-repeat="enquiry in enquiries"
+            class="thumbnail enquiry-list-item">
+          <p>
+          <md-button ng-href="{{path+enquiry.enquiryId}}">{{enquiry.account.username}}:{{enquiry.enquiryId}}</md-button>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+
+</div>

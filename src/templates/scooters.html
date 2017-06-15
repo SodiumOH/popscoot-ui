@@ -1,0 +1,16 @@
+<div>
+	
+	<div class="col-md-10">
+      <!--Body content-->
+
+      <ul class="scooterss">
+        <li ng-repeat="scooter in scooters"
+            class="thumbnail account-list-item">
+          <p>
+          <md-button ng-href="{{path+scooter.scooterId}}">{{scooter.name}}:{{scooter.scooterId}}</md-button>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+</div>

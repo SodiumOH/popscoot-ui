@@ -1,0 +1,43 @@
+{
+  "name": "popscoot",
+  "version": "1.0.0",
+  "description": "popscoot front end",
+  "main": "index.js",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-aria": "^1.6.4",
+    "angular-dynamic-locale": "^0.1.32",
+    "angular-i18n": "^1.6.4",
+    "angular-material": "^1.1.4",
+    "angular-route": "^1.6.4",
+    "angular-translate": "^2.15.1",
+    "angular-translate-handler-log": "^2.15.1",
+    "angular-translate-loader-static-files": "^2.15.1",
+    "angular-translate-storage-local": "^2.15.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
+    "roboto-fontface": "^0.7.0"
+  },
+  "devDependencies": {
+    "angular-translate": "^2.15.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^3.2.0",
+    "gulp-inject": "^4.2.0",
+    "gulp-remove-html-comments": "^1.0.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-webserver": "^0.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "popscoot"
+  ],
+  "author": "Bie Yaqing",
+  "license": "ISC"
+}

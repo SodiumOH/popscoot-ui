@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>POPSCOOT</title>
+	
+	<link rel="stylesheet" href="/app/lib/roboto-fontface/css/roboto/roboto-fontface.css">
+	<link rel="stylesheet" href="/app/lib/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/app/lib/angular-material/angular-material.min.css">
+	<link rel="stylesheet" href="/app/css/style.css">
+	
+</head>
+<body>
+<div ng-app="POPSCOOT">
+	<md-content class="md-padding" ng-controller="RootCtrl">
+		<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+			<md-nav-item ng-repeat="item in menu" md-nav-click="goto(item.path)" name="{{item.path}}" ng-click="goPage(item.path)">
+			{{item.name}}
+			</md-nav-item>
+		</md-nav-bar>
+		<ng-view></ng-view>
+	</md-content>
+</div>
+	
+	<script src="/app/lib/moment/min/moment.min.js"></script>
+	<script src="/app/lib/angular/angular.min.js"></script>
+	<script src="/app/lib/angular-route/angular-route.min.js"></script>
+	<script src="/app/lib/angular-aria/angular-aria.min.js"></script>
+	<script src="/app/lib/angular-animate/angular-animate.min.js"></script>
+	<script src="/app/lib/angular-material/angular-material.min.js"></script>
+	<script src="/app/js/main.js"></script>
+	
+</body>
+</html>

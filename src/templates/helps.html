@@ -1,0 +1,15 @@
+<div>
+	<div class="col-md-10">
+      <!--Body content-->
+
+      <ul class="helps">
+        <li ng-repeat="help in helps"
+            class="thumbnail help-list-item">
+          <p>
+          <md-button ng-href="{{path+help.helpId}}">{{help.title}}:{{help.helpId}}</md-button>
+          </p>
+        </li>
+      </ul>
+
+    </div>
+</div>
