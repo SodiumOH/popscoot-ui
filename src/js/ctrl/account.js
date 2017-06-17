@@ -3,6 +3,7 @@ angular.module('app.account.ctrl', ['app.service'])
 .controller('AccountCtrl', function($routeParams, $scope, httpService) {
 	console.log('this is AccountCtrl');
 	$scope.paths = {
+		account: "#/accounts/",
 		booking: "#/bookings/0",
 		promotion: "#/promotions/0",
 		bank: "#/banks/0",
@@ -13,6 +14,10 @@ angular.module('app.account.ctrl', ['app.service'])
 	//console.log($scope.url);
 	httpService.httpGet($scope.url, 'GET_ACCOUNT');
 	
+	
+	$scope.updateAccount = function(){
+		console.log($scope.account);
+	}
 
 	$scope.$on("GET_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {

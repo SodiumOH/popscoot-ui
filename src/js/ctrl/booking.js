@@ -26,8 +26,16 @@ angular.module('app.booking.ctrl', ['app.service'])
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-	$scope.url = "http://test.popscoot.com/popscoot/service/bookings"
-	$scope.bookings = [];
+	$scope.url = "http://test.popscoot.com/popscoot/service"+$location.path();
+	console.log($scope.url);
+	$scope.bookings=[];
+	/*if ($location.path().split("/")[1] == "accounts") {
+		$scope.bookings = data.bookings;
+	} else {
+
+	}*/
+	
+
 
 	httpService.httpGet($scope.url, 'GET_BOOKINGS');
 

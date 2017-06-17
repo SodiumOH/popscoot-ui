@@ -3,7 +3,7 @@
       <!--Body content-->
 
       <ul class="bookings">
-        <li ng-repeat="booking in bookings | orderBy: booking.account.username"
+        <li ng-repeat="booking in bookings"
             class="thumbnail booking-list-item">
           <p>
           <md-button ng-href="{{path+booking.bookingId}}">{{booking.account.username}}:{{booking.bookingId}}</md-button>

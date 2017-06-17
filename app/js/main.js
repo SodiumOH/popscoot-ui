@@ -189,6 +189,7 @@ angular.module('app.account.ctrl', ['app.service'])
 .controller('AccountCtrl', function($routeParams, $scope, httpService) {
 	console.log('this is AccountCtrl');
 	$scope.paths = {
+		account: "#/accounts/",
 		booking: "#/bookings/0",
 		promotion: "#/promotions/0",
 		bank: "#/banks/0",
@@ -199,6 +200,10 @@ angular.module('app.account.ctrl', ['app.service'])
 	//console.log($scope.url);
 	httpService.httpGet($scope.url, 'GET_ACCOUNT');
 	
+	
+	$scope.updateAccount = function(){
+		console.log($scope.account);
+	}
 
 	$scope.$on("GET_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
@@ -311,8 +316,16 @@ angular.module('app.booking.ctrl', ['app.service'])
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-	$scope.url = "http://test.popscoot.com/popscoot/service/bookings"
-	$scope.bookings = [];
+	$scope.url = "http://test.popscoot.com/popscoot/service"+$location.path();
+	console.log($scope.url);
+	$scope.bookings=[];
+	/*if ($location.path().split("/")[1] == "accounts") {
+		$scope.bookings = data.bookings;
+	} else {
+
+	}*/
+	
+
 
 	httpService.httpGet($scope.url, 'GET_BOOKINGS');
 
