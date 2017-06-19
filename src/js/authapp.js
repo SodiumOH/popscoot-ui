@@ -1,5 +1,4 @@
-angular.module('auth', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
-])
+angular.module('auth', ['ngRoute', 'ngMaterial', 'app.services'])
 
 .run(function($rootScope) {
 	console.log("welcome to popscoot");
@@ -11,16 +10,37 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filters',
 	$routeProvider
 
 	.when('/login', {
-		templateUrl: "templates/login.html",
+		templateUrl: "templates/auth/login.html",
 		controller: "LoginCtrl"
 	})
-	.when('/verificationCode', {
-		templateUrl: "templates/verificationCode.html",
-		controller: "VerificationCodeCtrl"
+	.when('/forgetPassword', {
+		templateUrl: "templates/auth/forgetPassword.html",
+		controller: "ForgetPasswordCtrl"
 	})
-
+	.when('/changePassword', {
+		templateUrl: "templates/auth/changePassword.html",
+		controller: "ChangePasswordCtrl"
+	})
+	.when('/register', {
+		templateUrl: "templates/auth/register.html",
+		controller: "RegisterCtrl"
+	})
 	.otherwise({
 		redirectTo: '/login'
 	});
 })
 
+/*.controller('LoginCtrl', function($scope, httpService, configuration){
+	var loginForm = {
+		username: $scope.username,
+		password: $scope.password
+	}
+	$scope.url = configuration.domain()+"/service/auth"
+	function login (){
+		httpService.httpPost($scope.url, loginForm, "LOGIN")
+	}
+	$scope.$on("LOGIN")
+
+})
+
+*/

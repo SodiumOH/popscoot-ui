@@ -1,3 +1,18 @@
-<div>
-	<p>booking detail page</p>
+<div layout="row" layout-wrap layout-padding>
+	<div flex="100">
+		
+		<HEAD>booking</HEAD>
+		{{booking}}
+	</div>
+	<div flex="100">
+		
+		<HEAD>scooter</HEAD>
+		<md-button ng-href="#/scooters/{{booking.scooter.scooterId}}">{{booking.scooter.scooterId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>account</HEAD>
+		<md-button ng-href="#/accounts/{{booking.account.accountId}}">{{booking.account.accountId}}</md-button>
+	</div>
+	</div>
 </div>

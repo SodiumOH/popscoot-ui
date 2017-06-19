@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
+angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
 ])
 
 .run(function($rootScope) {
@@ -16,7 +16,7 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filte
 	})
 	.when('/accounts/:id', {
 		templateUrl: "templates/account.html",
-		controller: "AccountCtrl"
+		controller: "AccountCtrl as vm"
 	})
 
 	.when('/banks', {

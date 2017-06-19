@@ -1,12 +1,16 @@
-angular.module('app.booking.ctrl', ['app.service'])
+angular.module('app.booking.ctrl', [])
 
-.controller('BookingCtrl', function($scope, $routeParams, httpService) {
+.controller('BookingCtrl', function($scope, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
-	$scope.booking;
-	$scope.url = "http://test.popscoot.com/popscoot/service/bookings/"+$routeParams.id;
+	$scope.booking = {};
+	$scope.url = {
+		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
+	}
 	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_BOOKING');
-	
+	function getBooking (){
+		httpService.httpGet($scope.url.booking, 'GET_BOOKING');
+	}
+
 
 	$scope.$on("GET_BOOKING", function(event, data){
 		if(data.data.data.status == 1) {
@@ -16,6 +20,7 @@ angular.module('app.booking.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getBooking();
 
 })
 

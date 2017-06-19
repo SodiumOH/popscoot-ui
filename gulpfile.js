@@ -82,7 +82,11 @@ var JAVASCRIPTS = [
 	SRC + '/js/filters.js',
 	SRC + '/js/services.js',
 	SRC + '/js/dao.js',
-	SRC + '/js/languages.js'
+	SRC + '/js/languages.js',
+	SRC + '/js/authCtrl/changePassword.js',
+	SRC + '/js/authCtrl/forgetPassword.js',
+	SRC + '/js/authCtrl/login.js',
+	SRC + '/js/authCtrl/register.js'
 ];
 
 gulp.task('build-js', function() {
@@ -107,7 +111,7 @@ var INJECTRES = [
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {
 	console.log(INJECTRES)
-	return gulp.src(SRC + '/index.html', {
+	return gulp.src(SRC + '/auth.html', {
 		base: SRC
 	})
 	.pipe(inject(gulp.src(INJECTRES, {

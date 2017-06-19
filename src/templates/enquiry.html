@@ -1,3 +1,11 @@
-<div>
-	<p>this is enquiry details page</p>
+<div layout="row" layout-wrap layout-padding>
+	<div flex="100">
+		<!-- profile -->
+		<HEAD>enquiry</HEAD>
+		{{enquiry}}
+	</div>
+	<div flex="100">
+		<head>account</head>
+		<md-button ng-href="#/accounts/{{enquiry.account.accountId}}">{{enquiry.account.accountId}}</md-button>
+	</div>
 </div>

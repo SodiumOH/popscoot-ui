@@ -72,6 +72,14 @@ angular.module('app.service', [])
             });
         }
     }
+})
+
+.factory('configuration', function($rootScope, $http){
+    return {
+        domain: function() {
+            return "http://test.popscoot.com/popscoot/";
+        }
+    }
 });
  
  /*.service('LocaleService', function ($translate, LOCALES, $rootScope, tmhDynamicLocale) {

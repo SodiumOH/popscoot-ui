@@ -1,4 +1,6 @@
   
+<div>
+<md-button ng-href="{{path}}0">create new account</md-button>
 <md-card ng-repeat="account in accounts" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
         <md-card-title>
           <md-card-title-text>
@@ -16,7 +18,7 @@
           </md-card-title-media>
         </md-card-title>
         <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-href="{{paths.account+account.accountId}}/bookings">booking</md-button>
+        <md-button ng-href="{{paths.booking}}">booking</md-button>
         <md-button ng-href="{{paths.promotion}}">promotion</md-button>
         <md-button ng-href="{{paths.bank}}">bank</md-button>
         <md-button ng-href="{{paths.enquiry}}">enquiry</md-button>

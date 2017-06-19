@@ -6,7 +6,7 @@
         <li ng-repeat="payment in payments"
             class="thumbnail payment-list-item">
           <p>
-          <md-button ng-href="{{path+payment.paymentId}}">{{payment.username}}:{{payment.paymentId}}</md-button>
+          <md-button ng-href="{{path+payment.paymentId}}">{{payment.account.username}}:{{payment.paymentId}}</md-button>
           </p>
         </li>
       </ul>

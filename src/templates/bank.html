@@ -1,4 +1,12 @@
-<div>
-	<p>this is bank details page</p>
-	
+<div layout="row" layout-wrap layout-padding>
+	<div flex="100">
+		<!-- profile -->
+		<HEAD>bank</HEAD>
+		{{bank}}
+	</div>
+	<div flex="100">
+		<!-- profile -->
+		<HEAD>account</HEAD>
+		<md-button ng-href="#/accounts/{{bank.account.accountId}}">{{bank.account.accountId}}</md-button>
+	</div>
 </div>

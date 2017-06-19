@@ -1,3 +1,17 @@
-<div>
-	<p>this is payment details page</p>
+<div layout="row" layout-wrap layout-padding>
+	<div flex="100">
+		
+		<HEAD>payment</HEAD>
+		{{payment}}
+	</div>
+	<div flex="100">
+		
+		<HEAD>account</HEAD>
+		<md-button ng-href="#/accounts/{{payment.account.accountId}}">{{payment.account.accountId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>transactions</HEAD>
+		<p ng-repeat="item in transactions">{{item}}</p>
+	</div>
 </div>

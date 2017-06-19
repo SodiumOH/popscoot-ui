@@ -1,13 +1,16 @@
-angular.module('app.scooter.ctrl', ['app.service'])
+angular.module('app.scooter.ctrl', [])
 
-.controller('ScooterCtrl', function($scope, $routeParams, httpService) {
+.controller('ScooterCtrl', function($scope, $routeParams, httpService, configuration) {
 	console.log('this is ScooterCtrl')
-	$scope.scooter;
-	$scope.url = "http://test.popscoot.com/popscoot/service/scooters/"+$routeParams.id;
-	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_SCOOTER');
-	
-
+	$scope.scooter = {};
+	$scope.bookings = [];
+	$scope.url = {
+		scooter: configuration.domain()+"/service/scooters/"+$routeParams.id,
+		bookings: configuration.domain()+"/service/scooters/"+$routeParams.id+"/bookings"
+	}
+	function getScooter (){
+		httpService.httpGet($scope.url.scooter, 'GET_SCOOTER');		
+	};
 	$scope.$on("GET_SCOOTER", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -16,6 +19,20 @@ angular.module('app.scooter.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	function getBookings (){
+		httpService.httpGet($scope.url.bookings, 'GET_BOOKINGS');		
+	}
+
+	$scope.$on("GET_BOOKINGS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.bookings = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+	getScooter();
+	getBookings();
 })
 
 

@@ -1,13 +1,15 @@
-angular.module('app.enquiry.ctrl', ['app.service'])
+angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiryCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is EnquiryCtrl');
 	$scope.enquiry;
-	$scope.url = "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id;
+	$scope.url = {
+		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
+	}
 	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_ENQUIRY');
-	
-
+	function getEnquiry(){
+		httpService.httpGet($scope.url.enquiry, 'GET_ENQUIRY');		
+	};
 	$scope.$on("GET_ENQUIRY", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -16,6 +18,7 @@ angular.module('app.enquiry.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getEnquiry();
 })
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {

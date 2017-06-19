@@ -1,4 +1,4 @@
-angular.module('auth.login.ctrl', ['app.service'])
+angular.module('auth.login.ctrl', [])
 
 .controller('LoginCtrl', function() {
 	console.log('login')

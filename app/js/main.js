@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
+angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
 ])
 
 .run(function($rootScope) {
@@ -16,7 +16,7 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filte
 	})
 	.when('/accounts/:id', {
 		templateUrl: "templates/account.html",
-		controller: "AccountCtrl"
+		controller: "AccountCtrl as vm"
 	})
 
 	.when('/banks', {
@@ -141,7 +141,7 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.root.ctrl', 'app.filte
             }
         };
     });*/
-angular.module('app.root.ctrl', ['app.filters'])
+angular.module('app.root.ctrl', [])
 
 .controller('RootCtrl', function($rootScope, $scope, $location) {
 	$rootScope.language = LANG_EN;
@@ -184,25 +184,37 @@ angular.module('app.root.ctrl', ['app.filters'])
 	};
 })
 
-angular.module('app.account.ctrl', ['app.service'])
+angular.module('app.account.ctrl', [])
 
-.controller('AccountCtrl', function($routeParams, $scope, httpService) {
+.controller('AccountCtrl', function($routeParams, $scope, httpService, configuration) {
 	console.log('this is AccountCtrl');
-	$scope.paths = {
-		account: "#/accounts/",
-		booking: "#/bookings/0",
-		promotion: "#/promotions/0",
-		bank: "#/banks/0",
-		enquiry: "#/enquiries/0"
+
+	var accountId = $routeParams.id;
+	var domain = configuration.domain();
+	$scope.url = {
+		account: domain + "/service/accounts/" + accountId,
+		bookings: domain + "/service/accounts/" + accountId + "/bookings",
+		banks: domain + "/service/accounts/" + accountId + "/banks",
+		enquiries: domain + "/service/accounts/" + accountId + "/enquiries",
+		promotions: domain + "/service/accounts/" + accountId + "/promotions",
+		shareLogs: domain + "/service/accounts/" + accountId + "/shareLogs",
+		pushTokens: domain + "/service/accounts/" + accountId + "/pushTokens",
+		transactions: domain + "/service/accounts/" + accountId + "/transactions",
+		payments: domain + "/service/accounts/" + accountId + "/payments"
 	};
-	$scope.account;
-	$scope.url = "http://test.popscoot.com/popscoot/service/accounts/"+$routeParams.id;
-	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_ACCOUNT');
-	
-	
-	$scope.updateAccount = function(){
-		console.log($scope.account);
+
+	$scope.account = {};
+	$scope.bookings = [];
+	$scope.banks = [];
+	$scope.transactions = [];
+	$scope.promotions = [];
+	$scope.shareLogs = [];
+	$scope.payments = [];
+	$scope.pushTokens = [];
+	$scope.enquiries = [];
+
+	function getAccount() {
+		httpService.httpGet($scope.url.account, 'GET_ACCOUNT');
 	}
 
 	$scope.$on("GET_ACCOUNT", function(event, data){
@@ -213,6 +225,124 @@ angular.module('app.account.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+
+	function getBookings() {
+		httpService.httpGet($scope.url.bookings, 'GET_BOOKINGS');
+	}
+
+	$scope.$on("GET_BOOKINGS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.bookings = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getBanks() {
+		httpService.httpGet($scope.url.banks, 'GET_BANKS');
+	}
+
+	$scope.$on("GET_BANKS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.banks = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getPromotions() {
+		httpService.httpGet($scope.url.promotions, 'GET_PROMOTIONS');
+	}
+
+	$scope.$on("GET_PROMOTIONS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log("test", data);
+			console.log(data.data.data.data.appliedPromotions);
+			$scope.promotions = data.data.data.data.appliedPromotions;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getShareLogs() {
+		httpService.httpGet($scope.url.shareLogs, 'GET_SHARELOGS');
+	}
+
+	$scope.$on("GET_SHARELOGS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.shareLogs = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getTransactions() {
+		httpService.httpGet($scope.url.transactions, 'GET_TRANSACTIONS');
+	}
+
+	$scope.$on("GET_TRANSACTIONS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.transactions = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getPushTokens() {
+		httpService.httpGet($scope.url.pushTokens, 'GET_PUSHTOKENS');
+	}
+
+	$scope.$on("GET_PUSHTOKENS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.pushTokens = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getPayments() {
+		httpService.httpGet($scope.url.payments, 'GET_PAYMENTS');
+	}
+
+	$scope.$on("GET_PAYMENTS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.payments = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	function getEnquiries() {
+		httpService.httpGet($scope.url.enquiries, 'GET_ENQUIRIES');
+	}
+
+	$scope.$on("GET_ENQUIRIES", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.enquiries = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	// init
+
+		getAccount();
+		getBookings();
+		getBanks();
+		getEnquiries();
+		getPayments();
+		getPushTokens();
+		getShareLogs();
+		getTransactions();
+		getPromotions();
+	
 })
 
 .controller('AccountsCtrl', function($scope, $location, httpService) {
@@ -247,13 +377,17 @@ angular.module('app.analytics.ctrl', [])
 	console.log('this is AnalyticsCtrl')
 })
 
-angular.module('app.bank.ctrl', ['app.service'])
+angular.module('app.bank.ctrl', [])
 
 .controller('BankCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is BankCtrl')
 	$scope.bank;
-	$scope.url = "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id;
-	httpService.httpGet($scope.url, "GET_BANK");
+	$scope.url = {
+		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
+	}
+	function getBank (){
+		httpService.httpGet($scope.url.bank, "GET_BANK");		
+	}
 	$scope.$on("GET_BANK", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -262,12 +396,13 @@ angular.module('app.bank.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getBank();
 
 })
 
 .controller('BanksCtrl', function($scope, $location, httpService) {
 	console.log('this is BanksCtrl');
-	$scope.path = "#/banks/0";
+	$scope.path = "#/banks/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
@@ -288,15 +423,19 @@ angular.module('app.bank.ctrl', ['app.service'])
 })
 
 
-angular.module('app.booking.ctrl', ['app.service'])
+angular.module('app.booking.ctrl', [])
 
-.controller('BookingCtrl', function($scope, $routeParams, httpService) {
+.controller('BookingCtrl', function($scope, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
-	$scope.booking;
-	$scope.url = "http://test.popscoot.com/popscoot/service/bookings/"+$routeParams.id;
+	$scope.booking = {};
+	$scope.url = {
+		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
+	}
 	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_BOOKING');
-	
+	function getBooking (){
+		httpService.httpGet($scope.url.booking, 'GET_BOOKING');
+	}
+
 
 	$scope.$on("GET_BOOKING", function(event, data){
 		if(data.data.data.status == 1) {
@@ -306,6 +445,7 @@ angular.module('app.booking.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getBooking();
 
 })
 
@@ -347,16 +487,18 @@ angular.module('app.dashboard.ctrl', [])
 })
 
 
-angular.module('app.enquiry.ctrl', ['app.service'])
+angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiryCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is EnquiryCtrl');
 	$scope.enquiry;
-	$scope.url = "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id;
+	$scope.url = {
+		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
+	}
 	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_ENQUIRY');
-	
-
+	function getEnquiry(){
+		httpService.httpGet($scope.url.enquiry, 'GET_ENQUIRY');		
+	};
 	$scope.$on("GET_ENQUIRY", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -365,6 +507,7 @@ angular.module('app.enquiry.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getEnquiry();
 })
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {
@@ -390,14 +533,17 @@ angular.module('app.enquiry.ctrl', ['app.service'])
 })
 
 
-angular.module('app.help.ctrl', ['app.service'])
+angular.module('app.help.ctrl', [])
 
 .controller('HelpCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is HelpCtrl');
-	$scope.url = "http://test.popscoot.com/popscoot/service/"+ $routeParams.id;
+	$scope.url = {
+		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
+	};
 	$scope.help;
-
-	httpService.httpGet($scope.url, 'GET_HELPS');
+	function getHelp(){
+		httpService.httpGet($scope.url.help, 'GET_HELPS');
+	}
 
 	$scope.$on("GET_HELPS", function(event, data){
 		if(data.data.data.status == 1) {
@@ -407,6 +553,7 @@ angular.module('app.help.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getHelp();
 })
 
 .controller('HelpsCtrl', function($scope, $location, httpService) {
@@ -432,14 +579,19 @@ angular.module('app.help.ctrl', ['app.service'])
 })
 
 
-angular.module('app.payment.ctrl', ['app.service'])
+angular.module('app.payment.ctrl', [])
 
 .controller('PaymentCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is PaymentCtrl');
-	$scope.url = "http://test.popscoot.com/popscoot/service/paymesnts"+$routeParams.id;
+	$scope.url = {
+		payment: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id,
+		transactions: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id+"/transactions"
+	};
 	$scope.payment;
-
-	httpService.httpGet($scope.url, 'GET_PAYMENT');
+	$scope.transactions;
+	function getPayment(){
+		httpService.httpGet($scope.url.payment, 'GET_PAYMENT');		
+	};
 
 	$scope.$on("GET_PAYMENT", function(event, data){
 		if(data.data.data.status == 1) {
@@ -449,6 +601,21 @@ angular.module('app.payment.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+
+	function getTransactions(){
+		httpService.httpGet($scope.url.transactions, 'GET_TRANSACTIONS');		
+	};
+
+	$scope.$on("GET_TRANSACTIONS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.transactions = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+	getPayment();
+	getTransactions();
 })
 
 .controller('PaymentsCtrl', function($scope, $location, httpService) {
@@ -474,16 +641,17 @@ angular.module('app.payment.ctrl', ['app.service'])
 })
 
 
-angular.module('app.promotion.ctrl', ['app.service'])
+angular.module('app.promotion.ctrl', [])
 
 .controller('PromotionCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is PromotionCtrl')
 	$scope.promotion;
 	$scope.url = "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id;
 	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_promotion');
+	function getPromotion (){		
+		httpService.httpGet($scope.url, 'GET_promotion');
+	}
 	
-
 	$scope.$on("GET_promotion", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -492,6 +660,7 @@ angular.module('app.promotion.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getPromotion();
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {
@@ -517,16 +686,19 @@ angular.module('app.promotion.ctrl', ['app.service'])
 })
 
 
-angular.module('app.scooter.ctrl', ['app.service'])
+angular.module('app.scooter.ctrl', [])
 
-.controller('ScooterCtrl', function($scope, $routeParams, httpService) {
+.controller('ScooterCtrl', function($scope, $routeParams, httpService, configuration) {
 	console.log('this is ScooterCtrl')
-	$scope.scooter;
-	$scope.url = "http://test.popscoot.com/popscoot/service/scooters/"+$routeParams.id;
-	//console.log($scope.url);
-	httpService.httpGet($scope.url, 'GET_SCOOTER');
-	
-
+	$scope.scooter = {};
+	$scope.bookings = [];
+	$scope.url = {
+		scooter: configuration.domain()+"/service/scooters/"+$routeParams.id,
+		bookings: configuration.domain()+"/service/scooters/"+$routeParams.id+"/bookings"
+	}
+	function getScooter (){
+		httpService.httpGet($scope.url.scooter, 'GET_SCOOTER');		
+	};
 	$scope.$on("GET_SCOOTER", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -535,6 +707,20 @@ angular.module('app.scooter.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	function getBookings (){
+		httpService.httpGet($scope.url.bookings, 'GET_BOOKINGS');		
+	}
+
+	$scope.$on("GET_BOOKINGS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.bookings = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+	getScooter();
+	getBookings();
 })
 
 
@@ -661,6 +847,14 @@ angular.module('app.service', [])
             });
         }
     }
+})
+
+.factory('configuration', function($rootScope, $http){
+    return {
+        domain: function() {
+            return "http://test.popscoot.com/popscoot/";
+        }
+    }
 });
  
  /*.service('LocaleService', function ($translate, LOCALES, $rootScope, tmhDynamicLocale) {
@@ -764,3 +958,20 @@ var LANG_CH = {
 	promotion: "优惠",
 	scooter: "踏板车"
 };
+angular.module('app.changePassword.ctrl', [])
+.controller('ChangePasswordCtrl' function($scope, httpService){
+	console.log("ChangePasswordCtrl");
+})
+angular.module('app.forgetPassword.ctrl', [])
+.controller('ForgetPasswordCtrl' function($scope, httpService){
+	console.log("ForgetPasswordCtrl");
+})
+angular.module('app.login.ctrl', [])
+.controller('LoginCtrl' function($scope, httpService, $location){
+	$scope.path = $location.path();
+	console.log("LoginCtrl");
+})
+angular.module('app.register.ctrl', [])
+.controller('RegisterCtrl' function($scope, httpService){
+	console.log("RegisterCtrl");
+})

@@ -1,4 +1,13 @@
 <div>
-	<p>this is scooter details page</p>
+	<div layout="row" layout-wrap layout-padding>
+		<div flex="100">
+			<head>scooter</head>
+			{{scooter}}
+		</div>
+		<div flex="100">
+			<head>bookings</head>
+			<md-button ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">{{item.bookingId}}</md-button>
+		</div>
+	</div>
 	
 </div>

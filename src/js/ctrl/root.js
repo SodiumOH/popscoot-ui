@@ -1,4 +1,4 @@
-angular.module('app.root.ctrl', ['app.filters'])
+angular.module('app.root.ctrl', [])
 
 .controller('RootCtrl', function($rootScope, $scope, $location) {
 	$rootScope.language = LANG_EN;

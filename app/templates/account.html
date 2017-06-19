@@ -1,72 +1,47 @@
-
-
-
-<div layout="column" ng-cloak class="md-inline-form">
-	<md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
-
-		<md-card-title>
-			<md-card-title-text>
-				<span class="md-headline">
-					<md-input-container>
-						<label>Username</label>
-						<input ng-model="account.username">
-					</md-input-container>
-				</span>
-				<span class="md-subhead">
-					<md-input-container>
-						<label>Type</label>
-						<input ng-model="account.type">
-					</md-input-container>
-				</span>
-				<span class="md-subhead">
-					<md-input-container>
-						<label>Email</label>
-						<input ng-model="account.email" type="email">
-					</md-input-container>
-				</span>
-				<span class="md-subhead">
-					<p>AccountID: {{account.accountId}}</p>
-					<p>Date joined: {{account.date}}</p>
-				</span>
-			</md-card-title-text>
-			<md-card-title-media>
-				<div class="md-media-lg card-media">
-					<img ng-src="{{account.avatar.url}}">
-				</div>
-				<md-button>Update photo</md-button>
-			</md-card-title-media>
-		</md-card-title>
-		<md-content layout-padding>
-			<div>
-				<form name="userForm">
-
-					<div layout-gt-xs="row">
-						<md-input-container class="md-block" flex="50">
-							<label>Social Media</label>
-							<input ng-model="account.socialMedia" flex="50">
-						</md-input-container>
-
-						<md-input-container>
-							<label>Birthday</label>
-							<md-datepicker ng-model="account.birthday"></md-datepicker>
-						</md-input-container>
-					</div>
-
-					
-				<md-input-container class="md-block">
-					<label>Remarks</label>
-					<textarea ng-model="user.biography" md-maxlength="150" rows="5" md-select-on-focus></textarea>
-				</md-input-container>
-
-			</form>
-		</div>
-	</md-content>
-	<md-card-actions layout="row" layout-align="end center">
-		<md-button ng-href="{{paths.booking}}">booking</md-button>
-		<md-button ng-href="{{paths.promotion}}">promotion</md-button>
-		<md-button ng-href="{{paths.bank}}">bank</md-button>
-		<md-button ng-href="{{paths.enquiry}}">enquiry</md-button>
-		<md-button ngClick="updateAccount()">Submit</md-button>
-	</md-card-actions>
-</md-card>
+<div layout="row" layout-wrap layout-padding>
+	<div flex="100">
+		
+		<HEAD>account</HEAD>
+		{{account}}
+	</div>
+	<div flex="100">
+		
+		<HEAD>bookings</HEAD>
+		<md-button ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">{{item.bookingId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>banks</HEAD>		
+		<md-button ng-repeat="item in banks" ng-href="#/banks/{{item.bankId}}">{{item.bankId}}</md-button>			
+	</div>
+	<div flex="100">
+		
+		<HEAD>enquiries</HEAD>
+		<md-button ng-repeat="item in enquiries" ng-href="#/enquiries/{{item.enquiryId}}">{{item.enquiryId}}</md-button>			
+	</div>
+	<div flex="100">
+		
+		<HEAD>payments</HEAD>
+		<md-button ng-repeat="item in payments" ng-href="#/payments/{{item.paymentId}}">{{item.paymentId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>transactions</HEAD>
+		<md-button ng-repeat="item in transactions" ng-href="#/transactions/{{item.transactionId}}">{{item.transactionId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>shareLogs</HEAD>
+		<md-button ng-repeat="item in shareLogs" ng-href="#/shareLogs/{{item.shareLogId}}">{{item.shareLogId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>pushTokens</HEAD>
+		<md-button ng-repeat="item in pushTokens" ng-href="#/pushTokens/{{item.pushTokenId}}">{{item.pushTokenId}}</md-button>
+	</div>
+	<div flex="100">
+		
+		<HEAD>promotions</HEAD>
+		<md-button ng-repeat="item in promotions" ng-href="#/promotions/{{item.promotionId}}">{{item.promotionId}}</md-button>
+	</div>
 </div>

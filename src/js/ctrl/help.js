@@ -1,11 +1,14 @@
-angular.module('app.help.ctrl', ['app.service'])
+angular.module('app.help.ctrl', [])
 
 .controller('HelpCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is HelpCtrl');
-	$scope.url = "http://test.popscoot.com/popscoot/service/"+ $routeParams.id;
+	$scope.url = {
+		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
+	};
 	$scope.help;
-
-	httpService.httpGet($scope.url, 'GET_HELPS');
+	function getHelp(){
+		httpService.httpGet($scope.url.help, 'GET_HELPS');
+	}
 
 	$scope.$on("GET_HELPS", function(event, data){
 		if(data.data.data.status == 1) {
@@ -15,6 +18,7 @@ angular.module('app.help.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getHelp();
 })
 
 .controller('HelpsCtrl', function($scope, $location, httpService) {

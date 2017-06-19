@@ -1,10 +1,14 @@
-angular.module('app.bank.ctrl', ['app.service'])
+angular.module('app.bank.ctrl', [])
 
 .controller('BankCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is BankCtrl')
 	$scope.bank;
-	$scope.url = "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id;
-	httpService.httpGet($scope.url, "GET_BANK");
+	$scope.url = {
+		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
+	}
+	function getBank (){
+		httpService.httpGet($scope.url.bank, "GET_BANK");		
+	}
 	$scope.$on("GET_BANK", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -13,12 +17,13 @@ angular.module('app.bank.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+	getBank();
 
 })
 
 .controller('BanksCtrl', function($scope, $location, httpService) {
 	console.log('this is BanksCtrl');
-	$scope.path = "#/banks/0";
+	$scope.path = "#/banks/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);

@@ -1,11 +1,16 @@
-angular.module('app.payment.ctrl', ['app.service'])
+angular.module('app.payment.ctrl', [])
 
 .controller('PaymentCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is PaymentCtrl');
-	$scope.url = "http://test.popscoot.com/popscoot/service/paymesnts"+$routeParams.id;
+	$scope.url = {
+		payment: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id,
+		transactions: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id+"/transactions"
+	};
 	$scope.payment;
-
-	httpService.httpGet($scope.url, 'GET_PAYMENT');
+	$scope.transactions;
+	function getPayment(){
+		httpService.httpGet($scope.url.payment, 'GET_PAYMENT');		
+	};
 
 	$scope.$on("GET_PAYMENT", function(event, data){
 		if(data.data.data.status == 1) {
@@ -15,6 +20,21 @@ angular.module('app.payment.ctrl', ['app.service'])
 			console.log(data.data.data.message);
 		}
 	});
+
+	function getTransactions(){
+		httpService.httpGet($scope.url.transactions, 'GET_TRANSACTIONS');		
+	};
+
+	$scope.$on("GET_TRANSACTIONS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.transactions = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+	getPayment();
+	getTransactions();
 })
 
 .controller('PaymentsCtrl', function($scope, $location, httpService) {
