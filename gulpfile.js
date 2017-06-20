@@ -83,6 +83,7 @@ var JAVASCRIPTS = [
 	SRC + '/js/services.js',
 	SRC + '/js/dao.js',
 	SRC + '/js/languages.js',
+	SRC + '/js/authapp.js',
 	SRC + '/js/authCtrl/changePassword.js',
 	SRC + '/js/authCtrl/forgetPassword.js',
 	SRC + '/js/authCtrl/login.js',

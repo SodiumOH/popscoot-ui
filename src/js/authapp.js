@@ -1,7 +1,7 @@
-angular.module('auth', ['ngRoute', 'ngMaterial', 'app.services'])
+angular.module('auth', ['ngRoute', 'ngMaterial', 'app.services', 'app.ForgetPasswordCtrl', 'app.ChangePasswordCtrl', 'app.RegisterCtrl', 'app.LoginCtrl'])
 
 .run(function($rootScope) {
-	console.log("welcome to popscoot");
+	console.log("welcome to popscoot Auth");
 })
 
 .config(function($routeProvider, $locationProvider) {

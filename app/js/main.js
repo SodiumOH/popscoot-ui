@@ -958,20 +958,66 @@ var LANG_CH = {
 	promotion: "优惠",
 	scooter: "踏板车"
 };
+angular.module('auth', ['ngRoute', 'ngMaterial', 'app.services', 'app.ForgetPasswordCtrl', 'app.ChangePasswordCtrl', 'app.RegisterCtrl', 'app.LoginCtrl'])
+
+.run(function($rootScope) {
+	console.log("welcome to popscoot Auth");
+})
+
+.config(function($routeProvider, $locationProvider) {
+	$locationProvider.hashPrefix("");
+
+	$routeProvider
+
+	.when('/login', {
+		templateUrl: "templates/auth/login.html",
+		controller: "LoginCtrl"
+	})
+	.when('/forgetPassword', {
+		templateUrl: "templates/auth/forgetPassword.html",
+		controller: "ForgetPasswordCtrl"
+	})
+	.when('/changePassword', {
+		templateUrl: "templates/auth/changePassword.html",
+		controller: "ChangePasswordCtrl"
+	})
+	.when('/register', {
+		templateUrl: "templates/auth/register.html",
+		controller: "RegisterCtrl"
+	})
+	.otherwise({
+		redirectTo: '/login'
+	});
+})
+
+/*.controller('LoginCtrl', function($scope, httpService, configuration){
+	var loginForm = {
+		username: $scope.username,
+		password: $scope.password
+	}
+	$scope.url = configuration.domain()+"/service/auth"
+	function login (){
+		httpService.httpPost($scope.url, loginForm, "LOGIN")
+	}
+	$scope.$on("LOGIN")
+
+})
+
+*/
 angular.module('app.changePassword.ctrl', [])
-.controller('ChangePasswordCtrl' function($scope, httpService){
+.controller('ChangePasswordCtrl', function($scope, httpService){
 	console.log("ChangePasswordCtrl");
 })
 angular.module('app.forgetPassword.ctrl', [])
-.controller('ForgetPasswordCtrl' function($scope, httpService){
+.controller('ForgetPasswordCtrl', function($scope, httpService){
 	console.log("ForgetPasswordCtrl");
 })
 angular.module('app.login.ctrl', [])
-.controller('LoginCtrl' function($scope, httpService, $location){
+.controller('LoginCtrl', function($scope, httpService, $location){
 	$scope.path = $location.path();
 	console.log("LoginCtrl");
 })
 angular.module('app.register.ctrl', [])
-.controller('RegisterCtrl' function($scope, httpService){
+.controller('RegisterCtrl', function($scope, httpService){
 	console.log("RegisterCtrl");
 })
