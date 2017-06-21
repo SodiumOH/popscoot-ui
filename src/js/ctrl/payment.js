@@ -58,4 +58,7 @@ angular.module('app.payment.ctrl', [])
 		}
 	});
 })
+.controller('NewPaymentCtrl', function(){
+	console.log("this is NewPaymentCtrl");
+})
 

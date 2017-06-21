@@ -1,5 +1,5 @@
 angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
-])
+	])
 
 .run(function($rootScope) {
 	console.log("welcome to popscoot");
@@ -14,14 +14,22 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/accounts.html",
 		controller: "AccountsCtrl"
 	})
+	.when('/new/account', {
+		templateUrl: "templates/accountnew.html",
+		controller: "NewAccountCtrl"
+	})
 	.when('/accounts/:id', {
 		templateUrl: "templates/account.html",
-		controller: "AccountCtrl as vm"
+		controller: "AccountCtrl"
 	})
 
 	.when('/banks', {
 		templateUrl: "templates/banks.html",
 		controller: "BanksCtrl"
+	})	
+	.when('/new/bank', {
+		templateUrl: "templates/banknew.html",
+		controller: "NewBankCtrl"
 	})
 	.when('/banks/:id', {
 		templateUrl: "templates/bank.html",
@@ -30,6 +38,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/bookings', {
 		templateUrl: "templates/bookings.html",
 		controller: "BookingsCtrl"
+	})
+	.when('/new/booking', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
 	})
 	.when('/bookings/:id', {
 		templateUrl: "templates/booking.html",
@@ -47,6 +59,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/helps.html",
 		controller: "HelpsCtrl"
 	})
+	.when('/new/help', {
+		templateUrl: "templates/helpnew.html",
+		controller: "NewHelpCtrl"
+	})
 	.when('/helps/:id', {
 		templateUrl: "templates/help.html",
 		controller: "HelpCtrl"
@@ -55,6 +71,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/payments.html",
 		controller: "PaymentsCtrl"
 	})
+	.when('/new/payment', {
+		templateUrl: "templates/paymentnew.html",
+		controller: "NewPaymentCtrl"
+	})
 	.when('/payments/:id', {
 		templateUrl: "templates/payment.html",
 		controller: "PaymentCtrl"
@@ -62,6 +82,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/promotions', {
 		templateUrl: "templates/promotions.html",
 		controller: "PromotionsCtrl"
+	})	
+	.when('/new/promotion', {
+		templateUrl: "templates/promotionnew.html",
+		controller: "NewPromotionCtrl"
 	})
 	.when('/promotions/:id', {
 		templateUrl: "templates/promotion.html",
@@ -70,6 +94,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/scooters', {
 		templateUrl: "templates/scooters.html",
 		controller: "ScootersCtrl"
+	})
+	.when('/new/scooter', {
+		templateUrl: "templates/scooternew.html",
+		controller: "NewScooterCtrl"
 	})
 	.when('/scooters/:id', {
 		templateUrl: "templates/scooter.html",

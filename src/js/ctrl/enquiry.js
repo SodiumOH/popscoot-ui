@@ -23,7 +23,7 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {
 	console.log('this is EnquiriesCtrl')
-	$scope.path = "#/enquiries/0";
+	$scope.path = "#/enquiries/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -42,4 +42,6 @@ angular.module('app.enquiry.ctrl', [])
 		}
 	});
 })
-
+.controller('NewEnquiryCtrl', function(){
+	console.log("this is NewEnquiryCtrl");
+})

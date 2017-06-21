@@ -42,4 +42,7 @@ angular.module('app.help.ctrl', [])
 		}
 	});
 })
+.controller("NewHelpCtrl", function(){
+	console.log("this is NewHelpCtrl");
+})
 

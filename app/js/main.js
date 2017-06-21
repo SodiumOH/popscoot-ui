@@ -1,5 +1,5 @@
 angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
-])
+	])
 
 .run(function($rootScope) {
 	console.log("welcome to popscoot");
@@ -14,14 +14,22 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/accounts.html",
 		controller: "AccountsCtrl"
 	})
+	.when('/new/account', {
+		templateUrl: "templates/accountnew.html",
+		controller: "NewAccountCtrl"
+	})
 	.when('/accounts/:id', {
 		templateUrl: "templates/account.html",
-		controller: "AccountCtrl as vm"
+		controller: "AccountCtrl"
 	})
 
 	.when('/banks', {
 		templateUrl: "templates/banks.html",
 		controller: "BanksCtrl"
+	})	
+	.when('/new/bank', {
+		templateUrl: "templates/banknew.html",
+		controller: "NewBankCtrl"
 	})
 	.when('/banks/:id', {
 		templateUrl: "templates/bank.html",
@@ -30,6 +38,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/bookings', {
 		templateUrl: "templates/bookings.html",
 		controller: "BookingsCtrl"
+	})
+	.when('/new/booking', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
 	})
 	.when('/bookings/:id', {
 		templateUrl: "templates/booking.html",
@@ -47,6 +59,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/helps.html",
 		controller: "HelpsCtrl"
 	})
+	.when('/new/help', {
+		templateUrl: "templates/helpnew.html",
+		controller: "NewHelpCtrl"
+	})
 	.when('/helps/:id', {
 		templateUrl: "templates/help.html",
 		controller: "HelpCtrl"
@@ -55,6 +71,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/payments.html",
 		controller: "PaymentsCtrl"
 	})
+	.when('/new/payment', {
+		templateUrl: "templates/paymentnew.html",
+		controller: "NewPaymentCtrl"
+	})
 	.when('/payments/:id', {
 		templateUrl: "templates/payment.html",
 		controller: "PaymentCtrl"
@@ -62,6 +82,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/promotions', {
 		templateUrl: "templates/promotions.html",
 		controller: "PromotionsCtrl"
+	})	
+	.when('/new/promotion', {
+		templateUrl: "templates/promotionnew.html",
+		controller: "NewPromotionCtrl"
 	})
 	.when('/promotions/:id', {
 		templateUrl: "templates/promotion.html",
@@ -70,6 +94,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/scooters', {
 		templateUrl: "templates/scooters.html",
 		controller: "ScootersCtrl"
+	})
+	.when('/new/scooter', {
+		templateUrl: "templates/scooternew.html",
+		controller: "NewScooterCtrl"
 	})
 	.when('/scooters/:id', {
 		templateUrl: "templates/scooter.html",
@@ -228,7 +256,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 		}
 		/*return new Promise(function(resolve, reject){
-			if (typeof($scope.account) === "object") {
+			if (typeof($scope.account) === "object") {	
 				resolve();
 			} else {
 				reject();
@@ -370,7 +398,8 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("CREATE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.account = data.data.data.data;
+			$scope.account = data.data.data.data;		
+			window.location.href = "#accounts/" + $scope.account.accountId
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -444,7 +473,9 @@ angular.module('app.account.ctrl', [])
 	});
 })
 
-
+.controller("NewAccountCtrl", function(){
+	console.log("this is NewAccountCtrl");
+})
 angular.module('app.analytics.ctrl', [])
 
 .controller('AnalyticsCtrl', function() {
@@ -495,7 +526,9 @@ angular.module('app.bank.ctrl', [])
 		}
 	});
 })
-
+.controller("NewBankCtrl", function(){
+	console.log("this is NewBankCtrl");
+})
 
 angular.module('app.booking.ctrl', [])
 
@@ -525,7 +558,7 @@ angular.module('app.booking.ctrl', [])
 
 .controller('BookingsCtrl', function($scope, $location, httpService) {
 	console.log('this is BookingsCtrl');
-	$scope.path = "#/bookings/0";
+	$scope.path = "#/bookings/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
@@ -551,6 +584,10 @@ angular.module('app.booking.ctrl', [])
 			console.log(data.data.data.message);
 		}
 	});
+})
+
+.controller("NewBookingCtrl", function(){
+	console.log("this is NewBookingCtrl");
 })
 
 
@@ -586,7 +623,7 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {
 	console.log('this is EnquiriesCtrl')
-	$scope.path = "#/enquiries/0";
+	$scope.path = "#/enquiries/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -605,7 +642,9 @@ angular.module('app.enquiry.ctrl', [])
 		}
 	});
 })
-
+.controller('NewEnquiryCtrl', function(){
+	console.log("this is NewEnquiryCtrl");
+})
 
 angular.module('app.help.ctrl', [])
 
@@ -650,6 +689,9 @@ angular.module('app.help.ctrl', [])
 			console.log(data.data.data.message);
 		}
 	});
+})
+.controller("NewHelpCtrl", function(){
+	console.log("this is NewHelpCtrl");
 })
 
 
@@ -713,6 +755,9 @@ angular.module('app.payment.ctrl', [])
 		}
 	});
 })
+.controller('NewPaymentCtrl', function(){
+	console.log("this is NewPaymentCtrl");
+})
 
 
 angular.module('app.promotion.ctrl', [])
@@ -759,6 +804,10 @@ angular.module('app.promotion.ctrl', [])
 	});
 })
 
+.controller("NewPromotionCtrl", function(){
+	console.log("this is NewPromotionCtrl");
+})
+
 
 angular.module('app.scooter.ctrl', [])
 
@@ -800,7 +849,7 @@ angular.module('app.scooter.ctrl', [])
 
 .controller('ScootersCtrl', function($scope, $location, httpService) {
 	console.log('this is ScootersCtrl');
-	$scope.path = "#/scooters/0";
+	$scope.path = "#/scooters/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -820,6 +869,9 @@ angular.module('app.scooter.ctrl', [])
 		}
 	});
 })
+.controller('NewScooterCtrl', function(){
+	console.log("this is NewScooterCtrl")
+;})
 
 
 angular.module('app.filters', [])

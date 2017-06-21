@@ -42,7 +42,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 		}
 		/*return new Promise(function(resolve, reject){
-			if (typeof($scope.account) === "object") {
+			if (typeof($scope.account) === "object") {	
 				resolve();
 			} else {
 				reject();
@@ -184,7 +184,8 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("CREATE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.account = data.data.data.data;
+			$scope.account = data.data.data.data;		
+			window.location.href = "#accounts/" + $scope.account.accountId
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -258,3 +259,6 @@ angular.module('app.account.ctrl', [])
 	});
 })
 
+.controller("NewAccountCtrl", function(){
+	console.log("this is NewAccountCtrl");
+})

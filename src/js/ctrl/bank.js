@@ -42,4 +42,6 @@ angular.module('app.bank.ctrl', [])
 		}
 	});
 })
-
+.controller("NewBankCtrl", function(){
+	console.log("this is NewBankCtrl");
+})

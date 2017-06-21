@@ -42,3 +42,7 @@ angular.module('app.promotion.ctrl', [])
 	});
 })
 
+.controller("NewPromotionCtrl", function(){
+	console.log("this is NewPromotionCtrl");
+})
+

@@ -1,16 +1,17 @@
 <div>
 	
 	<div class="col-md-10">
-      
+    
+    <md-button ng-href="#/new/scooter">create new scooter</md-button>
+    <ul class="scooterss">
+      <li ng-repeat="scooter in scooters"
+      class="thumbnail account-list-item">
+      <p>
+          {{scooter}}
+        <md-button ng-href="{{path+scooter.scooterId}}">Edit details</md-button>
+      </p>
+    </li>
+  </ul>
 
-      <ul class="scooterss">
-        <li ng-repeat="scooter in scooters"
-            class="thumbnail account-list-item">
-          <p>
-          <md-button ng-href="{{path+scooter.scooterId}}">{{scooter.name}}:{{scooter.scooterId}}</md-button>
-          </p>
-        </li>
-      </ul>
-
-    </div>
+</div>
 </div>

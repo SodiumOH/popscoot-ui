@@ -1,12 +1,12 @@
 <div>
 	<div class="col-md-10">
       <!--Body content-->
-
+      <md-button ng-href="#/new/payment">create new payment</md-button>
       <ul class="payments">
-        <li ng-repeat="payment in payments"
-            class="thumbnail payment-list-item">
+        <li ng-repeat="payment in payments">
           <p>
-          <md-button ng-href="{{path+payment.paymentId}}">{{payment.account.username}}:{{payment.paymentId}}</md-button>
+          {{payment}}
+          <md-button ng-href="{{path+payment.paymentId}}">Edit details</md-button>
           </p>
         </li>
       </ul>

@@ -38,7 +38,7 @@ angular.module('app.scooter.ctrl', [])
 
 .controller('ScootersCtrl', function($scope, $location, httpService) {
 	console.log('this is ScootersCtrl');
-	$scope.path = "#/scooters/0";
+	$scope.path = "#/scooters/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -58,4 +58,7 @@ angular.module('app.scooter.ctrl', [])
 		}
 	});
 })
+.controller('NewScooterCtrl', function(){
+	console.log("this is NewScooterCtrl")
+;})
 

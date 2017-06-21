@@ -1,12 +1,12 @@
 <div>
 	<div class="col-md-10">
       
-
+      <md-button ng-href="#/new/bank">create new bank</md-button>
       <ul class="banks">
-        <li ng-repeat="bank in banks | orderBy: bank.account.username"
-            class="thumbnail bank-list-item">
+        <li ng-repeat="bank in banks">
           <p>
-          <md-button ng-href="{{path+bank.bankId}}">{{bank.account.username}}:{{bank.bankId}}</md-button>
+          {{bank}}
+          <md-button ng-href="{{path+bank.bankId}}">Edit details</md-button>
           </p>
         </li>
       </ul>

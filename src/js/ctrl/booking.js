@@ -26,7 +26,7 @@ angular.module('app.booking.ctrl', [])
 
 .controller('BookingsCtrl', function($scope, $location, httpService) {
 	console.log('this is BookingsCtrl');
-	$scope.path = "#/bookings/0";
+	$scope.path = "#/bookings/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
@@ -52,5 +52,9 @@ angular.module('app.booking.ctrl', [])
 			console.log(data.data.data.message);
 		}
 	});
+})
+
+.controller("NewBookingCtrl", function(){
+	console.log("this is NewBookingCtrl");
 })
 
