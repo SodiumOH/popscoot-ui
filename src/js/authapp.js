@@ -10,26 +10,28 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 	$routeProvider
 
 	.when('/login', {
-		templateUrl: "templates/auth/login.html",
+		templateUrl: "authTemplates/login.html",
 		controller: "LoginCtrl"
 	})
 	.when('/forgetPassword', {
-		templateUrl: "templates/auth/forgetPassword.html",
+		templateUrl: "authTemplates/forgetPassword.html",
 		controller: "ForgetPasswordCtrl"
 	})
 	.when('/changePassword', {
-		templateUrl: "templates/auth/changePassword.html",
+		templateUrl: "authTemplates/changePassword.html",
 		controller: "ChangePasswordCtrl"
 	})
 	.when('/register', {
-		templateUrl: "templates/auth/register.html",
+		templateUrl: "authTemplates/register.html",
 		controller: "RegisterCtrl"
 	})
 	.otherwise({
 		redirectTo: '/login'
 	});
 })
-
+.controller("AuthCtrl", function(){
+	console.log("Auth Ctrl");
+})
 /*.controller('LoginCtrl', function($scope, httpService, configuration){
 	var loginForm = {
 		username: $scope.username,
