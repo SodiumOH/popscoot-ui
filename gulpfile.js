@@ -6,7 +6,8 @@ var inject = require('gulp-inject');
 var removeHtmlComments = require('gulp-remove-html-comments');
 var webserver = require('gulp-webserver');
 var clean = require('gulp-clean');
-
+var browserSyn = require('browser-sync');
+var reload = browserSyn.reload;
 /** ======
 Parameters
 ======= */

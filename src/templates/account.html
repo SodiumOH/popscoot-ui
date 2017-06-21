@@ -1,8 +1,25 @@
 <div layout="row" layout-wrap layout-padding>
 	<div flex="100">
 		<!-- profile -->
-		<HEAD>account</HEAD>
-		{{account}}
+		<form>
+			<label>Username</label></br>
+			<input type="text" ng-model="init_form.username" ng-disabled="isEdit"></br>
+			<label>Email</label></br>
+			<input type="text" ng-model="init_form.email" ng-disabled="isEdit"></br>
+			<label ng-show="!isEdit">Password</br></label>
+			<input type="text" ng-model="init_form.password" ng-show="!isEdit"></br>
+			<label ng-show="isEdit">Type</label></br>
+			<input type="text" ng-model="init_form.type" ng-disabled="isEdit" ng-show="isEdit"></br>
+			<label ng-show="isEdit">Active</label></br>
+			<input type="text" ng-model="init_form.active" ng-show="isEdit"></br>
+			<label ng-show="isEdit">SocialMedia</label></br>
+			<input type="text" ng-model="init_form.socialMedia" disabled ng-show="isEdit"></br>
+			<label ng-show="isEdit">birthday</label>
+			<md-datepicker ng-model="init_form.birthday" ng-show="isEdit"></md-datepicker></br>
+			<input type="submit" ng-click="updateAccount()" value="Update" ng-show="isEdit">
+			<input type="submit" ng-click="createAccount()" value="Create" ng-show="!isEdit">
+		</form>		
+		<p ng-show="isEdit">{{account}}</p>
 	</div>
 	<div flex="100">
 		<!-- bookings -->

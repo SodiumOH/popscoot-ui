@@ -1,30 +1,14 @@
   
 <div>
-<md-button ng-href="{{path}}0">create new account</md-button>
-<md-card ng-repeat="account in accounts" md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">{{account.username}}</span>
-            <span class="md-subhead">{{account.type}}</span>
-            <span>Account ID: {{account.accountId}}</span>
-            <span>Email: {{account.email}}</span>
-            <span>Birthday: {{account.birthday}}</span>
-            <span>Social Media: {{account.socialMedia}}</span>
-          </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-lg card-media">
-              <img ng-src="{{account.avatar.url}}">
-            </div>
-          </md-card-title-media>
-        </md-card-title>
-        <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-href="{{paths.booking}}">booking</md-button>
-        <md-button ng-href="{{paths.promotion}}">promotion</md-button>
-        <md-button ng-href="{{paths.bank}}">bank</md-button>
-        <md-button ng-href="{{paths.enquiry}}">enquiry</md-button>
-        <md-button ng-href="{{path+account.accountId}}">Edit Information</md-button>
-        </md-card-actions>
-      </md-card>
+  <md-button ng-href="{{path}}0">create new account</md-button>
+  <div flex="100" ng-repeat="account in accounts" >
+
+    <span class="md-headline">{{account.username}}</span>
+    <span class="md-subhead">{{account.type}}</span>
+    {{account}}
+
+    <md-button ng-href="{{path+account.accountId}}">Edit Information</md-button>
+    <md-button ng-click="deleteAccount(account.accountId)" disabled>Delete Account</md-button>
 
     
-</div>
+  </div>

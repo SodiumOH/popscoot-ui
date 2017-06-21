@@ -3,6 +3,7 @@ angular.module('app.account.ctrl', [])
 .controller('AccountCtrl', function($routeParams, $scope, httpService, configuration) {
 	console.log('this is AccountCtrl');
 
+	$scope.isEdit = false;
 	var accountId = $routeParams.id;
 	var domain = configuration.domain();
 	$scope.url = {
@@ -17,6 +18,7 @@ angular.module('app.account.ctrl', [])
 		payments: domain + "/service/accounts/" + accountId + "/payments"
 	};
 
+	$scope.init_form = {};
 	$scope.account = {};
 	$scope.bookings = [];
 	$scope.banks = [];
@@ -35,9 +37,17 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.account = data.data.data.data;
+			initForm();
 		} else {
 			console.log(data.data.data.message);
 		}
+		/*return new Promise(function(resolve, reject){
+			if (typeof($scope.account) === "object") {
+				resolve();
+			} else {
+				reject();
+			}
+		})*/
 	});
 
 	function getBookings() {
@@ -72,7 +82,7 @@ angular.module('app.account.ctrl', [])
 
 	$scope.$on("GET_PROMOTIONS", function(event, data){
 		if(data.data.data.status == 1) {
-			console.log("test", data);
+			/*console.log("test", data);*/
 			console.log(data.data.data.data.appliedPromotions);
 			$scope.promotions = data.data.data.data.appliedPromotions;
 		} else {
@@ -145,17 +155,68 @@ angular.module('app.account.ctrl', [])
 		}
 	});
 
+	$scope.updateAccount = function(){
+		 var updateForm = {
+			accountId: $scope.init_form.accountId,
+			birthday: moment($scope.init_form.birthday).format("YYYY-MM-DDTHH:MM:SSZ")
+		}
+		console.log(updateForm);
+		httpService.httpPut($scope.url.account, updateForm, 'UPDATE_ACCOUNT');
+	}
+	$scope.$on('UPDATE_ACCOUNT', function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.account = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+
+	$scope.createAccount = function(){
+		var createForm = {
+			username: $scope.init_form.username,
+			email: $scope.init_form.email,
+			password: $scope.init_form.password
+		}
+		console.log(createForm);
+		httpService.httpPost($scope.url.account, createForm, 'CREATE_ACCOUNT');
+	}
+	$scope.$on("CREATE_ACCOUNT", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.account = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+
+	function initForm() {
+		if (typeof($scope.account) === "object") {
+			$scope.isEdit = true; 
+		} 
+		$scope.init_form= {
+			accountId: $scope.isEdit ? $scope.account.accountId : "",
+			username: $scope.isEdit ? $scope.account.username : "",
+			birthday: $scope.isEdit ? $scope.account.birthday : "",
+			type: $scope.isEdit ? $scope.account.type : "",
+			socialMedia: $scope.isEdit ? $scope.account.socialMedia : "",
+			email: $scope.isEdit ? $scope.account.email : "",
+			active: $scope.isEdit ? $scope.account.active : "",
+			password : ""
+		}
+	}
+
 	// init
 
-		getAccount();
-		getBookings();
-		getBanks();
-		getEnquiries();
-		getPayments();
-		getPushTokens();
-		getShareLogs();
-		getTransactions();
-		getPromotions();
+	getAccount();
+	getBookings();
+	getBanks();
+	getEnquiries();
+	getPayments();
+	getPushTokens();
+	getShareLogs();
+	getTransactions();
+	getPromotions();	
 	
 })
 
@@ -178,6 +239,19 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	$scope.deleteAccount = function(id){
+		httpService.httpDelete($scope.url+"/"+id, 'DELETE_ACCOUNT');
+	}
+
+	$scope.$on("DELETE_ACCOUNT", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			httpService.httpGet($scope.url, 'GET_ACCOUNTS');
 		} else {
 			console.log(data.data.data.message);
 		}

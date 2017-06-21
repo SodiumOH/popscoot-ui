@@ -6,7 +6,7 @@ angular.module('app.service', [])
             url += "?_=" + new Date().getTime();
             $http.get(url, {
                 headers: {
-                    "Auth-Secret": '_1em51i6803tmf21496915286236l24i5gl3nhgd5tit'
+                    "Auth-Secret": '_auku09gp9blvcd14979377239506c3rnkdri7m69krr'
                 }
             })
             .then(function(data, status, headers, config) {
@@ -23,7 +23,7 @@ angular.module('app.service', [])
         httpPost: function(url, input, listenerId){
             $http.post(url, input, {
                 headers: {
-                    "Auth-Secret": DAO.getSecret()
+                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
                 }
             })
 			.then(function(data, status, headers, config) {
@@ -40,7 +40,7 @@ angular.module('app.service', [])
         httpPut: function(url, input, listenerId){
             $http.put(url, input, {
                 headers: {
-                    "Auth-Secret": DAO.getSecret()
+                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
                 }
             })
 			.then(function(data, status, headers, config) {
@@ -57,7 +57,7 @@ angular.module('app.service', [])
         httpDelete: function(url, listenerId){
             $http.delete(url, {
                 headers: {
-                    "Auth-Secret": DAO.getSecret()
+                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
                 }
             })
             .then(function(data, status, headers, config) {

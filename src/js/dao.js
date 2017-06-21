@@ -7,7 +7,7 @@ var DAO = (function() {
 	};
 
 	app.getSecret = function() {
-		console.log(secret)
+		
 		return localStorage.getItem("UI_SECRET");
 	};
 
