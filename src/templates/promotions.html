@@ -1,15 +1,10 @@
 <div>
 	<div class="col-md-10">
-      <!--Body content-->
-      <md-button ng-href="#/new/promotion">create new promotion</md-button>
-      <ul class="promotions">
-        <li ng-repeat="promotion in promotions">
-          <p>
-          {{promotion}}
-          <md-button ng-href="{{path+promotion.promotionId}}">Edit details</md-button>
-          </p>
-        </li>
-      </ul>
+    <!--Body content-->
+    <md-button ng-href="#/new/promotion">create new promotion</md-button>
+    <div flex="100" ng-repeat="promotion in promotions">
+      {{promotion}}
+      <md-button ng-href="{{path+promotion.promotionId}}">{{promotion.promotionId}}</md-button>
 
     </div>
-</div>
+  </div>

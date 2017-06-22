@@ -1,5 +1,40 @@
-<div>login page
-<md-button ng-click="successfulLogin()">successful login</md-button>
-<md-button ng-href="#/forgetPassword">forgetPassword</md-button>
-<md-button ng-href="#/register">register</md-button>
+<div layout="row" layout-align="center center" layout-margin>
+	<md-card flex="25">
+		<md-card-title layout="column" layout-align="center center">
+			<div>
+				<md-card-title-text >
+					<span class="md-headline" layout-align="center">Login</span>
+					<span class="md-subhead" layout-align="center">popscoot</span>
+				</md-card-title-text>			
+			</div>
+						
+		</md-card-title>
+		<md-content layout-padding>
+			<div>
+				<form name="userForm">
+
+					<div layout-gt-xs="column" layout-align="center center">
+						<md-input-container class="md-block" flex-gt-xs>
+							<label>Username</label>
+							<input ng-model="user.Username">
+						</md-input-container>
+
+						<md-input-container>
+							<label>Password</label>
+							<input ng-model="user.password" type="password">
+						</md-input-container>	
+					</div>
+				</form>
+			</div>
+		</md-content>
+
+		<md-card-actions layout="column" layout-align="space-around center">
+			<md-button type="submit" ng-click="successfulLogin()" class="md-raised md-primary">login</md-button>
+			<div layout="row" layout-align="space-around center" layout-margin>				
+				<md-button ng-href="#/forgetPassword" class="md-raised">forget password</md-button>				
+				<md-button ng-href="#/register" class="md-raised">register</md-button>
+			</div>
+		</md-card-actions>
+	</md-card>
+
 </div>

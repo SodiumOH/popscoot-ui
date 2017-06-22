@@ -2,11 +2,16 @@ angular.module('app.promotion.ctrl', [])
 
 .controller('PromotionCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is PromotionCtrl')
+	$scope.accounts;
 	$scope.promotion;
-	$scope.url = "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id;
+	$scope.url = {
+		promotion: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id,
+		accounts: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id+"/accounts"
+	}
+
 	//console.log($scope.url);
 	function getPromotion (){		
-		httpService.httpGet($scope.url, 'GET_promotion');
+		httpService.httpGet($scope.url.promotion, 'GET_promotion');
 	}
 	
 	$scope.$on("GET_promotion", function(event, data){
@@ -17,7 +22,20 @@ angular.module('app.promotion.ctrl', [])
 			console.log(data.data.data.message);
 		}
 	});
+	function getAccounts (){		
+		httpService.httpGet($scope.url.accounts, 'GET_ACCOUNTS');
+	}
+	
+	$scope.$on("GET_ACCOUNTS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.accounts = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
 	getPromotion();
+	getAccounts();
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {

@@ -1,5 +1,50 @@
-<div>register page
-<md-button ng-href="#/">register</md-button>
-<md-button ng-href="#/">Login</md-button>
+<div layout="column">
 
-</div>
+	<md-content class="md-padding" layout-xs="column" layout="row" layout-align="center center">
+		<div flex-xs flex-gt-xs="40" layout="column" layout-align="center center">
+			<md-card class="card-40-center">
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline">Register</span>
+					</md-card-title-text>
+				</md-card-title>
+				<form class="register_form">
+					<div class="md-padding" layout-align="center">
+						<div layout="column">
+							<md-input-container flex="100">
+								<label>Username</label>
+								<input>
+							</md-input-container>
+							<md-input-container flex="100">
+								<label>Email</label>
+								<input type="email">
+							</md-input-container>
+						</div>
+						<div layout="column">
+							<md-input-container flex="100">
+								<label>Password</label>
+								<input type="password">
+							</md-input-container>
+							<md-input-container flex="100">
+								<label>Repeat Password</label>
+								<input type="password">
+							</md-input-container>
+						</div>
+
+
+						<md-card-actions layout="row" layout-align="center">
+							<br>
+							<center>
+								<md-button class="md-primary md-raised" type="submit">Register</md-button>
+
+							</center>
+						</form>
+					</md-card-actions>
+				</md-card>
+			</div>
+		</md-content>
+		<md-button ng-href="#/">register</md-button>
+		<md-button ng-href="#/">Login</md-button> 
+	</div>
+
+	

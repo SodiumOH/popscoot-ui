@@ -2,14 +2,11 @@
 	<div class="col-md-10">
       
       <md-button ng-href="#/new/help">create new help</md-button>
-      <ul class="helps">
-        <li ng-repeat="help in helps">
-          <p>
+      <div flex="100" ng-repeat="help in helps">
+          
           {{help}}
           <md-button ng-href="{{path+help.helpId}}">Edit details</md-button>
-          </p>
-        </li>
-      </ul>
+          
 
     </div>
 </div>

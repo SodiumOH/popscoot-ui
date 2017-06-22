@@ -2,13 +2,8 @@
 <div>
   <md-button ng-href="#/new/account">create new account</md-button>
   <div flex="100" ng-repeat="account in accounts" >
-
-    <span class="md-headline">{{account.username}}</span>
-    <span class="md-subhead">{{account.type}}</span>
     {{account}}
-
-    <md-button ng-href="{{path+account.accountId}}">Edit Information</md-button>
-    <md-button ng-click="deleteAccount(account.accountId)" disabled>Delete Account</md-button>
+    <md-button ng-href="{{path+account.accountId}}">{{account.accountId}}</md-button>
 
     
   </div>

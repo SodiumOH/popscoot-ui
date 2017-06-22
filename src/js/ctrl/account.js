@@ -28,6 +28,7 @@ angular.module('app.account.ctrl', [])
 	$scope.payments = [];
 	$scope.pushTokens = [];
 	$scope.enquiries = [];
+	$scope.hasBank = false;
 
 	function getAccount() {
 		httpService.httpGet($scope.url.account, 'GET_ACCOUNT');
@@ -71,6 +72,9 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.banks = data.data.data.data;
+			if(typeof($scope.banks[0]) === 'object'){
+				$scope.hasBank = true;
+			}
 		} else {
 			console.log(data.data.data.message);
 		}

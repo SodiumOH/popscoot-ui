@@ -3,15 +3,13 @@
     
     <md-button ng-href="#/new/booking">create new booking</md-button>
 
-    <ul class="bookings">
-      <li ng-repeat="booking in bookings">
-      <p>
-          {{booking}}
-        <md-button ng-href="{{path+booking.bookingId}}">Edit details</md-button>
-      </p>
-    </li>
-  </ul>
+    
+    <div flex="100" ng-repeat="booking in bookings">
 
-</div>
+      {{booking}}
+      <md-button ng-href="{{path+booking.bookingId}}">{{booking.bookingId}}</md-button>
+    </div>
+
+  </div>
 
 </div>

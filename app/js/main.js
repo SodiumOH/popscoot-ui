@@ -1,4 +1,5 @@
-angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl'
+angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.accountPromo.ctrl'
 	])
 
 .run(function($rootScope) {
@@ -14,10 +15,6 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/accounts.html",
 		controller: "AccountsCtrl"
 	})
-	.when('/new/account', {
-		templateUrl: "templates/accountnew.html",
-		controller: "NewAccountCtrl"
-	})
 	.when('/accounts/:id', {
 		templateUrl: "templates/account.html",
 		controller: "AccountCtrl"
@@ -27,10 +24,6 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/banks.html",
 		controller: "BanksCtrl"
 	})	
-	.when('/new/bank', {
-		templateUrl: "templates/banknew.html",
-		controller: "NewBankCtrl"
-	})
 	.when('/banks/:id', {
 		templateUrl: "templates/bank.html",
 		controller: "BankCtrl"
@@ -38,10 +31,6 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/bookings', {
 		templateUrl: "templates/bookings.html",
 		controller: "BookingsCtrl"
-	})
-	.when('/new/booking', {
-		templateUrl: "templates/bookingnew.html",
-		controller: "NewBookingCtrl"
 	})
 	.when('/bookings/:id', {
 		templateUrl: "templates/booking.html",
@@ -59,10 +48,6 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/helps.html",
 		controller: "HelpsCtrl"
 	})
-	.when('/new/help', {
-		templateUrl: "templates/helpnew.html",
-		controller: "NewHelpCtrl"
-	})
 	.when('/helps/:id', {
 		templateUrl: "templates/help.html",
 		controller: "HelpCtrl"
@@ -71,10 +56,6 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/payments.html",
 		controller: "PaymentsCtrl"
 	})
-	.when('/new/payment', {
-		templateUrl: "templates/paymentnew.html",
-		controller: "NewPaymentCtrl"
-	})
 	.when('/payments/:id', {
 		templateUrl: "templates/payment.html",
 		controller: "PaymentCtrl"
@@ -82,10 +63,6 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/promotions', {
 		templateUrl: "templates/promotions.html",
 		controller: "PromotionsCtrl"
-	})	
-	.when('/new/promotion', {
-		templateUrl: "templates/promotionnew.html",
-		controller: "NewPromotionCtrl"
 	})
 	.when('/promotions/:id', {
 		templateUrl: "templates/promotion.html",
@@ -95,14 +72,45 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 		templateUrl: "templates/scooters.html",
 		controller: "ScootersCtrl"
 	})
-	.when('/new/scooter', {
-		templateUrl: "templates/scooternew.html",
-		controller: "NewScooterCtrl"
-	})
 	.when('/scooters/:id', {
 		templateUrl: "templates/scooter.html",
 		controller: "ScooterCtrl"
 	})
+	
+	.when('/new/account', {
+		templateUrl: "templates/accountnew.html",
+		controller: "NewAccountCtrl"
+	})
+	.when('/new/bank', {
+		templateUrl: "templates/banknew.html",
+		controller: "NewBankCtrl"
+	})
+	.when('/new/booking', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
+	})
+	.when('/new/help', {
+		templateUrl: "templates/helpnew.html",
+		controller: "NewHelpCtrl"
+	})
+	.when('/new/payment', {
+		templateUrl: "templates/paymentnew.html",
+		controller: "NewPaymentCtrl"
+	})	
+	.when('/new/promotion', {
+		templateUrl: "templates/promotionnew.html",
+		controller: "NewPromotionCtrl"
+	})
+	.when('/new/scooter', {
+		templateUrl: "templates/scooternew.html",
+		controller: "NewScooterCtrl"
+	})
+	.when('/new/accountPromo', {
+		templateUrl: "templates/accountPromonew.html",
+		controller: "NewAccountPromoCtrl"
+	})
+
+
 	.when('/dashboard', {
 		templateUrl: "templates/dashboard.html",
 		controller: "DashboardCtrl"
@@ -203,13 +211,22 @@ angular.module('app.root.ctrl', [])
 	}, {
 		path: "analytics",
 		name: $rootScope.language.analytics
+	}, {
+		path: "logout",
+		name: "Logout"
 	}];
 
 	var path = $location.path();
 	$scope.currentNavItem = path.substring(1);
 	$scope.goPage = function(path) {
-		$location.path(path);
+		if (path == "logout") {
+			var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+			window.location.href = (path + "auth.html");
+		} else {
+			$location.path(path);
+		}		
 	};
+
 })
 
 angular.module('app.account.ctrl', [])
@@ -242,6 +259,7 @@ angular.module('app.account.ctrl', [])
 	$scope.payments = [];
 	$scope.pushTokens = [];
 	$scope.enquiries = [];
+	$scope.hasBank = false;
 
 	function getAccount() {
 		httpService.httpGet($scope.url.account, 'GET_ACCOUNT');
@@ -285,6 +303,9 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.banks = data.data.data.data;
+			if(typeof($scope.banks[0]) === 'object'){
+				$scope.hasBank = true;
+			}
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -764,11 +785,16 @@ angular.module('app.promotion.ctrl', [])
 
 .controller('PromotionCtrl', function($scope, $routeParams, httpService) {
 	console.log('this is PromotionCtrl')
+	$scope.accounts;
 	$scope.promotion;
-	$scope.url = "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id;
+	$scope.url = {
+		promotion: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id,
+		accounts: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id+"/accounts"
+	}
+
 	//console.log($scope.url);
 	function getPromotion (){		
-		httpService.httpGet($scope.url, 'GET_promotion');
+		httpService.httpGet($scope.url.promotion, 'GET_promotion');
 	}
 	
 	$scope.$on("GET_promotion", function(event, data){
@@ -779,7 +805,20 @@ angular.module('app.promotion.ctrl', [])
 			console.log(data.data.data.message);
 		}
 	});
+	function getAccounts (){		
+		httpService.httpGet($scope.url.accounts, 'GET_ACCOUNTS');
+	}
+	
+	$scope.$on("GET_ACCOUNTS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.accounts = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
 	getPromotion();
+	getAccounts();
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {
@@ -874,6 +913,11 @@ angular.module('app.scooter.ctrl', [])
 ;})
 
 
+angular.module("app.accountPromo.ctrl", [])
+
+.controller("NewAccountPromoCtrl", function(){
+	console.log("NewAccountPromoCtrl");
+});
 angular.module('app.filters', [])
 
 .filter('text_fmt', function() {

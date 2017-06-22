@@ -32,11 +32,20 @@ angular.module('app.root.ctrl', [])
 	}, {
 		path: "analytics",
 		name: $rootScope.language.analytics
+	}, {
+		path: "logout",
+		name: "Logout"
 	}];
 
 	var path = $location.path();
 	$scope.currentNavItem = path.substring(1);
 	$scope.goPage = function(path) {
-		$location.path(path);
+		if (path == "logout") {
+			var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+			window.location.href = (path + "auth.html");
+		} else {
+			$location.path(path);
+		}		
 	};
+
 })

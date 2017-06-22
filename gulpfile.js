@@ -80,6 +80,7 @@ var JAVASCRIPTS = [
 	SRC + '/js/ctrl/payment.js',
 	SRC + '/js/ctrl/promotion.js',
 	SRC + '/js/ctrl/scooter.js',
+	SRC + '/js/ctrl/accountPromo.js',
 	SRC + '/js/filters.js',
 	SRC + '/js/services.js',
 	SRC + '/js/dao.js',

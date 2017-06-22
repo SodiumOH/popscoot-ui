@@ -1,15 +1,15 @@
 <div>
 	<div class="col-md-10">
-      
-      <md-button ng-href="#/new/bank">create new bank</md-button>
-      <ul class="banks">
-        <li ng-repeat="bank in banks">
-          <p>
-          {{bank}}
-          <md-button ng-href="{{path+bank.bankId}}">Edit details</md-button>
-          </p>
-        </li>
-      </ul>
+    
+    <md-button ng-href="#/new/bank">create new bank</md-button>
+
+    <div flex="100" ng-repeat="bank in banks">
+
+      {{bank}}
+      <md-button ng-href="{{path+bank.bankId}}">{{bank.bankId}}</md-button>
 
     </div>
+
+
+  </div>
 </div>

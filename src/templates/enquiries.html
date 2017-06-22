@@ -1,15 +1,11 @@
 <div>
 	<div class="col-md-10">
-      <!--Body content-->
-      <md-button ng-href="{{path}}0">create new enquiry</md-button>
-      <ul class="enquiries">
-        <li ng-repeat="enquiry in enquiries">
-          <p>
-          {{enquiry}}
-          </p>
-        </li>
-      </ul>
-
+    <!--Body content-->
+    <md-button ng-href="{{path}}0">create new enquiry</md-button>
+    <div flex="100" ng-repeat="enquiry in enquiries">
+      
+      {{enquiry}}
+      
     </div>
 
-</div>
+  </div>

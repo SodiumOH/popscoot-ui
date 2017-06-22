@@ -2,37 +2,25 @@
 	<div flex="100">
 		
 		<md-button ng-href="#/accounts">accountList</md-button>
+		{{account}}
 		<md-button ng-href="#/accounts/1">updated</md-button>
 		<md-button ng-href="#/accounts">deleted</md-button>
-		<form>
-			<label>Username</label></br>
-			<input type="text" ng-model="init_form.username" ng-disabled="isEdit"></br>
-			<label>Email</label></br>
-			<input type="text" ng-model="init_form.email" ng-disabled="isEdit"></br>
-			<label ng-show="!isEdit">Password</br></label>
-			<input type="text" ng-model="init_form.password" ng-show="!isEdit"></br>
-			<label ng-show="isEdit">Type</label></br>
-			<input type="text" ng-model="init_form.type" ng-disabled="isEdit" ng-show="isEdit"></br>
-			<label ng-show="isEdit">Active</label></br>
-			<input type="text" ng-model="init_form.active" ng-show="isEdit"></br>
-			<label ng-show="isEdit">SocialMedia</label></br>
-			<input type="text" ng-model="init_form.socialMedia" disabled ng-show="isEdit"></br>
-			<label ng-show="isEdit">birthday</label>
-			<md-datepicker ng-model="init_form.birthday" ng-show="isEdit"></md-datepicker></br>
-			<input type="submit" ng-click="updateAccount()" value="Update" ng-show="isEdit">
-			<input type="submit" ng-click="createAccount()" value="Create" ng-show="!isEdit">
-		</form>		
-		<p ng-show="isEdit">{{account}}</p>
 	</div>
 	<div flex="100">
 		
 		<HEAD>bookings</HEAD>
 		<md-button ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">{{item.bookingId}}</md-button>
+		<md-button ng-href="#/new/booking">Create booking</md-button>
 	</div>
 	<div flex="100">
 		
-		<HEAD>banks</HEAD>		
-		<md-button ng-repeat="item in banks" ng-href="#/banks/{{item.bankId}}">{{item.bankId}}</md-button>			
+		<HEAD>banks</HEAD>
+		<div ng-repeat="item in banks">
+			{{item}}
+			<md-button ng-href="#/banks/{{item.bankId}}">details</md-button>
+		</div>
+		<md-button ng-href="#/new/bank" ng-show="!hasBank">Create bank</md-button>
+		<md-button ng-href="#/accounts/1" ng-show="!hasBank">Add bank</md-button>		
 	</div>
 	<div flex="100">
 		
@@ -62,6 +50,12 @@
 	<div flex="100">
 		
 		<HEAD>promotions</HEAD>
-		<md-button ng-repeat="item in promotions" ng-href="#/promotions/{{item.promotionId}}">{{item.promotionId}}</md-button>
+		<div ng-repeat="item in promotions">
+			{{item}}
+			<md-button ng-href="#/promotions/{{item.promotionId}}">details</md-button>
+			<md-button ng-href="#/accounts/5">remove</md-button>
+		</div>
+		<md-button ng-href="#/new/accountPromo">apply promotion</md-button>
 	</div>
+
 </div>
