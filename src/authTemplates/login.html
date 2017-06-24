@@ -1,46 +1,52 @@
-<div layout="row" layout-align="center center" layout-margin>
-	<md-card flex="25">
-		<md-card-title layout="column" layout-align="center center">
-			<div>
-				<md-card-title-text >
-					<span class="md-headline" layout-align="center">Login</span>
-					<span class="md-subhead" layout-align="center">popscoot</span>
-				</md-card-title-text>			
-			</div>
-			<!-- <div>
-				<md-card-title-media>
-					<div class="md-media-md card-media">
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd74g2KkaJptnt4lw8aNVgrpXUTpQhzeEyViitzlCSMB1Vk4u6"/>
+
+<div layout="row" layout-align="center center">
+	<div flex-sm="100" flex-xs="100" flex-md="50" flex-lg="30" flex-gt-lg="15">
+		<div>
+			
+		</div>		
+		<md-card>
+			<md-card-title>
+				<md-card-title-text class="md-headline">
+					login
+				</md-card-title-text>
+			</md-card-title>
+			<md-content layout="column" layout-padding>
+				<md-input-container>
+					<div layout-padding>
+						<label>Username</label>
+						<input>
 					</div>
-				</md-card-title-media>			
-			</div> -->			
-		</md-card-title>
-		<md-content layout-padding>
-			<div>
-				<form name="userForm">
-
-					<div layout-gt-xs="column" layout-align="center center">
-						<md-input-container class="md-block" flex-gt-xs>
-							<label>Username</label>
-							<input ng-model="user.Username">
-						</md-input-container>
-
-						<md-input-container>
-							<label>Password</label>
-							<input ng-model="user.password" type="password">
-						</md-input-container>	
+				</md-input-container>
+				<md-input-container>
+					<div layout-padding>
+						<label>Password</label>
+						<input type="password">
 					</div>
-				</form>
-			</div>
-		</md-content>
+				</md-input-container>
+				<div layout="column" layout-padding>
+					<div layout="row" layout-align="space-between start" layout-wrap>
+						<a href="#/register">Forget password?</a>
+						<md-button flex-sm="100" flex-xs="100" type="submit" ng-click="successfulLogin()" class="md-raised md-primary md-padding">login</md-button>
+					</div>
+					<div flex="100" layout="row" layout-padding>					
+						<md-button ng-href="#/register" class="md-raised">register</md-button>
+					</div>
+				</div>
+			</md-content>
+			<md-card-actions>
+				<div>
 
-		<md-card-actions layout="column" layout-align="space-around center">
-			<md-button type="submit" ng-click="successfulLogin()" class="md-raised md-primary">login</md-button>
-			<div layout="row" layout-align="space-around center" layout-margin>				
-				<md-button ng-href="#/forgetPassword" class="md-raised">forget password</md-button>				
-				<md-button ng-href="#/register" class="md-raised">register</md-button>
-			</div>
-		</md-card-actions>
-	</md-card>
-
+				</div>
+			</md-card-actions>	
+		</md-card>
+	</div>
 </div>
+
+
+
+
+
+
+
+
+<!-- <md-button ng-href="#/forgetPassword" class="md-raised md-padding">forget password</md-button>	 -->
