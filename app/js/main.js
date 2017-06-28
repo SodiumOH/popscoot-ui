@@ -945,13 +945,13 @@ angular.module('app.filters', [])
 
 angular.module('app.service', [])
 
- .factory('httpService', function($rootScope, $http){
+.factory('httpService', function($rootScope, $http){
     return{
         httpGet: function(url, listenerId){
             url += "?_=" + new Date().getTime();
             $http.get(url, {
                 headers: {
-                    "Auth-Secret": '_auku09gp9blvcd14979377239506c3rnkdri7m69krr'
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
             .then(function(data, status, headers, config) {
@@ -968,10 +968,10 @@ angular.module('app.service', [])
         httpPost: function(url, input, listenerId){
             $http.post(url, input, {
                 headers: {
-                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
-			.then(function(data, status, headers, config) {
+            .then(function(data, status, headers, config) {
                 $rootScope.$broadcast(listenerId, {
                     status: 1,
                     data: data
@@ -985,10 +985,10 @@ angular.module('app.service', [])
         httpPut: function(url, input, listenerId){
             $http.put(url, input, {
                 headers: {
-                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
-			.then(function(data, status, headers, config) {
+            .then(function(data, status, headers, config) {
                 $rootScope.$broadcast(listenerId, {
                     status: 1,
                     data: data
@@ -1002,7 +1002,7 @@ angular.module('app.service', [])
         httpDelete: function(url, listenerId){
             $http.delete(url, {
                 headers: {
-                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
             .then(function(data, status, headers, config) {
@@ -1025,8 +1025,40 @@ angular.module('app.service', [])
             return "http://test.popscoot.com/popscoot/";
         }
     }
+})
+.factory('toastService', function($rootScope, $http, $mdToast){
+    return {
+        showSimpleToast: function(textContent, position, hideDelay, parent) {
+
+            $mdToast.show(
+                $mdToast.simple()
+                .textContent(textContent)
+                .position(position)
+                .hideDelay(hideDelay)
+                .parent(parent)
+                );
+        },
+        showActionToast: function(textContent, position, hideDelay, parent, actionName, action, action2) {
+            var toast = $mdToast.simple()
+            .textContent(actionName)
+            .action(actionName)
+            .highlightAction(true)
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position(position)
+      .parent(parent);
+
+      $mdToast.show(toast).then(function(response) {
+        if ( response == 'ok' ) {
+            action();
+        }else{
+            action2();
+        }
+    });
+  }
+
+}
 });
- 
+
  /*.service('LocaleService', function ($translate, LOCALES, $rootScope, tmhDynamicLocale) {
     'use strict';
     // PREPARING LOCALES INFO
@@ -1089,7 +1121,6 @@ angular.module('app.service', [])
 var DAO = (function() {
 	var app = {};
 
-	var secret = '_1em51i6803tmf21496915286236l24i5gl3nhgd5tit'
 	app.setSecret = function(secret) {
 		localStorage.setItem("UI_SECRET", secret);
 	};
@@ -1159,8 +1190,9 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 		redirectTo: '/login'
 	});
 })
-.controller("AuthCtrl", function(){
+.controller("AuthCtrl", function($rootScope, $window){
 	console.log("Auth Ctrl");
+	$rootScope.browserHeight = $window.innerHeight;
 })
 /*.controller('LoginCtrl', function($scope, httpService, configuration){
 	var loginForm = {
@@ -1181,18 +1213,203 @@ angular.module('app.changePassword.ctrl', [])
 	console.log("ChangePasswordCtrl");
 })
 angular.module('app.forgetPassword.ctrl', [])
-.controller('ForgetPasswordCtrl', function($scope, httpService){
+.controller('ForgetPasswordCtrl', function($scope, httpService, $location, $mdToast, toastService, configuration){
+	var domain = configuration.domain();	
+	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+	$scope.url = {
+		forgetPassword: domain + "service/auth"
+	}
+	$scope.form = {
+		email: ""
+	}
+	$scope.forgetPassword = function(){
+		var body = {
+			email: $scope.form.email
+		}
+		httpService.httpPut($scope.url.forgetPassword, body, 'FORGETPASSWORD');
+		
+	}
+
+	var directInbox = function(mail){
+		atPos = mail.indexOf("@"),
+		hoster = mail.substring(atPos + 1);
+		window.location.href = 'http://' + hoster;
+	}
+	var showActionToast = function(textContent, position, hideDelay, parent, email) {
+		var toast = $mdToast.simple()
+		.textContent('Activation email sent...')
+		.action('To Inbox')
+		.highlightAction(true)
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position(position)
+      .parent(parent);
+
+      $mdToast.show(toast).then(function(response) {
+      	if ( response == 'ok' ) {
+      		directInbox(email);
+      	}else{
+      		window.location.href = $scope.path + "auth.html";
+      	}
+      });
+  }
+  $scope.$on("FORGETPASSWORD", function(event, data){
+  	console.log(data);
+  	if(data.data.data.status == 1) {
+  		/*if (data.data.data.data.type === "admin") {	*/			
+  			console.log(data.data.data.data);
+  			showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
+
+			/*} else {
+				alert("not admin");
+			}*/
+		} else {
+			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+		}
+	})
+
 	console.log("ForgetPasswordCtrl");
 })
 angular.module('app.login.ctrl', [])
-.controller('LoginCtrl', function($scope, httpService, $location){
+.controller('LoginCtrl', function($scope, httpService, $location, configuration, toastService){
+	$scope.authSecret;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-	console.log("LoginCtrl");
-	$scope.successfulLogin = function(){
-		window.location.href = ($scope.path + "index.html");
+	var domain = configuration.domain();
+	$scope.url = {
+		account: domain + "service/auth"
 	}
+	$scope.form = {
+		username: "",
+		password: ""
+	}
+	$scope.login = function(){
+		var body = {
+			username: $scope.form.username,	
+			password: $scope.form.password
+		}
+		if ($scope.form.username != "" && $scope.form.password != "") {
+			httpService.httpPost($scope.url.account, body, 'LOGIN');
+		} 		
+	}
+	$scope.$on("LOGIN", function(event, data){
+		console.log(data);
+		if(data.data.data.status == 1) {
+			/*if (data.data.data.data.type === "admin") {	*/			
+				console.log(data.data.data.data);
+				console.log(data.data.data.data["Auth-Secret"]);
+				DAO.setSecret(data.data.data.data["Auth-Secret"]);
+				window.location.href = $scope.path + "index.html"
+			/*} else {
+				alert("not admin");
+			}*/
+		} else {
+			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+		}
+	})
+
+  console.log("LoginCtrl");
 })
 angular.module('app.register.ctrl', [])
-.controller('RegisterCtrl', function($scope, httpService){
-	console.log("RegisterCtrl");
+.controller('RegisterCtrl', function($scope, httpService, toastService, configuration, $location, $mdToast){
+	var domain = configuration.domain();	
+	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+	$scope.url = {
+		register: domain + "service/accounts"
+	}
+	$scope.form = {
+		username: "",
+		email: "",
+		password: ""
+	}
+	$scope.register = function(){
+		var body = {
+			username: $scope.form.username,	
+			email: $scope.form.email,
+			password: $scope.form.password
+		}
+		if ($scope.form.username != "" && $scope.form.password != "") {
+			httpService.httpPost($scope.url.register, body, 'REGISTER');
+		} 		
+	}
+
+	var directInbox = function(mail){
+		atPos = mail.indexOf("@"),
+		hoster = mail.substring(atPos + 1);
+		window.location.href = 'http://' + hoster;
+	}
+	var showActionToast = function(textContent, position, hideDelay, parent, email) {
+		var toast = $mdToast.simple()
+		.textContent('Activation email sent...')
+		.action('To Inbox')
+		.highlightAction(true)
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position(position)
+      .parent(parent);
+
+      $mdToast.show(toast).then(function(response) {
+      	if ( response == 'ok' ) {
+      		directInbox(email);
+      	}else{
+      		window.location.href = $scope.path + "auth.html";
+      	}
+      });
+  }
+  $scope.$on("REGISTER", function(event, data){
+  	console.log(data);
+  	if(data.data.data.status == 1) {
+  		/*if (data.data.data.data.type === "admin") {	*/			
+  			console.log(data.data.data.data);
+  			showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
+
+			/*} else {
+				alert("not admin");
+			}*/
+		} else {
+			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+		}
+	})
+
+  console.log("RegisterCtrl");
+})
+.directive("compareTo", function(){
+	return {
+		require: "ngModel",
+		scope: {
+			otherModelValue: "=compareTo"
+		},
+		link: function(scope, element, attributes, ngModel) {
+
+			ngModel.$validators.compareTo = function(modelValue) {
+				return modelValue == scope.otherModelValue;
+			};
+
+			scope.$watch("otherModelValue", function() {
+				ngModel.$validate();
+			});
+		}
+	};
+})
+.directive("existUsername", function($http, $q, configuration){
+	var domain = configuration.domain();
+	url = {
+		validateUser: domain + "service/accounts"
+	}
+	return {
+		require: 'ngModel',
+		link: function(scope, elm, attrs, ngModel) {
+			ngModel.$asyncValidators.uniqueUsername = function(username) {
+				var body = {
+					"username": username
+				}
+				$http.post(url.validateUser, body)
+				.then(function(response) {
+					console.log(response);
+					if (response.data.status == 0) {
+						return $q.reject("Username has already been taken");
+					} else {
+						return true;
+					}
+				})
+			}
+		}
+	}
 })

@@ -1,12 +1,12 @@
 angular.module('app.service', [])
 
- .factory('httpService', function($rootScope, $http){
+.factory('httpService', function($rootScope, $http){
     return{
         httpGet: function(url, listenerId){
             url += "?_=" + new Date().getTime();
             $http.get(url, {
                 headers: {
-                    "Auth-Secret": '_auku09gp9blvcd14979377239506c3rnkdri7m69krr'
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
             .then(function(data, status, headers, config) {
@@ -23,10 +23,10 @@ angular.module('app.service', [])
         httpPost: function(url, input, listenerId){
             $http.post(url, input, {
                 headers: {
-                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
-			.then(function(data, status, headers, config) {
+            .then(function(data, status, headers, config) {
                 $rootScope.$broadcast(listenerId, {
                     status: 1,
                     data: data
@@ -40,10 +40,10 @@ angular.module('app.service', [])
         httpPut: function(url, input, listenerId){
             $http.put(url, input, {
                 headers: {
-                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
-			.then(function(data, status, headers, config) {
+            .then(function(data, status, headers, config) {
                 $rootScope.$broadcast(listenerId, {
                     status: 1,
                     data: data
@@ -57,7 +57,7 @@ angular.module('app.service', [])
         httpDelete: function(url, listenerId){
             $http.delete(url, {
                 headers: {
-                    "Auth-Secret": "_auku09gp9blvcd14979377239506c3rnkdri7m69krr"
+                    "Auth-Secret": DAO.getSecret()
                 }
             })
             .then(function(data, status, headers, config) {
@@ -80,8 +80,40 @@ angular.module('app.service', [])
             return "http://test.popscoot.com/popscoot/";
         }
     }
+})
+.factory('toastService', function($rootScope, $http, $mdToast){
+    return {
+        showSimpleToast: function(textContent, position, hideDelay, parent) {
+
+            $mdToast.show(
+                $mdToast.simple()
+                .textContent(textContent)
+                .position(position)
+                .hideDelay(hideDelay)
+                .parent(parent)
+                );
+        },
+        showActionToast: function(textContent, position, hideDelay, parent, actionName, action, action2) {
+            var toast = $mdToast.simple()
+            .textContent(actionName)
+            .action(actionName)
+            .highlightAction(true)
+      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+      .position(position)
+      .parent(parent);
+
+      $mdToast.show(toast).then(function(response) {
+        if ( response == 'ok' ) {
+            action();
+        }else{
+            action2();
+        }
+    });
+  }
+
+}
 });
- 
+
  /*.service('LocaleService', function ($translate, LOCALES, $rootScope, tmhDynamicLocale) {
     'use strict';
     // PREPARING LOCALES INFO
