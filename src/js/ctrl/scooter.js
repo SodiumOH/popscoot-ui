@@ -15,8 +15,10 @@ angular.module('app.scooter.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.scooter = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	function getBookings (){
@@ -27,8 +29,10 @@ angular.module('app.scooter.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bookings = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getScooter();
@@ -53,8 +57,10 @@ angular.module('app.scooter.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.scooters = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })

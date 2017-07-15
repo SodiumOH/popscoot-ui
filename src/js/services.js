@@ -3,6 +3,7 @@ angular.module('app.service', [])
 .factory('httpService', function($rootScope, $http){
     return{
         httpGet: function(url, listenerId){
+            $rootScope.$broadcast("GETLOADING");
             url += "?_=" + new Date().getTime();
             $http.get(url, {
                 headers: {
@@ -81,6 +82,12 @@ angular.module('app.service', [])
         }
     }
 })
+.factory('sortBy', function($rootScope){
+    return function sortBy(propertyName){
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+    };
+}])
 .factory('toastService', function($rootScope, $http, $mdToast){
     return {
         showSimpleToast: function(textContent, position, hideDelay, parent) {

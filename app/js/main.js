@@ -125,6 +125,11 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	});
 })
 
+.config(function($mdIconProvider) {
+	$mdIconProvider
+	.iconSet("call", 'img/icons/sets/communication-icons.svg', 24)
+	.iconSet("social", 'img/icons/sets/social-icons.svg', 24);
+})
 
 
 /*.constant('LOCALES', {
@@ -179,55 +184,228 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
     });*/
 angular.module('app.root.ctrl', [])
 
-.controller('RootCtrl', function($rootScope, $scope, $location) {
-	$rootScope.language = LANG_EN;
-	$scope.menu = [{
-		path: "dashboard",
-		name: $rootScope.language.dashboard
-	}, {
-		path: "accounts",
-		name: $rootScope.language.account
-	}, {
-		path: "scooters",
-		name: $rootScope.language.scooter
-	}, {
-		path: "bookings",
-		name: $rootScope.language.booking
-	}, {
-		path: "enquiries",
-		name: $rootScope.language.enquiry
-	}, {
-		path: "banks",
-		name: $rootScope.language.bank
-	}, {
-		path: "payments",
-		name: $rootScope.language.payment
-	}, {
-		path: "promotions",
-		name: $rootScope.language.promotion
-	}, {
-		path: "helps",
-		name: $rootScope.language.help
-	}, {
-		path: "analytics",
-		name: $rootScope.language.analytics
-	}, {
-		path: "logout",
-		name: "Logout"
-	}];
-
-	var path = $location.path();
-	$scope.currentNavItem = path.substring(1);
-	$scope.goPage = function(path) {
-		if (path == "logout") {
-			var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-			window.location.href = (path + "auth.html");
+.controller('RootCtrl', function($rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+	$scope.$on('GETLOADING', function(){
+		$scope.getLoad = true;
+		console.log(1);
+	});
+	$scope.$on('GETFINISHED', function(){
+		$scope.getLoad = false;
+		console.log(2);
+	})
+	$scope.setLanguage = function(language){
+		if (language) {
+			$scope.language = language;
 		} else {
-			$location.path(path);
-		}		
-	};
+			$scope.language = LANG_EN;
+		}
+	}
+	angular.element($window).on('resize', function () {
+		console.log($window.innerHeight);
+		$scope.browserHeight = $window.innerHeight;
+	});
+	
+	
+	var element = angular.element(document.querySelector('#id'));/*
+	$scope.profileHeight = element("#profileInfo").offsetHeight;*/
+	console.log($scope.profileHeight);
+	$scope.setLanguage();
+	$scope.menu ={
+		main: [	
+		{
+			path: "dashboard",
+			name: $scope.language.dashboard,
+			icon: "fa fa-tachometer"
+		}, {
+			path: "accounts",
+			name: $scope.language.account,
+			icon: "fa fa-users"
+		}, {
+			path: "scooters",
+			name: $scope.language.scooter,
+			icon: "fa fa-bicycle"
+		}, {
+			path: "bookings",
+			name: $scope.language.booking,
+			icon: "fa fa-book"
+		}, {
+			path: "enquiries",
+			name: $scope.language.enquiry,
+			icon: "fa fa-question-circle"
+		}, {
+			path: "finance",
+			name: $scope.language.finance,
+			colapsed: false,
+			icon: "fa fa-balance-scale",
+			icon2: {
+				colapsed: "fa fa-caret-up",
+				folded: "fa fa-caret-down"
+			},
+			child: [{
+				path: "banks",
+				name: $scope.language.bank,
+				icon: "fa fa-credit-card"
+			}, {
+				path: "payments",
+				name: $scope.language.payment,
+				icon: "fa fa-money"
+			}]
+		}, {
+			path: "miscellaneous",
+			name: $scope.language.miscellaneous,
+			colapsed: false,
+			icon: "fa fa-ellipsis-h",
+			icon2: {
+				colapsed: "fa fa-caret-up",
+				folded: "fa fa-caret-down"
+			},
+			child: [{
+				path: "promotions",
+				name: $scope.language.promotion,
+				icon: "fa fa-gift"
+			}, {
+				path: "helps",
+				name: $scope.language.help,
+				icon: "fa fa-info-circle"
+			}]
+		}, {
+			path: "analytics",
+			name: $scope.language.analytics,
+			icon: "fa fa-line-chart"
+		}],
+		logout: {
+			path: "logout",
+			name: "Logout",
+			icon: "fa fa-sign-out"
+		}};
+
+		var path = $location.path();
+		$scope.currentNavItem = path.substring(1);
+		$scope.openLeftMenu = function() {
+			$mdSidenav('left').toggle();
+		};
+
+		$scope.closeNav = function(id){
+			$mdSidenav(id).close();
+		}
+
+		$scope.goPage = function(path) {
+			if (path == "logout") {
+				var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+				window.location.href = (path + "auth.html");
+			} else if(path == "miscellaneous") {
+				$scope.menu.main[6].colapsed = !$scope.menu.main[6].colapsed;
+			} else if(path == "finance") {
+				$scope.menu.main[5].colapsed = !$scope.menu.main[5].colapsed;
+			} else {
+				$location.path(path);
+			}		
+		};
+
+		
+
+		var originatorEv;
+
+		$scope.openMenu = function($mdMenu, ev) {
+			originatorEv = ev;
+			$mdMenu.open(ev);
+		};
+
+		$scope.notificationsEnabled = true;
+		$scope.toggleNotifications = function() {
+			$scope.notificationsEnabled = !this.notificationsEnabled;
+		};
+
+		$scope.redial = function() {
+			$mdDialog.show(
+				$mdDialog.alert()
+				.targetEvent(originatorEv)
+				.clickOutsideToClose(true)
+				.parent('body')
+				.title('Suddenly, a redial')
+				.textContent('You just called a friend; who told you the most amazing story. Have a cookie!')
+				.ok('That was easy')
+				);
+
+			originatorEv = null;
+		};
+
+
+		$scope.checkVoicemail = function() {
+      // This never happens.
+  };
 
 })
+.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
+	return {
+		scope: {
+			section: '='
+		},
+		templateUrl: 'templates/menu-toggle.html',
+		link: function($scope, $element) {
+			var controller = $element.parent().controller();
+
+      // Used for toggling the visibility of the accordion's content, after
+      // all of the animations are completed. This prevents users from being
+      // allowed to tab through to the hidden content.
+      $scope.renderContent = false;
+
+      $scope.isOpen = function() {
+      	return controller.isOpen($scope.section);
+      };
+
+      $scope.toggle = function() {
+      	controller.toggleOpen($scope.section);
+      };
+
+      $mdUtil.nextTick(function() {
+      	$scope.$watch(function () {
+      		return controller.isOpen($scope.section);
+      	}, function (open) {
+      		var $ul = $element.find('ul');
+      		var $li = $ul[0].querySelector('a.active');
+
+      		if (open) {
+      			$scope.renderContent = true;
+      		}
+
+      		$$rAF(function() {
+      			var targetHeight = open ? $ul[0].scrollHeight : 0;
+
+      			$animateCss($ul, {
+      				easing: 'cubic-bezier(0.35, 0, 0.25, 1)',
+      				to: { height: targetHeight + 'px' },
+              duration: 0.75 // seconds
+          }).start().then(function() {
+          	var $li = $ul[0].querySelector('a.active');
+
+          	$scope.renderContent = open;
+
+          	if (open && $li && $ul[0].scrollTop === 0) {
+          		var activeHeight = $li.scrollHeight;
+          		var activeOffset = $li.offsetTop;
+          		var offsetParent = $li.offsetParent;
+          		var parentScrollPosition = offsetParent ? offsetParent.offsetTop : 0;
+
+                // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
+                var negativeOffset = activeHeight * 2;
+                var newScrollTop = activeOffset + parentScrollPosition - negativeOffset;
+
+                $mdUtil.animateScrollTo(document.querySelector('.docs-menu').parentNode, newScrollTop);
+            }
+        });
+      });
+      	});
+      });
+
+      var parentNode = $element[0].parentNode.parentNode.parentNode;
+      if(parentNode.classList.contains('parent-list-item')) {
+      	var heading = parentNode.querySelector('h2');
+      	$element[0].firstChild.setAttribute('aria-describedby', heading.id);
+      }
+  }
+};
+}])
 
 angular.module('app.account.ctrl', [])
 
@@ -391,7 +569,7 @@ angular.module('app.account.ctrl', [])
 	});
 
 	$scope.updateAccount = function(){
-		 var updateForm = {
+		var updateForm = {
 			accountId: $scope.init_form.accountId,
 			birthday: moment($scope.init_form.birthday).format("YYYY-MM-DDTHH:MM:SSZ")
 		}
@@ -442,6 +620,14 @@ angular.module('app.account.ctrl', [])
 		}
 	}
 
+	$scope.getActive = function (acc){
+		if (acc.active) {
+			return 'ACTIVATED'
+		} else {
+			return 'DEACTIVATED'
+		}
+	}
+
 	// init
 
 	getAccount();
@@ -456,15 +642,15 @@ angular.module('app.account.ctrl', [])
 	
 })
 
-.controller('AccountsCtrl', function($scope, $location, httpService) {
+.controller('AccountsCtrl', function($scope, $location, httpService, $timeout) {
 	console.log('this is AccountsCtrl');
 	$scope.path = "#/accounts/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-	
 
+	
 	$scope.accounts = [];
 
 	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
@@ -475,27 +661,130 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.emit("GETFINISHED")
 		}
 	});
 
-	$scope.deleteAccount = function(id){
-		httpService.httpDelete($scope.url+"/"+id, 'DELETE_ACCOUNT');
+    //dynamic loading start
+    // In this example, we set up our model using a class.
+        // Using a plain object works too. All that matters
+        // is that we implement getItemAtIndex and getLength.
+        $scope.DynamicItems = function() {
+          /**
+           * @type {!Object<?Array>} Data pages, keyed by page number (0-index).
+           */
+           this.loadedPages = {};
+
+           /** @type {number} Total number of items. */
+           this.numItems = 0;
+
+           /** @const {number} Number of items to fetch per request. */
+           this.PAGE_SIZE = 50;
+
+           this.fetchNumItems_();
+       };
+
+        // Required.
+        $scope.DynamicItems.prototype.getItemAtIndex = function(index) {
+        	var pageNumber = Math.floor(index / this.PAGE_SIZE);
+        	var page = this.loadedPages[pageNumber];
+
+        	if (page) {
+        		return page[index % this.PAGE_SIZE];
+        	} else if (page !== null) {
+        		this.fetchPage_(pageNumber);
+        	}
+        };
+
+        // Required.
+        $scope.DynamicItems.prototype.getLength = function() {
+        	return this.numItems;
+        };
+
+        $scope.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+          // Set the page to null so we know it is already being fetched.
+          this.loadedPages[pageNumber] = null;
+
+          // For demo purposes, we simulate loading more items with a timed
+          // promise. In real code, this function would likely contain an
+          // $http request.
+          $timeout(angular.noop, 300).then(angular.bind(this, function() {
+          	this.loadedPages[pageNumber] = [];
+          	var pageOffset = pageNumber * this.PAGE_SIZE;
+          	for (var i = pageOffset; i < pageOffset + this.PAGE_SIZE; i++) {
+          		this.loadedPages[pageNumber].push(i);
+          	}
+          }));
+      };
+
+      $scope.DynamicItems.prototype.fetchNumItems_ = function() {
+          // For demo purposes, we simulate loading the item count with a timed
+          // promise. In real code, this function would likely contain an
+          // $http request.
+          $timeout(angular.noop, 300).then(angular.bind(this, function() {
+          	this.numItems = 50000;
+          }));
+      };
+
+      this.dynamicItems = new $scope.DynamicItems();
+
+    //dynamic loading end
+
+    //pagination start
+    $scope.currentPageNumber = 1;
+    $scope.itemsPerPage = 10;
+
+    $scope.getNumberOfPages = function() {
+    	var count = $scope.accounts.length / $scope.itemsPerPage;
+    	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+    	return count;
+    }
+
+    $scope.pageDown = function()
+    {
+    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+    }
+
+    $scope.pageUp = function()
+    {
+    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+    }
+    //pagination end
+
+    $scope.deleteAccount = function(id){
+    	httpService.httpDelete($scope.url+"/"+id, 'DELETE_ACCOUNT');
+    }
+
+    $scope.$on("DELETE_ACCOUNT", function(event, data){
+    	if(data.data.data.status == 1) {
+    		console.log(data.data.data.data);
+    		httpService.httpGet($scope.url, 'GET_ACCOUNTS');
+    	} else {
+    		console.log(data.data.data.message);
+    	}
+    });
+
+    $scope.getActive = function (acc){
+		if (acc.active) {
+			return 'ACTIVATED'
+		} else {
+			return 'DEACTIVATED'
+		}
 	}
-
-	$scope.$on("DELETE_ACCOUNT", function(event, data){
-		if(data.data.data.status == 1) {
-			console.log(data.data.data.data);
-			httpService.httpGet($scope.url, 'GET_ACCOUNTS');
-		} else {
-			console.log(data.data.data.message);
-		}
-	});
 })
 
 .controller("NewAccountCtrl", function(){
 	console.log("this is NewAccountCtrl");
+})
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
 })
 angular.module('app.analytics.ctrl', [])
 
@@ -518,8 +807,10 @@ angular.module('app.bank.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getBank();
@@ -542,8 +833,10 @@ angular.module('app.bank.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.banks = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -569,8 +862,10 @@ angular.module('app.booking.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.booking = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getBooking();
@@ -601,8 +896,10 @@ angular.module('app.booking.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bookings = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -635,8 +932,10 @@ angular.module('app.enquiry.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.enquiry = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getEnquiry();
@@ -658,8 +957,10 @@ angular.module('app.enquiry.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.enquiries = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -676,15 +977,17 @@ angular.module('app.help.ctrl', [])
 	};
 	$scope.help;
 	function getHelp(){
-		httpService.httpGet($scope.url.help, 'GET_HELPS');
+		httpService.httpGet($scope.url.help, 'GET_HELP');
 	}
 
-	$scope.$on("GET_HELPS", function(event, data){
+	$scope.$on("GET_HELP", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.help = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getHelp();
@@ -706,8 +1009,10 @@ angular.module('app.help.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.helps = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -734,8 +1039,10 @@ angular.module('app.payment.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.payment = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 
@@ -747,8 +1054,10 @@ angular.module('app.payment.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.transactions = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getPayment();
@@ -771,8 +1080,10 @@ angular.module('app.payment.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.payments = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -801,8 +1112,10 @@ angular.module('app.promotion.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	function getAccounts (){		
@@ -813,8 +1126,10 @@ angular.module('app.promotion.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getPromotion();
@@ -837,8 +1152,10 @@ angular.module('app.promotion.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotions = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -865,8 +1182,10 @@ angular.module('app.scooter.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.scooter = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	function getBookings (){
@@ -877,8 +1196,10 @@ angular.module('app.scooter.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bookings = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getScooter();
@@ -903,8 +1224,10 @@ angular.module('app.scooter.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.scooters = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })
@@ -935,6 +1258,12 @@ angular.module('app.filters', [])
 				return input;
 		}
 	}
+})
+
+.filter('nospace', function () {
+    return function (value) {
+        return (!value) ? '' : value.replace(/ /g, '');
+    };
 });
 
 
@@ -948,6 +1277,7 @@ angular.module('app.service', [])
 .factory('httpService', function($rootScope, $http){
     return{
         httpGet: function(url, listenerId){
+            $rootScope.$broadcast("GETLOADING");
             url += "?_=" + new Date().getTime();
             $http.get(url, {
                 headers: {
@@ -1026,6 +1356,12 @@ angular.module('app.service', [])
         }
     }
 })
+.factory('sortBy', function($rootScope){
+    return function sortBy(propertyName){
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+    };
+}])
 .factory('toastService', function($rootScope, $http, $mdToast){
     return {
         showSimpleToast: function(textContent, position, hideDelay, parent) {
@@ -1143,7 +1479,9 @@ var LANG_EN = {
 	help: "help",
 	payment: "payment",
 	promotion: "promotion",
-	scooter: "scooter"
+	scooter: "scooter",
+	finance: "finance",
+	miscellaneous: "miscellaneous"
 };
 
 var LANG_CH = {
@@ -1305,7 +1643,7 @@ angular.module('app.login.ctrl', [])
 			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
 		}
 	})
-
+ 	
   console.log("LoginCtrl");
 })
 angular.module('app.register.ctrl', [])
@@ -1388,7 +1726,7 @@ angular.module('app.register.ctrl', [])
 		}
 	};
 })
-.directive("existUsername", function($http, $q, configuration){
+/*.directive("existUsername", function($http, $q, configuration){
 	var domain = configuration.domain();
 	url = {
 		validateUser: domain + "service/accounts"
@@ -1412,4 +1750,4 @@ angular.module('app.register.ctrl', [])
 			}
 		}
 	}
-})
+})*/

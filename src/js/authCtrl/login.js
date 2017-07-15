@@ -34,6 +34,6 @@ angular.module('app.login.ctrl', [])
 			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
 		}
 	})
-
+ 	
   console.log("LoginCtrl");
 })

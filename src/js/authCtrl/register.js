@@ -78,7 +78,7 @@ angular.module('app.register.ctrl', [])
 		}
 	};
 })
-.directive("existUsername", function($http, $q, configuration){
+/*.directive("existUsername", function($http, $q, configuration){
 	var domain = configuration.domain();
 	url = {
 		validateUser: domain + "service/accounts"
@@ -102,4 +102,4 @@ angular.module('app.register.ctrl', [])
 			}
 		}
 	}
-})
+})*/

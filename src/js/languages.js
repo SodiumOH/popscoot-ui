@@ -9,7 +9,9 @@ var LANG_EN = {
 	help: "help",
 	payment: "payment",
 	promotion: "promotion",
-	scooter: "scooter"
+	scooter: "scooter",
+	finance: "finance",
+	miscellaneous: "miscellaneous"
 };
 
 var LANG_CH = {

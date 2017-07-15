@@ -7,15 +7,17 @@ angular.module('app.help.ctrl', [])
 	};
 	$scope.help;
 	function getHelp(){
-		httpService.httpGet($scope.url.help, 'GET_HELPS');
+		httpService.httpGet($scope.url.help, 'GET_HELP');
 	}
 
-	$scope.$on("GET_HELPS", function(event, data){
+	$scope.$on("GET_HELP", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.help = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 	getHelp();
@@ -37,8 +39,10 @@ angular.module('app.help.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.helps = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 	});
 })

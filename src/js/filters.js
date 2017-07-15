@@ -15,6 +15,12 @@ angular.module('app.filters', [])
 				return input;
 		}
 	}
+})
+
+.filter('nospace', function () {
+    return function (value) {
+        return (!value) ? '' : value.replace(/ /g, '');
+    };
 });
 
 

@@ -6,17 +6,84 @@
 	<!-- endinject -->
 </head>
 <body>
-	<div ng-app="POPSCOOT">
-		<md-content class="md-padding" ng-controller="RootCtrl">
-			<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+	<div id="root" ng-app="POPSCOOT">
+		<div flex ng-controller="RootCtrl" layout="row">
+			<div  ng-style="{'height': browserHeight+ 'px'}">
+				<md-sidenav
+				class="md-sidenav-left"
+				md-component-id="left"
+				md-is-locked-open="$mdMedia('gt-md')"
+				md-whiteframe="4"
+				style="width: 240px">
+
+				<md-toolbar id='profileInfo' class="md-theme-indigo" layout-padding>
+					<h1 class="md-toolbar-tools">Sidenav Left</h1>
+				</md-toolbar>
+				<md-content style="overflow-y: scroll;">
+					<ul flex style="padding-left: 0px">
+						<div ng-repeat="item in menu.main" layout-align="center start">
+							<li class="md-button" ng-click="goPage(item.path)">
+								<i class="{{item.icon}} fa-lg fa-fw" aria-hidden="true" ></i> {{item.name}}
+								<i ng-if="item.icon2 && !item.colapsed" class="{{item.icon2.folded}} fa-lg fa-fw" aria-hidden="true" ></i>
+								<i ng-if="item.icon2 && item.colapsed" class="{{item.icon2.colapsed}} fa-lg fa-fw" aria-hidden="true" ></i>
+							</li>
+							<li class="md-button" ng-if="item.child && item.colapsed" ng-repeat="child in item.child" ng-click="goPage(child.path); $event.stopPropagation()">
+								<i class="{{child.icon}} fa-lg fa-fw" aria-hidden="true" ></i> {{child.name}}									
+							</li>
+						</div>
+						
+					</ul>
+				</md-content>
+
+
+
+
+			</md-sidenav>
+		</div>
+
+
+		<div flex>
+			<md-toolbar class="md-hue-2">
+				<div class="md-toolbar-tools">
+					<md-button class="md-icon-button" ng-click="openLeftMenu()" hide-gt-md>
+						<i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+					</md-button>
+					<h2 flex md-truncate>#TODO: STEPPER</h2>
+					<md-button class="md-icon-button" aria-label="More" ng-click="goPage(menu[10].path)">
+						<i class="fa fa-sign-out fa-2x" aria-hidden="true"></i> 
+					</md-button>
+				</div>
+			</md-toolbar>
+			<div>
+				<md-progress-circular md-mode="indeterminate" class="md-accent" ng-if="getLoad"></md-progress-circular>
+				<ng-view></ng-view>	
+			</div>
+
+		</div>
+
+
+	</div>
+
+</div>
+
+<!-- inject:js -->
+<!-- endinject -->
+</body>
+</html>
+
+
+			<!-- <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+				<div layout="row" layout-align="end stretch">
+					<md-button ng-click="openLeftMenu()" hide-gt-md>
+						Open
+					</md-button>
 				<md-nav-item ng-repeat="item in menu" md-nav-click="goto(item.path)" name="{{item.path}}" ng-click="goPage(item.path)">
 					{{item.name}}
 				</md-nav-item>
-			</md-nav-bar>
-			<ng-view></ng-view>
-		</md-content>
-	</div>
-	<!-- inject:js -->
-	<!-- endinject -->
-</body>
-</html>
+				<div>
+					<md-button ng-click="goPage(menu[10].path)">{{menu[10].name}}</md-button>
+				</div>
+
+			</div>
+
+		</md-nav-bar> -->

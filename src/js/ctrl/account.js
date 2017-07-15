@@ -160,7 +160,7 @@ angular.module('app.account.ctrl', [])
 	});
 
 	$scope.updateAccount = function(){
-		 var updateForm = {
+		var updateForm = {
 			accountId: $scope.init_form.accountId,
 			birthday: moment($scope.init_form.birthday).format("YYYY-MM-DDTHH:MM:SSZ")
 		}
@@ -211,6 +211,14 @@ angular.module('app.account.ctrl', [])
 		}
 	}
 
+	$scope.getActive = function (acc){
+		if (acc.active) {
+			return 'ACTIVATED'
+		} else {
+			return 'DEACTIVATED'
+		}
+	}
+
 	// init
 
 	getAccount();
@@ -225,15 +233,15 @@ angular.module('app.account.ctrl', [])
 	
 })
 
-.controller('AccountsCtrl', function($scope, $location, httpService) {
+.controller('AccountsCtrl', function($scope, $location, httpService, $timeout) {
 	console.log('this is AccountsCtrl');
 	$scope.path = "#/accounts/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-	
 
+	
 	$scope.accounts = [];
 
 	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
@@ -244,25 +252,128 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.emit("GETFINISHED")
 		}
 	});
 
-	$scope.deleteAccount = function(id){
-		httpService.httpDelete($scope.url+"/"+id, 'DELETE_ACCOUNT');
+    //dynamic loading start
+    // In this example, we set up our model using a class.
+        // Using a plain object works too. All that matters
+        // is that we implement getItemAtIndex and getLength.
+        $scope.DynamicItems = function() {
+          /**
+           * @type {!Object<?Array>} Data pages, keyed by page number (0-index).
+           */
+           this.loadedPages = {};
+
+           /** @type {number} Total number of items. */
+           this.numItems = 0;
+
+           /** @const {number} Number of items to fetch per request. */
+           this.PAGE_SIZE = 50;
+
+           this.fetchNumItems_();
+       };
+
+        // Required.
+        $scope.DynamicItems.prototype.getItemAtIndex = function(index) {
+        	var pageNumber = Math.floor(index / this.PAGE_SIZE);
+        	var page = this.loadedPages[pageNumber];
+
+        	if (page) {
+        		return page[index % this.PAGE_SIZE];
+        	} else if (page !== null) {
+        		this.fetchPage_(pageNumber);
+        	}
+        };
+
+        // Required.
+        $scope.DynamicItems.prototype.getLength = function() {
+        	return this.numItems;
+        };
+
+        $scope.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+          // Set the page to null so we know it is already being fetched.
+          this.loadedPages[pageNumber] = null;
+
+          // For demo purposes, we simulate loading more items with a timed
+          // promise. In real code, this function would likely contain an
+          // $http request.
+          $timeout(angular.noop, 300).then(angular.bind(this, function() {
+          	this.loadedPages[pageNumber] = [];
+          	var pageOffset = pageNumber * this.PAGE_SIZE;
+          	for (var i = pageOffset; i < pageOffset + this.PAGE_SIZE; i++) {
+          		this.loadedPages[pageNumber].push(i);
+          	}
+          }));
+      };
+
+      $scope.DynamicItems.prototype.fetchNumItems_ = function() {
+          // For demo purposes, we simulate loading the item count with a timed
+          // promise. In real code, this function would likely contain an
+          // $http request.
+          $timeout(angular.noop, 300).then(angular.bind(this, function() {
+          	this.numItems = 50000;
+          }));
+      };
+
+      this.dynamicItems = new $scope.DynamicItems();
+
+    //dynamic loading end
+
+    //pagination start
+    $scope.currentPageNumber = 1;
+    $scope.itemsPerPage = 10;
+
+    $scope.getNumberOfPages = function() {
+    	var count = $scope.accounts.length / $scope.itemsPerPage;
+    	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+    	return count;
+    }
+
+    $scope.pageDown = function()
+    {
+    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+    }
+
+    $scope.pageUp = function()
+    {
+    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+    }
+    //pagination end
+
+    $scope.deleteAccount = function(id){
+    	httpService.httpDelete($scope.url+"/"+id, 'DELETE_ACCOUNT');
+    }
+
+    $scope.$on("DELETE_ACCOUNT", function(event, data){
+    	if(data.data.data.status == 1) {
+    		console.log(data.data.data.data);
+    		httpService.httpGet($scope.url, 'GET_ACCOUNTS');
+    	} else {
+    		console.log(data.data.data.message);
+    	}
+    });
+
+    $scope.getActive = function (acc){
+		if (acc.active) {
+			return 'ACTIVATED'
+		} else {
+			return 'DEACTIVATED'
+		}
 	}
-
-	$scope.$on("DELETE_ACCOUNT", function(event, data){
-		if(data.data.data.status == 1) {
-			console.log(data.data.data.data);
-			httpService.httpGet($scope.url, 'GET_ACCOUNTS');
-		} else {
-			console.log(data.data.data.message);
-		}
-	});
 })
 
 .controller("NewAccountCtrl", function(){
 	console.log("this is NewAccountCtrl");
+})
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
 })
