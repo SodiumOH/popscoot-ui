@@ -1,6 +1,6 @@
 var DAO = (function() {
 	var app = {};
-
+	
 	app.setSecret = function(secret) {
 		localStorage.setItem("UI_SECRET", secret);
 	};

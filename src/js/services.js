@@ -87,7 +87,7 @@ angular.module('app.service', [])
         $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
         $scope.propertyName = propertyName;
     };
-}])
+})
 .factory('toastService', function($rootScope, $http, $mdToast){
     return {
         showSimpleToast: function(textContent, position, hideDelay, parent) {

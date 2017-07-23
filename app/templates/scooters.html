@@ -1,10 +1,56 @@
 <div>
-	
-	
-  <md-button ng-href="#/new/scooter">create new scooter</md-button>
-  <div flex="100" ng-repeat="scooter in scooters">
-    {{scooter}}
-    <md-button ng-href="{{path+scooter.scooterId}}">{{scooter.scooterId}}</md-button>
+	<md-card>
+		<md-content class="md-padding">
 
-  </div>
+			<md-card>
+				<div layout="row" layout-align="space-between center" layout-padding>
+					<div layout="row" layout-align="start center" layout-padding>
+						<span>Items Per Page</span>
+						<md-select ng-model="itemsPerPage" placeholder="Item per page">
+							<md-option value=10>10</md-option>
+							<md-option value=20>20</md-option>
+							<md-option value=30>30</md-option>
+							<md-option value="all">all</md-option>
+						</md-select>
+						<span>Order by</span>
+						<md-select ng-model="itemsOrder" placeholder="Item per page">
+							<md-option value="date" ng-click="order()">Latest</md-option>
+							<md-option value="scooterId" ng-click="order()">ScooterID</md-option>
+							<md-option value="active" ng-click="order()">Active</md-option>
+						</md-select>				
+					</div> 
+					<div>
+						<span>Create New Scooter</span>
+						<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+							<i class="fa fa-plus-circle"></i>
+						</md-button>
+					</div>			
+				</div>
+			</md-card>
+			<md-divider ></md-divider>
+			
+			<div layout="row" layout-wrap>
+				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in scooters|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
+					<md-card>
+						<md-card-title>
+							<md-card-title-text>
+								<span class="md-headline">{{item.integrateId}}</span>
+								<span class="md-subhead">ScooterID: {{item.scooterId}}</span>
+								<span class="md-subhead">Battery: {{item.battery}}</span>
+							</md-card-title-text>
+							<md-card-title-media>
+								<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+								</div>
+							</md-card-title-media>
+						</md-card-title>
+						<md-card-actions layout="row" layout-align="end center"> 
+							<md-button class="md-raised" ng-href="{{path+item.scooterId}}">Details</md-button>
+							<md-switch ng-model="item.active" aria-label="Switch 1" ng-change>{{(item.active)?"activated":"deactivated"}}</md-switch>
+						</md-card-actions>
+					</md-card>
+				</div>
+			</div>
+
+		</md-content>
+	</md-card>       
 </div>

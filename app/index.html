@@ -7,23 +7,27 @@
 	<link rel="stylesheet" href="/app/lib/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/app/lib/angular-material/angular-material.min.css">
 	<link rel="stylesheet" href="/app/css/style.css">
+	<link rel="stylesheet" href="/app/css/ng-img-crop.css">
+	<link rel="stylesheet" href="/app/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css">
 	
 </head>
 <body>
 	<div id="root" ng-app="POPSCOOT">
-		<div flex ng-controller="RootCtrl" layout="row">
-			<div  ng-style="{'height': browserHeight+ 'px'}">
+		<div flex ng-controller="RootCtrl">
+			<md-progress-linear md-mode="indeterminate" class="md-accent" ng-if="getLoad"></md-progress-linear>
+			<div layout="row">
 				<md-sidenav
 				class="md-sidenav-left"
 				md-component-id="left"
 				md-is-locked-open="$mdMedia('gt-md')"
 				md-whiteframe="4"
-				style="width: 240px">
+				ng-style="{'min-height': browserHeight px}"
+				>
 
 				<md-toolbar id='profileInfo' class="md-theme-indigo" layout-padding>
-					<h1 class="md-toolbar-tools">Sidenav Left</h1>
+					<h1 class="md-toolbar-tools">Company Profile</h1>
 				</md-toolbar>
-				<md-content style="overflow-y: scroll;">
+				<md-content>
 					<ul flex style="padding-left: 0px">
 						<div ng-repeat="item in menu.main" layout-align="center start">
 							<li class="md-button" ng-click="goPage(item.path)">
@@ -31,39 +35,64 @@
 								<i ng-if="item.icon2 && !item.colapsed" class="{{item.icon2.folded}} fa-lg fa-fw" aria-hidden="true" ></i>
 								<i ng-if="item.icon2 && item.colapsed" class="{{item.icon2.colapsed}} fa-lg fa-fw" aria-hidden="true" ></i>
 							</li>
-							<li class="md-button" ng-if="item.child && item.colapsed" ng-repeat="child in item.child" ng-click="goPage(child.path); $event.stopPropagation()">
-								<i class="{{child.icon}} fa-lg fa-fw" aria-hidden="true" ></i> {{child.name}}									
-							</li>
+							<ul ng-if="item.child && item.colapsed">
+								<li class="md-button" ng-repeat="child in item.child" ng-click="goPage(child.path); $event.stopPropagation()">
+									<i class="{{child.icon}} fa-lg fa-fw" aria-hidden="true" ></i> {{child.name}}									
+								</li>								
+							</ul>
 						</div>
-						
+
 					</ul>
 				</md-content>
-
-
-
-
 			</md-sidenav>
-		</div>
+			<div flex>
+				<md-toolbar class="md-hue-2">
+					<div class="md-toolbar-tools">
+						<md-button class="md-icon-button" ng-click="openLeftMenu()" hide-gt-md>
+							<i class="fa fa-bars fa-2x" aria-hidden="true" ></i>
+						</md-button>
+						<h2 flex md-truncate>
+							<md-button ng-repeat="breadcrumb in breadcrumbs">{{breadcrumb.name}}></md-button>
+						</h2>
+						<md-menu md-offset="0 50">
+							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
+								<div style="border-radius: 100%; background-color: #C0C0C0;">{{Laccount.username.split("")[0]}}</div>
+							</md-button>
+							<md-menu-content width="4">
+								<md-menu-item>
+									<span  style="margin-top: 0px; padding-left: 5px;">{{Laccount.email}}</span>								
+								</md-menu-item>
+								<md-menu-item>
+									<md-content layout-align='row'>
+										<div class="md-media-sm card-media" style="background-image: url({{Laccount.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">								
+										</div>								
+										<md-button ng-href="{{path+Laccount.accountId}}">
+											Profile
+										</md-button>
+									</md-content>
+								</md-menu-item>
+								<md-menu-divider></md-menu-divider>
+								<md-menu-item layout-align="end end">
+									<md-button aria-label="More" ng-click="goPage(menu.logout.path)">
+										<i class="fa fa-sign-out" aria-hidden="true"></i>Logout
+									</md-button>
+								</md-menu-item>
+							</md-menu-content>
+						</md-menu>
 
+					</div>
+				</md-toolbar>
+				<md-content>
 
-		<div flex>
-			<md-toolbar class="md-hue-2">
-				<div class="md-toolbar-tools">
-					<md-button class="md-icon-button" ng-click="openLeftMenu()" hide-gt-md>
-						<i class="fa fa-bars fa-2x" aria-hidden="true"></i>
-					</md-button>
-					<h2 flex md-truncate>#TODO: STEPPER</h2>
-					<md-button class="md-icon-button" aria-label="More" ng-click="goPage(menu[10].path)">
-						<i class="fa fa-sign-out fa-2x" aria-hidden="true"></i> 
-					</md-button>
-				</div>
-			</md-toolbar>
-			<div>
-				<md-progress-circular md-mode="indeterminate" class="md-accent" ng-if="getLoad"></md-progress-circular>
-				<ng-view></ng-view>	
+					<ng-view></ng-view>	
+				</md-content>
+
 			</div>
-
 		</div>
+
+
+
+		
 
 
 	</div>
@@ -78,6 +107,10 @@
 <script src="/app/lib/angular-animate/angular-animate.min.js"></script>
 <script src="/app/lib/angular-material/angular-material.min.js"></script>
 <script src="/app/js/main.js"></script>
+<script src="/app/lib/angular-avatar/dist/angular-avatar.js"></script>
+<script src="/app/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js"></script>
+<script src="/app/lib/ng-file-upload/dist/ng-file-upload.js"></script>
+<script src="/app/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js"></script>
 
 </body>
 </html>

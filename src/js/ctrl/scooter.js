@@ -1,6 +1,6 @@
 angular.module('app.scooter.ctrl', [])
 
-.controller('ScooterCtrl', function($scope, $routeParams, httpService, configuration) {
+.controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
 	console.log('this is ScooterCtrl')
 	$scope.scooter = {};
 	$scope.bookings = [];
@@ -35,18 +35,76 @@ angular.module('app.scooter.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		}
 	});
-	getScooter();
-	getBookings();
+
+	$scope.updateScooter = function(){
+		var updateForm = $scope.scooter;
+		httpService.httpPut($scope.url.scooter, updateForm, 'UPDATE_Scooter');
+	}
+	$scope.$on('UPDATE_Scooter', function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.scooter = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+
+	deletescooter = function(){
+		httpService.httpDelete($scope.url.scooter, 'DELETE_scooter');
+	}
+
+	$scope.$on("DELETE_scooter", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	$scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+    .title('Confirm Deletion')
+    .textContent('Please key in the IID of the scooter to delete')
+    .placeholder('integrateId')
+    .ariaLabel('integrate_id')
+    .targetEvent(ev)
+    .ok('Confirm')
+    .cancel('Cancel');
+
+    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+    $mdDialog.show(confirm).then(function(result) {
+    	if (result == $scope.scooter.integrateId) {
+    		deletescooter();    		
+    		window.location.href = $scope.path + "index.html#/scooters";
+    	} else {
+
+    		$scope.status = 'Username Mismatch';
+    	}
+    	
+    }, function() {
+    	$scope.status = 'Action canceled';
+    });
+};
+
+getScooter();
+getBookings();
 })
 
 
-.controller('ScootersCtrl', function($scope, $location, httpService) {
+.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService) {
 	console.log('this is ScootersCtrl');
 	$scope.path = "#/scooters/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
+	
+	$scope.itemsOrder = "active";
+	$scope.reverse = true;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 	$scope.scooters = [];
 
 	$scope.url = "http://test.popscoot.com/popscoot/service/scooters"
@@ -63,8 +121,37 @@ angular.module('app.scooter.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		}
 	});
+	    //pagination start
+	    $scope.itemsPerRow;
+	    if ($mdMedia('gt-md')) {
+	    	$scope.itemsPerRow = 3;
+	    } else if ($mdMedia('gt-xs')) {
+	    	$scope.itemsPerRow = 2;
+	    } else {
+	    	$scope.itemsPerRow = 1;
+	    }
+	    $scope.currentPageNumber = 1;
+	    $scope.row = 4;
+	    $scope.itemsPerPage = 10;
+
+	    $scope.getNumberOfPages = function() {
+	    	var count = $scope.scooters.length / $scope.itemsPerPage;
+	    	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+	    	return count;
+	    }
+
+	    $scope.pageDown = function()
+	    {
+	    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+	    }
+
+	    $scope.pageUp = function()
+	    {
+	    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+	    }
+    //pagination end
 })
 .controller('NewScooterCtrl', function(){
 	console.log("this is NewScooterCtrl")
-;})
+	;})
 

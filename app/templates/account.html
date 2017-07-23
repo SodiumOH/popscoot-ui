@@ -1,61 +1,262 @@
-<md-content layout="row" layout-wrap layout-padding  style="overflow: scroll">
-	<div flex="100">
-		
-		<md-button ng-href="#/accounts">accountList</md-button>
-		{{account}}
-		<md-button ng-href="#/accounts/1">updated</md-button>
-		<md-button ng-href="#/accounts">deleted</md-button>
-	</div>
-	<div flex="100">
-		
-		<HEAD>bookings</HEAD>
-		<md-button ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">{{item.bookingId}}</md-button>
-		<md-button ng-href="#/new/booking">Create booking</md-button>
-	</div>
-	<div flex="100">
-		
-		<HEAD>banks</HEAD>
-		<div ng-repeat="item in banks">
-			{{item}}
-			<md-button ng-href="#/banks/{{item.bankId}}">details</md-button>
-		</div>
-		<md-button ng-href="#/new/bank" ng-show="!hasBank">Create bank</md-button>
-		<md-button ng-href="#/accounts/1" ng-show="!hasBank">Add bank</md-button>		
-	</div>
-	<div flex="100">
-		
-		<HEAD>enquiries</HEAD>
-		<md-button ng-repeat="item in enquiries" ng-href="#/enquiries/{{item.enquiryId}}">{{item.enquiryId}}</md-button>			
-	</div>
-	<div flex="100">
-		
-		<HEAD>payments</HEAD>
-		<md-button ng-repeat="item in payments" ng-href="#/payments/{{item.paymentId}}">{{item.paymentId}}</md-button>
-	</div>
-	<div flex="100">
-		
-		<HEAD>transactions</HEAD>
-		<md-button ng-repeat="item in transactions" ng-href="#/transactions/{{item.transactionId}}">{{item.transactionId}}</md-button>
-	</div>
-	<div flex="100">
-		
-		<HEAD>shareLogs</HEAD>
-		<md-button ng-repeat="item in shareLogs" ng-href="#/shareLogs/{{item.shareLogId}}">{{item.shareLogId}}</md-button>
-	</div>
-	<div flex="100">
-		
-		<HEAD>pushTokens</HEAD>
-		<md-button ng-repeat="item in pushTokens" ng-href="#/pushTokens/{{item.pushTokenId}}">{{item.pushTokenId}}</md-button>
-	</div>
-	<div flex="100">
-		
-		<HEAD>promotions</HEAD>
-		<div ng-repeat="item in promotions">
-			{{item}}
-			<md-button ng-href="#/promotions/{{item.promotionId}}">details</md-button>
-			<md-button ng-href="#/accounts/5">remove</md-button>
-		</div>
-		<md-button ng-href="#/new/accountPromo">apply promotion</md-button>
-	</div>
 
-</md-content>
+<md-button class="md-raised" ng-href="#/accounts">accountList</md-button>
+<md-content layout-gt-sm="row" layout-padding>
+	<div flex flex-md="35" flex-gt-md="30">
+		<h2 class="title">Basic Information</h2>
+		<md-card>
+			<md-card-title>
+				<md-card-title-text>
+					<span class="md-headline">{{account.username}}</span>
+				</md-card-title-text>
+
+				<md-card-title-media>
+					<div class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+
+					</div>
+				</md-card-title-media>
+
+			</md-card-title>
+			<div>
+				<md-card-content layout-padding>
+					<div>
+						<form name="updateAccountForm" ng-submit="updateAccount()">
+
+							<div layout-align="center center">
+								<md-input-container class="md-block"> 
+									<label>Email</label>
+									<input ng-model="account.email" type="email" disabled>
+								</md-input-container>
+								<md-input-container class="md-block">
+									<label>FaceBook ID</label>
+									<input ng-model="account.facebookId" disabled>
+								</md-input-container>
+								<md-input-container class="md-block">
+									<label>Social Media</label>
+									<input ng-model="account.socialMedia" disabled>
+								</md-input-container>
+								<md-input-container class="md-block">
+									<label>Enter Birthday</label>
+									<md-datepicker ng-model="account.birthday"></md-datepicker>
+								</md-input-container>
+							</div>
+							<md-button ng-click="uploadDialog($event)">upload</md-button>
+
+
+							<div>
+								<md-switch flex="50" ng-model="account.active" aria-label="Switch 1" ng-change="">{{getActive(account)}}</md-switch>
+								<div flex layout="row">					
+									<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updateAccountForm.$invalid">Update</md-button>
+									<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</md-card-content>
+
+			</div>
+			
+		</md-card>
+	</div>
+	<div flex>
+		<h2 class="title">Usage</h2>
+		<md-card>
+			<md-tabs md-dynamic-height md-border-bottom>
+				<md-tab>
+					<md-tab-label>
+						<i class="fa fa-book"></i> Bookings
+					</md-tab-label>
+					<md-tab-body>
+						<md-content class="md-padding">
+							<md-list flex>
+								
+								<md-button ng-href="#/new/booking" class="md-raised">Create bookings</md-button>
+								<H2 ng-if="bookings.length === 0">There are currently no bookings under this account</H2>
+								<md-list-item class="md-3-line" ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">
+									<div class="md-list-item-text" layout="column">
+										<h3>BookingID: {{item.bookingId}}</h3>
+										<h4>Start Time: {{ item.startDate }}</h4>
+										<h4>End Time: {{ item.endDate }}</h4>
+										<p>Destination: {{ item.destinationName}}</p>
+									</div>								
+									<md-divider ></md-divider>
+								</md-list-item>
+							</md-list>
+						</md-content>
+					</md-tab-body>			
+				</md-tab>		
+				<md-tab>
+					<md-tab-label>
+						<i class="fa fa-money"></i> Banks
+					</md-tab-label>
+					<md-tab-body>
+						<md-content class="md-padding">
+							<div flex="100">
+								<H2 ng-if="!hasBank">There is no bank under this account</H2>
+								<md-button class="md-raised" ng-href="#/new/bank" ng-if="!hasBank">Create bank</md-button>
+								<md-button class="md-raised" ng-href="#/accounts/1" ng-if="!hasBank">Add bank</md-button>
+								<md-content  ng-repeat="item in banks">
+									<h3>Bank ID: {{item.bankId}}</h3>
+									<h4>Deposit: {{ item.deposit }}</h4>
+									<h4>Cash Amount: {{ item.cash }}</h4>
+									<p>Stamps: {{item.stamps}}</p>
+									<p>Create Date: {{ item.date}}</p>
+
+								</md-content>	
+								<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" style="margin-left: 0px">details</md-button>
+							</md-tab-body>					
+						</div>				
+					</md-tab>		
+					<md-tab>
+						<md-tab-label>
+							<i class="fa fa-question-circle"></i> Enquiries
+						</md-tab-label>
+						<md-tab-body>
+							<md-content class="md-padding">
+								<md-list flex>
+									
+									<H2 ng-if="enquiries.length === 0">There are currently no enquiries under this account</H2>
+									<md-list-item class="md-3-line" ng-repeat="item in enquiries" ng-href="#/enquiries/{{item.enquiryId}}">
+										<div class="md-list-item-text" layout="column">
+											<h3>Time: {{item.time}}</h3>
+											<h4>Enquiry ID: {{item.enquiryId}}</h4>
+											<p>Date: {{item.date}}</p>
+											<span md-truncate style="max-width: 250px;">Comment: {{item.comment}}</span>
+										</div>								
+										<md-divider ></md-divider>
+									</md-list-item>
+								</md-list>							
+							</md-content>
+						</md-tab-body>				
+					</md-tab>		
+					<md-tab>
+						<md-tab-label>
+							<i class="fa fa-credit-card"></i> Payments
+						</md-tab-label>
+						<md-tab-body>
+							<md-content class="md-padding">
+								<md-list flex>
+									
+									<md-button ng-href="#/new/payment" class="md-raised">Create payment</md-button>
+									<H2 ng-if="payments.length === 0">There are currently no payments under this account</H2>
+									<md-list-item class="md-3-line" ng-repeat="item in payments" ng-href="#/payments/{{item.paymentId}}">
+										<div class="md-list-item-text" layout="column">
+											<h3>Payment ID: {{item.paymentId}}</h3>
+											<h4>Active: {{ item.startDate }}</h4>
+											<h4>Method: {{ item.method }}</h4>
+											<p>Card Number: {{ item.credential1}}</p>
+											<p>Expiry: {{item.credential2}}</p>
+											<P>CSV: {{item.credential3}}</P>
+											<p>Date: {{item.date}}</p>
+										</div>								
+										<md-divider ></md-divider>
+									</md-list-item>
+								</md-list>
+							</md-content>
+						</md-tab-body>
+
+					</md-tab>		
+					<md-tab>
+						<md-tab-label>
+							<i class="fa fa-refresh"></i> Tansactions
+						</md-tab-label>
+						<md-tab-body>
+							<md-content class="md-padding">
+								<md-list flex>
+									
+									<H2 ng-if="transactions.length === 0">There are currently no transactions under this account</H2>
+									<md-list-item class="md-3-line" ng-repeat="item in transactions" ng-href="#/transactions/{{item.transactionId}}">
+										<div class="md-list-item-text" layout="column">
+											<h3>Transaction ID: {{item.transactionId}}</h3>
+											<h4>Status: {{ item.status }}</h4>
+											<h4>Amount: {{ item.amount }}</h4>
+											<p>Date: {{item.date}}</p>
+										</div>								
+										<md-divider ></md-divider>
+									</md-list-item>
+								</md-list>
+							</md-content>
+						</md-tab-body>
+
+					</md-tab>		
+					<md-tab>
+						<md-tab-label>
+							<i class="fa fa-facebook"></i> ShareLogs
+						</md-tab-label>
+						<md-tab-body>
+							<md-content class="md-padding">
+								<md-list flex>
+									
+									<H2 ng-if="shareLogs.length === 0">There are currently no share logs under this account</H2>
+									<md-list-item class="md-3-line" ng-repeat="item in shareLogs">
+										<div class="md-list-item-text" layout="column">
+											<h3>ShareLog ID: {{item.sharelogId}}</h3>
+											<h4>Gateway: {{ item.gateway }}</h4>
+											<h4>Date: {{ item.date }}</h4>
+										</div>								
+										<md-divider ></md-divider>
+									</md-list-item>
+								</md-list>
+							</md-content>
+						</md-tab-body>
+
+					</md-tab>
+					<md-tab>
+						<md-tab-label>
+							<i class="fa fa-bell"></i> PushTokens
+						</md-tab-label>
+						<md-tab-body>
+							<md-content class="md-padding">
+								<md-list flex>
+									<md-button class="md-raised">Add PushToken</md-button>
+									
+									<H2 ng-if="pushTokens.length === 0">There are currently no pushtokens under this account</H2>
+									<md-list-item class="md-3-line" ng-repeat="item in pushTokens">
+										<div class="md-list-item-text" layout="column">
+											<h3>PushToken ID: {{item.pushTokenId}}</h3>
+											<h4>Token: {{ item.token }}</h4>
+											<h4>Device: {{ item.device }}</h4>
+											<h4>Active: {{item.active}}</h4>
+											<p>Date: {{item.date}}</p>
+										</div>								
+										<md-divider ></md-divider>
+									</md-list-item>
+								</md-list>
+							</md-content>
+						</md-tab-body>
+
+					</md-tab>		
+					<md-tab>
+						<md-tab-label>
+							<i class="fa fa-gift"></i> Promotions
+						</md-tab-label>
+						<md-tab-body>
+							<md-content class="md-padding">					
+								<md-list flex>
+									<md-button class="md-raised" ng-href="#/new/accountPromo">Apply Promotion</md-button>
+									<H2 ng-if="promotions.length === 0">There are currently no promotions available to this account</H2>
+									
+									<md-list-item class="md-3-line" ng-repeat="item in promotions" ng-href="#/promotions/{{item.promotionId}}">
+										<div class="md-list-item-text" layout="column">
+											<h3>Name: {{ item.name }}</h3>
+											<h4>Promotion ID: {{item.promotionId}}</h4>
+											<h4>Description: {{ item.description }}</h4>
+											<h4>Amount: {{item.amount}}</h4>
+											<p>Date: {{item.date}}</p>
+											<md-button class="md-raised" ng-href="#/accounts/5">Remove</md-button>
+										</div>								
+										<md-divider ></md-divider>
+									</md-list-item>
+								</md-list>
+							</md-tab-body>
+
+						</md-content>
+					</md-tab>							
+				</md-tabs>
+			</md-card>
+		</div>
+
+
+
+
+
+	</md-content>

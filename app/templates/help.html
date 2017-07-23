@@ -1,10 +1,40 @@
-<div layout="row" layout-wrap layout-padding>
-	<div flex="100">
+<div flex-gt-md="50">
+	<md-card>
+		<md-card-title>
+			<md-card-title-text>
+				<span class="md-headline" md-truncate>Title: {{help.title}}</span>
+				<span class="md-subhead">Date: {{help.date}}</span>
+				<span class="md-subhead">Help ID: {{help.helpId}}</span>
+			</md-card-title-text>
+		</md-card-title>
+		<md-content layout-padding>
+			<div flex style="background-image: url({{help.image.url}}); background-repeat: no-repeat; background-position: center; background-size: contain;min-height: 500px; min-width: 500px"></div>
+			<div>
+				<form name="updateEnquiryForm" ng-submit="updateHelp()">
+
+					<div layout-align="center center">
+						<md-input-container class="md-block"> 
+							<label>Order</label>
+							<input ng-model="help.order" type="number">
+						</md-input-container>
+						<md-input-container class="md-block"> 
+							<label>Content</label>
+							<input ng-model="help.content">
+						</md-input-container>
+					</div>
+
+					<div layout-gt-xs="row" layout-padding>
+						
+					</div>
+
+					<div flex layout="row">					
+						<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updateEnquiryForm.$invalid">Update</md-button>
+						<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
+					</div>
+
+				</form>
+			</div>
+		</md-content>
 		
-		<HEAD>help</HEAD>
-		<md-button ng-href="#/helps">helpList</md-button>
-		{{help}}		
-		<md-button ng-href="#/helps/1">updated</md-button>
-		<md-button ng-href="#/helps">deleted</md-button>
-	</div>
+	</md-card>
 </div>

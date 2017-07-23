@@ -51,7 +51,13 @@ var LIBRARIES = [
 	'./node_modules/angular-aria/angular-aria.min.js',
 	'./node_modules/angular-animate/angular-animate.min.js',
 	'./node_modules/angular-material/angular-material.min.css',
-	'./node_modules/angular-material/angular-material.min.js'
+	'./node_modules/angular-material/angular-material.min.js',
+	'./node_modules/angular-avatar/dist/angular-avatar.js',
+	'./node_modules/lf-ng-md-file-input/dist/*',
+	'./node_modules/ng-file-upload/dist/*',
+	'./node_modules/ng-img-crop-full-extended/source/js/**/*.js',
+	'./node_modules/ng-img-crop-full-extended/source/js/*.js',
+	'./node_modules/ng-img-crop-full-extended/compile/minified/*.js'
 ];
 
 gulp.task('build-lib', function() {
@@ -62,7 +68,7 @@ gulp.task('build-lib', function() {
 });
 
 gulp.task('build-css', function() {
-	return gulp.src(SRC + '/scss/style.scss')
+	return gulp.src([SRC + '/scss/style.scss', './node_modules/ng-img-crop-full-extended/compile/minified/ng-img-crop.scss'])
 	.pipe(sass().on('error', sass.logError))
 	.pipe(gulp.dest(DEST + '/css'));
 });
@@ -109,7 +115,13 @@ var INJECTRES = [
 	DEST + '/lib/angular-material/angular-material.min.css',
 	DEST + '/lib/angular-material/angular-material.min.js',
 	DEST + '/css/style.css',
-	DEST + '/js/main.js'
+	DEST + '/css/ng-img-crop.css',
+	DEST + '/js/main.js',
+	DEST + '/lib/angular-avatar/dist/angular-avatar.js',
+	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css',
+	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
+	DEST + '/lib/ng-file-upload/dist/ng-file-upload.js',
+	DEST + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js'
 ];
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {

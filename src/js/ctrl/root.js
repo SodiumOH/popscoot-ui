@@ -1,14 +1,31 @@
 angular.module('app.root.ctrl', [])
 
-.controller('RootCtrl', function($rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+.controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
 	$scope.$on('GETLOADING', function(){
 		$scope.getLoad = true;
-		console.log(1);
+
 	});
 	$scope.$on('GETFINISHED', function(){
 		$scope.getLoad = false;
-		console.log(2);
+
 	})
+	$scope.$on('breadcrumbs', function(arg){
+		$scope.breadcrumbs = arg();
+	})
+	$scope.path = "#/accounts/";
+	function getLoginAccount(){
+		var url = configuration.domain()+"/service/accounts/"+localStorage.getItem("LoginId");
+		httpService.httpGet(url, 'GET_LACCOUNT');
+
+		$scope.$on("GET_LACCOUNT", function(event, data){
+			if(data.data.data.status == 1) {
+				console.log(data.data.data.data);
+				$scope.Laccount = data.data.data.data;
+			} else {
+				console.log(data.data.data.message);
+			}
+		});
+	}
 	$scope.setLanguage = function(language){
 		if (language) {
 			$scope.language = language;
@@ -17,7 +34,6 @@ angular.module('app.root.ctrl', [])
 		}
 	}
 	angular.element($window).on('resize', function () {
-		console.log($window.innerHeight);
 		$scope.browserHeight = $window.innerHeight;
 	});
 	
@@ -150,6 +166,8 @@ angular.module('app.root.ctrl', [])
 		$scope.checkVoicemail = function() {
       // This never happens.
   };
+
+  getLoginAccount();
 
 })
 .directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {

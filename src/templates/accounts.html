@@ -1,70 +1,85 @@
-  <md-button ng-href="#/new/account">create new account</md-button>
   <md-content>	
-  	<div flex>
-  		<span>items per page</span>
-  		<select name="items number select" ng-model="itemsPerPage">
-  			<option value=10>10</option>
-  			<option value=20>20</option>
-  			<option value=30>30</option>
-        <option value="all">all</option>
-      </select>
-      <span>order by</span>
-      <select  name="items order select" ng-model="itemsOrder">
-       <option value="date">latest</option>
-       <option value="username">username</option>
-       <option value="active">active</option>
-     </select>
 
+    <div flex>
+      <md-card>
+       <div layout="row" layout-align="space-between center" layout-padding>
+        <div layout="row" layout-align="start center" layout-padding>
+          <span>Items Per Page</span>
+          <md-select ng-model="itemsPerPage" placeholder="Item per page">
+            <md-option value=10>10</md-option>
+            <md-option value=20>20</md-option>
+            <md-option value=30>30</md-option>
+            <md-option value="all">all</md-option>
+          </md-select>
+          <span>Order by</span>
+          <md-select ng-model="itemsOrder" placeholder="Item per page">
+            <md-option value="date" ng-click="order()">Latest</md-option>
+            <md-option value="username" ng-click="order()">Username</md-option>
+            <md-option value="active" ng-click="order()">Active</md-option>
+          </md-select>        
+        </div> 
+        <div>
+          <span>Create New Account</span>
+          <md-button class="md-raised md-icon-button" ng-href="#/new/account">           
+            <i class="fa fa-plus-circle"></i>
+          </md-button>
+        </div>      
+      </div>
+      <md-divider></md-divider>
+      <div ng-if="itemsPerPage=='all'" flex layout="row" layout-wrap>
+        <md-virtual-repeat-container>
+          <md-card flex="33" md-virtual-repeat="account in dynamicItems" >
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{account.username}}</span>
+                <span class="md-subhead">{{account.email}}</span>
+                <span class="md-subhead">Date joined: {{account.date}}</span>
+              </md-card-title-text>
+              <md-card-title-media ng-style="{'background-image': 'url(account.avatar.url)'}">
+                <img src="" class="md-media-sm card-media md-user-avatar">
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-switch ng-model="account.active" aria-label="Switch 1">{{getActive(account)}}</md-switch>
+              <md-button ng-href="{{path+account.accountId}}">Details</md-button>
+            </md-card-actions>
+          </md-card>
+        </md-virtual-repeat-container>
+      </div>
 
-   </div>
-   <div ng-if="itemsPerPage=='all'" flex layout="row" layout-wrap>
-    <md-virtual-repeat-container>
-    <md-card flex="33" md-virtual-repeat="account in dynamicItems" >
-      <md-card-title>
-        <md-card-title-text>
-          <span class="md-headline">{{account.username}}</span>
-          <span class="md-subhead">{{account.email}}</span>
-          <span class="md-subhead">Date joined: {{account.date}}</span>
-        </md-card-title-text>
-        <md-card-title-media ng-style="{'background-image': 'url(account.avatar.url)'}">
-          <img src="" class="md-media-sm card-media md-user-avatar">
-        </md-card-title-media>
-      </md-card-title>
-      <md-card-actions layout="row" layout-align="end center">
-        <md-switch ng-model="account.active" aria-label="Switch 1">{{getActive(account)}}</md-switch>
-        <md-button ng-href="{{path+account.accountId}}">Details</md-button>
-      </md-card-actions>
-    </md-card>
-    </md-virtual-repeat-container>
+      <div ng-if="itemsPerPage!='all'" flex>
+        <div flex layout="row" layout-wrap>
+          <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="account in accounts|paginate:currentPageNumber:itemsPerPage|orderBy:itemsOrder:reverse">
+            <md-card>
+             <md-card-title>
+              <md-card-title-text>
+               <span class="md-headline">{{account.username}}</span>
+               <span class="md-subhead">{{account.email}}</span>
+               <span class="md-subhead">Date joined: {{account.date}}</span>
+             </md-card-title-text>
+             <md-card-title-media>
+               <div class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+               </div>
+             </md-card-title-media>
+           </md-card-title>
+           <md-card-actions layout="row" layout-align="end center"> 
+            <md-switch ng-model="account.active" aria-label="Switch 1" ng-change>{{getActive(account)}}</md-switch>
+            <md-button ng-href="{{path+account.accountId}}">Details</md-button>
+          </md-card-actions>
+        </md-card>
+      </div>
+
+    </div>  
+    <div layout="row" layout-align="space-around center">
+      <md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+      <md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+    </div>
   </div>
+</md-card>
 
-  <div ng-if="itemsPerPage!='all'" flex>
-    <div flex layout="row" layout-wrap>
-      <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="account in accounts|paginate:currentPageNumber:itemsPerPage|orderBy:propertyName:reverse">
-        <md-card>
-         <md-card-title>
-          <md-card-title-text>
-           <span class="md-headline">{{account.username}}</span>
-           <span class="md-subhead">{{account.email}}</span>
-           <span class="md-subhead">Date joined: {{account.date}}</span>
-         </md-card-title-text>
-         <md-card-title-media>
-          <div class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
-         </md-card-title-media>
-       </md-card-title>
-       <md-card-actions layout="row" layout-align="end center"> 
-        <md-switch ng-model="account.active" aria-label="Switch 1" ng-change>{{getActive(account)}}</md-switch>
-        <md-button ng-href="{{path+account.accountId}}">Details</md-button>
-      </md-card-actions>
-    </md-card>
-  </div>
+</div>
 
-</div>  
-<div layout = row>
-  <md-button ng-click="currentPageNumber=1">|<</md-button>
-  <md-button ng-click="currentPageNumber=2">2</md-button>
-</div>
-</div>
+
 </md-content>
 
 

@@ -1,18 +1,110 @@
 <div>
-	<div layout="row" layout-wrap layout-padding>
-		<div flex="100">
-			<head>scooter</head>
-			<md-button ng-href="#/scooters">scooterList</md-button>
-			{{scooter}}
-			<md-button ng-href="#/scooters/1">updated</md-button>
-			<md-button ng-href="#/scooters">deleted</md-button>
+	<md-content layout-gt-sm="row" layout-padding>
+		<div flex flex-md="35" flex-gt-md="30">
+			<md-card>
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline">{{scooter.integrateId}}</span>
+						<span class="md-subhead">{{scooter.date}}</span>
+					</md-card-title-text>
+					<md-card-title-media>
+						<div class="md-media-md card-media" style="background-image: url({{scooter.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
+					</md-card-title-media>
+				</md-card-title>
+				<md-card-content layout-padding>
+					<div>
+						<form name="updatescooterForm" ng-submit="updateScooter()">
 
+							<div layout-align="center center">
+								<md-input-container class="md-block"> 
+									<label>Please enter desired Integrate ID</label>
+									<input ng-model="scooter.integrateId">
+								</md-input-container>
+								<md-input-container class="md-block"> 
+									<label>Please enter desired name for this scooter</label>
+									<input ng-model="scooter.name">
+								</md-input-container>
+								<md-input-container class="md-block">
+									<label>Please enter model of the scooter</label>
+									<input ng-model="scooter.model">
+								</md-input-container>
+								<md-input-container class="md-block">
+									<label>Please enter percentage battery left</label>
+									<input ng-model="scooter.battery" type="number" step="0.01">
+								</md-input-container>
+							</div>
+							<md-button ng-click="uploadDialog($event)">upload</md-button>
+
+
+							<div>
+								<md-switch flex="50" ng-model="scooter.active" aria-label="Switch 1" ng-change="">{{scooter.active?"Activated":"Deactivated"}}</md-switch>
+								<div flex layout="row">					
+									<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">Update</md-button>
+									<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</md-card-content>
+			</md-card>
 		</div>
-		<div flex="100">
-			<head>bookings</head>
-			<md-button ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">{{item.bookingId}}</md-button>
-			<md-button ng-href="#new/booking">create booking</md-button>
-		</div>
+		<div>
+			<md-card>
+				<div layout="row" layout-align="space-between center" layout-padding>
+					<div layout="row" layout-align="start center" layout-padding>
+						<span>Items Per Page</span>
+						<md-select ng-model="itemsPerPage" placeholder="Item per page">
+							<md-option value=10>10</md-option>
+							<md-option value=20>20</md-option>
+							<md-option value=30>30</md-option>
+							<md-option value="all">all</md-option>
+						</md-select>
+						<span>Order by</span>
+						<md-select ng-model="itemsOrder" placeholder="Item per page">
+							<md-option value="date" ng-click="order()">Latest</md-option>
+							<md-option value="username" ng-click="order()">Username</md-option>
+							<md-option value="active" ng-click="order()">Active</md-option>
+						</md-select>				
+					</div> 
+					<div>
+						<span>Create New Booking</span>
+						<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+							<i class="fa fa-plus-circle"></i>
+						</md-button>
+					</div>			
+				</div>
+
+				<md-divider></md-divider>
+
+				<md-content layout="row" layout-wrap>
+					<H2 ng-if="bookings.length === 0">There are currently no bookings</H2>				
+					<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
+						<md-card id="bookingCard">
+							<md-card-title>
+								<md-card-title-text>
+									<span class="md-headline">Booking: {{item.bookingId}}</span>
+									<span class="sub-head">Start Time: {{ item.startDate }}</span>
+									<span class="sub-head">End Time: {{ item.endDate }}</span>
+									<span class="sub-head">Destination: {{ item.destinationName}}</span>								
+									<span class="sub-head">Booking By: {{ item.scooter.username}}</span>						
+								</md-card-title-text>
+							</md-card-title>
+							<md-card-actions>							
+								<md-button class="md-raised" ng-href="{{path+item.bookingId}}">Details</md-button>	
+							</md-card-actions>
+						</md-card>
+
+					</div>
+				</md-content>
+				<div layout="row" layout-align="space-around center">
+					<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+					<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+				</div>
+			</div>
+		</md-card>
 	</div>
-	
+
+</md-content>
+
+
 </div>

@@ -1,6 +1,6 @@
 angular.module('app.booking.ctrl', [])
 
-.controller('BookingCtrl', function($scope, $routeParams, httpService, configuration) {
+.controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
 	$scope.booking = {};
 	$scope.url = {
@@ -22,6 +22,60 @@ angular.module('app.booking.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+	$scope.updateBooking = function(){
+		var updateForm = $scope.booking;
+		updateForm.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SSZ")
+		updateForm.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SSZ")
+		httpService.httpPut($scope.url.booking, updateForm, 'UPDATE_Booking');
+		console.log("reached here");
+	}
+	$scope.$on('UPDATE_booking', function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.booking = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+
+	deleteBooking = function(){
+		httpService.httpDelete($scope.url.booking, 'DELETE_Booking');
+	}
+
+	$scope.$on("DELETE_Booking", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	$scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+    .title('Confirm Deletion')
+    .textContent('Please key in the IID of the booking to delete')
+    .placeholder('bookingId')
+    .ariaLabel('integrate_id')
+    .targetEvent(ev)
+    .ok('Confirm')
+    .cancel('Cancel');
+
+    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+    $mdDialog.show(confirm).then(function(result) {
+    	if (result == $scope.booking.bookingId) {
+    		deleteBooking();    		
+    		window.location.href = $scope.path + "index.html#/bookings";
+    	} else {
+
+    		$scope.status = 'Username Mismatch';
+    	}
+    	
+    }, function() {
+    	$scope.status = 'Action canceled';
+    });
+};
 	getBooking();
 
 })

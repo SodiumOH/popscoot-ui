@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
 	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.accountPromo.ctrl'
 	])
 
@@ -23,7 +23,10 @@ angular.module('POPSCOOT', ['ngRoute', 'ngMaterial', 'app.service', 'app.root.ct
 	.when('/banks', {
 		templateUrl: "templates/banks.html",
 		controller: "BanksCtrl"
-	})	
+	}).when('/transactions/:id', {
+		templateUrl: "templates/bank.html",
+		controller: "BankCtrl"
+	})
 	.when('/banks/:id', {
 		templateUrl: "templates/bank.html",
 		controller: "BankCtrl"

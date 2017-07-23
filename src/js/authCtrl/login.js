@@ -25,6 +25,7 @@ angular.module('app.login.ctrl', [])
 			/*if (data.data.data.data.type === "admin") {	*/			
 				console.log(data.data.data.data);
 				console.log(data.data.data.data["Auth-Secret"]);
+				localStorage.setItem("LoginId", data.data.data.data["accountId"]);
 				DAO.setSecret(data.data.data.data["Auth-Secret"]);
 				window.location.href = $scope.path + "index.html"
 			/*} else {

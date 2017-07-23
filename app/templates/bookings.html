@@ -1,15 +1,58 @@
 <div>
-	<div class="col-md-10">
-    
-    <md-button ng-href="#/new/booking">create new booking</md-button>
+	<div flex>
+		<md-card>
+		<div layout="row" layout-align="space-between center" layout-padding>
+				<div layout="row" layout-align="start center" layout-padding>
+					<span>Items Per Page</span>
+					<md-select ng-model="itemsPerPage" placeholder="Item per page">
+						<md-option value=10>10</md-option>
+						<md-option value=20>20</md-option>
+						<md-option value=30>30</md-option>
+						<md-option value="all">all</md-option>
+					</md-select>
+					<span>Order by</span>
+					<md-select ng-model="itemsOrder" placeholder="Item per page">
+						<md-option value="date" ng-click="order()">Latest</md-option>
+						<md-option value="username" ng-click="order()">Username</md-option>
+						<md-option value="active" ng-click="order()">Active</md-option>
+					</md-select>				
+				</div> 
+				<div>
+					<span>Create New Booking</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+						<i class="fa fa-plus-circle"></i>
+					</md-button>
+				</div>			
+			</div>
+			
+			<md-divider></md-divider>
+			
+			<md-content layout="row" layout-wrap>
+				<H2 ng-if="bookings.length === 0">There are currently no bookings</H2>				
+				<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
+					<md-card id="bookingCard">
+						<md-card-title>
+							<md-card-title-text>
+								<span class="md-headline">Booking: {{item.bookingId}}</span>
+								<span class="sub-head">Start Time: {{ item.startDate }}</span>
+								<span class="sub-head">End Time: {{ item.endDate }}</span>
+								<span class="sub-head">Destination: {{ item.destinationName}}</span>								
+								<span class="sub-head">Booking By: {{ item.account.username}}</span>						
+							</md-card-title-text>
+						</md-card-title>
+						<md-card-actions>							
+							<md-button class="md-raised" ng-href="{{path+item.bookingId}}">Details</md-button>	
+						</md-card-actions>
+					</md-card>
 
-    
-    <div flex="100" ng-repeat="booking in bookings">
+				</div>
+			</md-content>
+			<div layout="row" layout-align="space-around center">
+				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+			</div>
+		</div>
+	</md-card>
 
-      {{booking}}
-      <md-button ng-href="{{path+booking.bookingId}}">{{booking.bookingId}}</md-button>
-    </div>
-
-  </div>
-
+</div>
 </div>

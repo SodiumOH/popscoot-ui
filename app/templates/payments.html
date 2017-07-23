@@ -1,12 +1,58 @@
 <div>
-	<div class="col-md-10">
-      
-      <md-button ng-href="#/new/payment">create new payment</md-button>
-      <div flex="100" ng-repeat="payment in payments">
-          
-          {{payment}}
-          <md-button ng-href="{{path+payment.paymentId}}">{{payment.paymentId}}</md-button>
-          
+	<div flex>
+		<md-card>
+			<div layout="row" layout-align="space-between center" layout-padding>
+				<div layout="row" layout-align="start center" layout-padding>
+					<span>Items Per Page</span>
+					<md-select ng-model="itemsPerPage" placeholder="Item per page">
+						<md-option value=10>10</md-option>
+						<md-option value=20>20</md-option>
+						<md-option value=30>30</md-option>
+						<md-option value="all">all</md-option>
+					</md-select>
+					<span>Order by</span>
+					<md-select ng-model="itemsOrder" placeholder="Item per page">
+						<md-option value="date" ng-click="order()">Latest</md-option>
+						<md-option value="username" ng-click="order()">Username</md-option>
+						<md-option value="active" ng-click="order()">Active</md-option>
+					</md-select>				
+				</div> 
+				<div>
+					<span>Create New Payment</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
+						<i class="fa fa-plus-circle"></i>
+					</md-button>
+				</div>			
+			</div>
+			<md-divider></md-divider>
 
-    </div>
+			<md-content layout="row" layout-wrap>
+				<H2 ng-if="banks.length === 0">There are currently no payments</H2>
+				<div ng-repeat="item in payments" flex="100" flex-gt-xs="50" flex-gt-md="33">
+					<md-card id="bookingCard">
+						<md-card-title>
+							<md-card-title-text>
+								<span class="md-headline">Payment ID: {{item.paymentId}}</span>
+								<span class="sub-head">Method: {{ item.method }}</span>
+								<span class="sub-head">Card Number: {{ item.credential1}}</span>
+								<span class="sub-head">Expiry: {{item.credential2}}</span>								
+								<span class="sub-head">CSV: {{item.credential3}}</span>																
+								<span class="sub-head">Date: {{item.date}}</span>					
+							</md-card-title-text>
+						</md-card-title>
+						<md-card-actions>							
+							<md-button class="md-raised" ng-href="{{path+item.paymentId}}">Details</md-button>	
+						</md-card-actions>
+					</md-card>
+
+				</div>
+			</md-content>
+			<div layout="row" layout-align="space-around center">
+				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+			</div>
+		</div>
+	</md-card>
+
+</div>
 </div>

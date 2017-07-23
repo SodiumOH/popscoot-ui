@@ -1,0 +1,53 @@
+<md-dialog aria-label="Mango (Fruit)">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Selet Image</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content md-padding>
+      <form name="myForm">
+        <md-button class="md-raised" ngf-select ng-model="picFile" accept="image/*">
+          Select Picture</md-button>
+          <div layout-gt-md="row" layou-padding>
+            <div ngf-drop ng-model="picFile" ngf-pattern="image/*"
+            style="background: #E4E4E4;
+            overflow: hidden;
+            width:500px;
+            height:350px;">
+            <img-crop area-type="square" image="picFile  | ngfDataUrl"                 
+            result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
+          </img-crop>
+        </div>
+        <div layout="column">
+          <span ng-if="croppedDataUrl">Preview</span>
+          <img ng-src="{{croppedDataUrl}}" />
+        </div> 
+      </div>
+
+      <md-button class="md-raised" ng-click="upload(croppedDataUrl, picFile.name)">Submit</md-button> 
+
+      <span class="progress" ng-show="progress >= 0">
+        <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+      </span>
+      <span ng-show="result">Upload Successful</span>
+      <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+    </form>
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <span flex></span>
+   <!--  <md-button ng-click="answer('not useful')">
+     Not Useful
+   </md-button> -->
+   <md-button ng-click="answer()">
+     Cancel
+   </md-button>
+ </md-dialog-actions>
+</form>
+</md-dialog>

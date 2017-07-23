@@ -1,20 +1,103 @@
-<div layout="row" layout-wrap layout-padding>
-	<div flex="100">
-		<!-- profile -->
-		<HEAD>payment</HEAD>
-		<md-button ng-href="#/payments">paymentList</md-button>
-		{{payment}}		
-		<md-button ng-href="#/payments/1">updated</md-button>
-		<md-button ng-href="#/payments">deleted</md-button>
-	</div>
-	<div flex="100">
-		<!-- profile -->
-		<HEAD>account</HEAD>
-		<md-button ng-href="#/accounts/{{payment.account.accountId}}">{{payment.account.accountId}}</md-button>
-	</div>
-	<div flex="100">
-		<!-- profile -->
-		<HEAD>transactions</HEAD>
-		<p ng-repeat="item in transactions">{{item}}</p>
-	</div>
+<div>
+	<md-content layout-gt-md="row" layout-padding>
+		<div flex flex-md="35" flex-gt-md="30">
+			<md-card>
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline" md-truncate>User: {{payment.account.username}}</span>
+
+						<span class="md-subhead">Payment ID: {{payment.paymentId}}</span>
+						<span class="md-subhead">Date: {{payment.date}}</span>
+					</md-card-title-text>
+				</md-card-title>
+				<md-content layout-padding>	
+					<form name="updatePaymentForm" ng-submit="updatePayment()">
+
+						<div layout-align="center center">
+							<md-input-container class="md-block"> 
+								<label>Method</label>
+								<input ng-model="payment.method">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>Credential 1</label>
+								<input ng-model="payment.credential1">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>Credential 2</label>
+								<input ng-model="payment.credential2">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>Credential 3</label>
+								<input ng-model="payment.credential3">
+							</md-input-container>
+
+						</div>
+
+						<div layout-gt-xs="row" layout-padding layout-align="space-between center">
+							<div>			
+								<span>By: </span>
+								<md-button class="md-raised" ng-href="#/accounts/{{payment.account.accountId}}">{{payment.account.username}}</md-button>
+
+							</div>
+							<md-switch flex="45" ng-model="scooter.active" aria-label="Switch 1" ng-change="">{{payment.active?"Activated":"Deactivated"}}</md-switch>
+						</div>
+
+						<div flex layout="row">					
+							<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatePaymentForm.$invalid">Update</md-button>
+							<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
+						</div>
+
+					</form>
+
+				</md-content>
+
+			</md-card>
+		</div>
+		<div>
+			<md-card>
+				<div layout="row" layout-align="space-between center" layout-padding>
+					<div layout="row" layout-align="start center" layout-padding>
+						<span>Items Per Page</span>
+						<md-select ng-model="itemsPerPage" placeholder="Item per page">
+							<md-option value=10>10</md-option>
+							<md-option value=20>20</md-option>
+							<md-option value=30>30</md-option>
+							<md-option value="all">all</md-option>
+						</md-select>
+						<span>Order by</span>
+						<md-select ng-model="itemsOrder" placeholder="Item per page">
+							<md-option value="date" ng-click="order()">Latest</md-option>
+							<md-option value="username" ng-click="order()">Username</md-option>
+							<md-option value="active" ng-click="order()">Active</md-option>
+						</md-select>				
+					</div> 
+				</div>
+
+				<md-divider></md-divider>
+
+				<md-content layout="row" layout-wrap>
+					<H2 ng-if="transactions.length === 0">There are currently no transactions</H2>				
+					<div ng-repeat="item in transactions" flex="100" flex-gt-xs="50" flex-gt-md="33">
+						<md-card id="transactionCard">
+							<md-card-title>
+								<md-card-title-text>
+									<span class="md-headline">TransactionID: {{item.transactionId}}</span>
+									<span class="sub-head">Amount: {{ item.amount }}</span>
+									<span class="sub-head">Date: {{ item.date }}</span>
+									<span class="sub-head">Status: {{ item.status}}</span>						
+								</md-card-title-text>
+							</md-card-title>
+						</md-card>
+
+					</div>
+				</md-content>
+				<div layout="row" layout-align="space-around center">
+					<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+					<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+				</div>
+
+			</md-card>
+		</div>
+
+	</md-content>
 </div>

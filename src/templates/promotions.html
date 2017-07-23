@@ -1,10 +1,55 @@
 <div>
-	<div class="col-md-10">
-    <!--Body content-->
-    <md-button ng-href="#/new/promotion">create new promotion</md-button>
-    <div flex="100" ng-repeat="promotion in promotions">
-      {{promotion}}
-      <md-button ng-href="{{path+promotion.promotionId}}">{{promotion.promotionId}}</md-button>
+	<div flex>
+		<md-card>
+			<div layout="row" layout-align="space-between center" layout-padding>
+				<div layout="row" layout-align="start center" layout-padding>
+					<span>Items Per Page</span>
+					<md-select ng-model="itemsPerPage" placeholder="Item per page">
+						<md-option value=10>10</md-option>
+						<md-option value=20>20</md-option>
+						<md-option value=30>30</md-option>
+						<md-option value="all">all</md-option>
+					</md-select>
+					<span>Order by</span>
+					<md-select ng-model="itemsOrder" placeholder="Item per page">
+						<md-option value="date" ng-click="order()">Latest</md-option>
+						<md-option value="username" ng-click="order()">Username</md-option>
+						<md-option value="active" ng-click="order()">Active</md-option>
+					</md-select>				
+				</div> 
+				<div>
+					<span>Create New Promotion</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+						<i class="fa fa-plus-circle"></i>
+					</md-button>
+				</div>			
+			</div>
+			<md-divider></md-divider>
+			<md-content layout="row" layout-wrap>
+				<H2 ng-if="promotions.length === 0">There are currently no promotions</H2>
+				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in promotions">
+					<md-card>
+						<md-card-title>
+							<md-card-title-text>
+								<span class="md-headline">Name: {{ item.name }}</span>
+								<span class="md-subhead">Promotion ID: {{item.promotionId}}</span>
+								<span class="md-subhead">Description: {{ item.description }}</span>
+								<span class="md-subhead">Amount: {{item.amount}}</span>
+								<span class="md-subhead">Date: {{item.date}}</span>
+							</md-card-title-text>
+						</md-card-title>
+						<md-card-actions layout="row" layout-align="end center"> 
+							<md-button class="md-raised" ng-href="{{path+item.promotionId}}">Details</md-button>
+						</md-card-actions>
+					</md-card>
+				</div>
+			</md-content>
+			<div layout="row" layout-align="space-around center">
+				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+			</div>
 
-    </div>
-  </div>
+		</md-card>
+
+	</div>
+</div>

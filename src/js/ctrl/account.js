@@ -1,6 +1,6 @@
 angular.module('app.account.ctrl', [])
 
-.controller('AccountCtrl', function($routeParams, $scope, httpService, configuration) {
+.controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration) {
 	console.log('this is AccountCtrl');
 
 	$scope.isEdit = false;
@@ -18,6 +18,21 @@ angular.module('app.account.ctrl', [])
 		payments: domain + "/service/accounts/" + accountId + "/payments"
 	};
 
+	//hovers
+	
+
+
+	$scope.$emit('breadcrumbs', function(){
+		return([
+		{
+			name: Accounts,
+			url: domain + "/service/accounts/"
+		},
+		{
+			name: Account,
+			url: domain + "/service/accounts/" + accountId
+		}])
+	})
 	$scope.init_form = {};
 	$scope.account = {};
 	$scope.bookings = [];
@@ -91,6 +106,7 @@ angular.module('app.account.ctrl', [])
 			$scope.promotions = data.data.data.data.appliedPromotions;
 		} else {
 			console.log(data.data.data.message);
+			redirect();
 		}
 	});
 
@@ -159,10 +175,13 @@ angular.module('app.account.ctrl', [])
 		}
 	});
 
-	$scope.updateAccount = function(){
+
+
+	$scope.updateAccount = function(mediaId){
 		var updateForm = {
 			accountId: $scope.init_form.accountId,
-			birthday: moment($scope.init_form.birthday).format("YYYY-MM-DDTHH:MM:SSZ")
+			birthday: moment($scope.account.birthday).format("YYYY-MM-DDTHH:MM:SSZ"),
+			media: mediaId
 		}
 		console.log(updateForm);
 		httpService.httpPut($scope.url.account, updateForm, 'UPDATE_ACCOUNT');
@@ -218,9 +237,112 @@ angular.module('app.account.ctrl', [])
 			return 'DEACTIVATED'
 		}
 	}
+	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+	function redirect(){
+		window.location.href = $scope.path + "index.html#/accounts";
+	}
+
+	//deletion related
+	deleteAccount = function(){
+		httpService.httpDelete($scope.url.account, 'DELETE_ACCOUNT');
+	}
+
+	$scope.$on("DELETE_ACCOUNT", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	$scope.child={};
+	console.log($scope.child);
+	$scope.$watch('child',function() {
+		$scope.$evalAsync();
+		console.log(child);
+	});
+	$scope.customFullscreen = false;
+	$scope.uploadDialog = function(ev) {
+		$mdDialog.show({
+			controller: DialogController,
+			templateUrl: 'templates/upload.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: ev,
+			clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+  })
+		.then(function(answer) {
+			$scope.status = 'You said the information was "' + answer + '".';
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	};
+
+	function DialogController($scope, $mdDialog, Upload, $timeout) {
+		//test
+		var parentScope = $scope.$parent;
+		parentScope.child = $scope;
+		$scope.$watch(function(){parentScope.child = $scope}); 
+		$scope.upload = function (dataUrl, name) {
+			Upload.upload({
+				url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+				data: {
+					file: Upload.dataUrltoBlob(dataUrl, name)
+				},
+			}).then(function (response) {
+				$timeout(function () {
+					$scope.result = response.data;
+				});
+			}, function (response) {
+				if (response.status > 0) $scope.errorMsg = response.status 
+					+ ': ' + response.data;
+			}, function (evt) {
+				$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+			});
+		}
+		$scope.test = "testtesttest";
+		//test end
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+
+		$scope.answer = function(answer) {
+			$mdDialog.hide(answer);
+		};
+	}
+	$scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+    .title('Confirm Deletion')
+    .textContent('Please key in the username of the Account to delete')
+    .placeholder('username')
+    .ariaLabel('username')
+    .targetEvent(ev)
+    .ok('Confirm')
+    .cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function(result) {
+    	if (result == $scope.account.username) {
+    		deleteAccount();    		
+    		window.location.href = $scope.path + "index.html#/accounts";
+    	} else {
+
+    		$scope.status = 'Username Mismatch';
+    	}
+    	
+    }, function() {
+    	$scope.status = 'Action canceled';
+    });
+};
+
+//file upload
 
 	// init
-
+	
 	getAccount();
 	getBookings();
 	getBanks();
@@ -232,16 +354,28 @@ angular.module('app.account.ctrl', [])
 	getPromotions();	
 	
 })
+.config(function($mdThemingProvider) {
 
-.controller('AccountsCtrl', function($scope, $location, httpService, $timeout) {
+    // Configure a dark theme with primary foreground yellow
+
+    $mdThemingProvider.theme('docs-dark', 'default')
+    .primaryPalette('yellow')
+    .dark();
+
+})
+
+.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout) {
 	console.log('this is AccountsCtrl');
 	$scope.path = "#/accounts/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-
-	
+	$scope.itemsOrder = "active";
+	$scope.reverse = true;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 	$scope.accounts = [];
 
 	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
@@ -273,7 +407,7 @@ angular.module('app.account.ctrl', [])
            this.numItems = 0;
 
            /** @const {number} Number of items to fetch per request. */
-           this.PAGE_SIZE = 50;
+           this.PAGE_SIZE = 10;
 
            this.fetchNumItems_();
        };
@@ -320,12 +454,25 @@ angular.module('app.account.ctrl', [])
           }));
       };
 
-      this.dynamicItems = new $scope.DynamicItems();
+      $scope.dynamicItems = new $scope.DynamicItems();
 
     //dynamic loading end
+    
+    //orderfilter
+    
+
 
     //pagination start
+    $scope.itemsPerRow;
+    if ($mdMedia('gt-md')) {
+    	$scope.itemsPerRow = 3;
+    } else if ($mdMedia('gt-xs')) {
+    	$scope.itemsPerRow = 2;
+    } else {
+    	$scope.itemsPerRow = 1;
+    }
     $scope.currentPageNumber = 1;
+    $scope.row = 4;
     $scope.itemsPerPage = 10;
 
     $scope.getNumberOfPages = function() {
@@ -345,26 +492,15 @@ angular.module('app.account.ctrl', [])
     }
     //pagination end
 
-    $scope.deleteAccount = function(id){
-    	httpService.httpDelete($scope.url+"/"+id, 'DELETE_ACCOUNT');
-    }
-
-    $scope.$on("DELETE_ACCOUNT", function(event, data){
-    	if(data.data.data.status == 1) {
-    		console.log(data.data.data.data);
-    		httpService.httpGet($scope.url, 'GET_ACCOUNTS');
-    	} else {
-    		console.log(data.data.data.message);
-    	}
-    });
+    
 
     $scope.getActive = function (acc){
-		if (acc.active) {
-			return 'ACTIVATED'
-		} else {
-			return 'DEACTIVATED'
-		}
-	}
+    	if (acc.active) {
+    		return 'ACTIVATED'
+    	} else {
+    		return 'DEACTIVATED'
+    	}
+    }
 })
 
 .controller("NewAccountCtrl", function(){
