@@ -66,7 +66,22 @@ angular.module('app.promotion.ctrl', [])
 	});
 })
 
-.controller("NewPromotionCtrl", function(){
+.controller("NewPromotionCtrl", function($scope, httpService){
 	console.log("this is NewPromotionCtrl");
+	$scope.promotion;
+	$scope.createPromotion = function(){
+		var createForm = $scope.promotion;
+		console.log(createForm);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/promotions", createForm, 'CREATE_PROMOTION');
+	}
+	$scope.$on("CREATE_PROMOTION", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.promotion = data.data.data.data;		
+			window.location.href = "#promotions/" + $scope.promotion.promotionId;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
 })
 

@@ -192,5 +192,14 @@ getBookings();
 		}
 	})
 })
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
+})
+
+
 
 

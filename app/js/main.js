@@ -1028,7 +1028,7 @@ angular.module('app.bank.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		}
 	});
-
+	getBank();
 	$scope.updateBank = function(){
 		var updateForm = $scope.bank;
 		httpService.httpPut($scope.url.bank, updateForm, 'UPDATE_Bank');
@@ -1078,10 +1078,8 @@ angular.module('app.bank.ctrl', [])
     }, function() {
     	$scope.status = 'Action canceled';
     });
+   
 };
-
-
-	getBank();
 
 })
 
@@ -1108,8 +1106,103 @@ angular.module('app.bank.ctrl', [])
 		}
 	});
 })
-.controller("NewBankCtrl", function(){
+.controller("NewBankCtrl", function($scope, $mdDialog, httpService){
 	console.log("this is NewBankCtrl");
+	function getAccounts() {
+		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
+	}
+
+	$scope.$on("GET_BACCOUNTS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.accounts = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+
+	});
+	getAccounts();
+
+	$scope.accDialog = function(ev) {
+		$mdDialog.show({
+			locals: {localAcc: $scope.accounts},
+			controller: DialogController,
+			templateUrl: 'templates/accountPicker.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: ev,
+			clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+  })
+		.then(function(answer) {
+			$scope.accountId = answer.accountId;
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	};
+
+	function DialogController($scope, $mdDialog, Upload, httpService, localAcc) {
+		$scope.accounts = localAcc;
+
+		$scope.itemsOrder = "active";
+		$scope.reverse = true;
+		$scope.order = function(){
+			$scope.reverse = !$scope.reverse;
+		}
+		$scope.currentPageNumber = 1;
+		$scope.itemsPerPage = 10;
+		$scope.search;
+		$scope.getNumberOfPages = function() {
+			var count = $scope.accounts.length / $scope.itemsPerPage;
+			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			return count;
+		}
+
+		$scope.pageDown = function()
+		{
+			if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+		}
+
+		$scope.pageUp = function()
+		{
+			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+		}
+
+		console.log($scope.accounts);
+
+		//test end
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+
+		$scope.answer = function(answer) {
+			$mdDialog.hide(answer);
+		};
+	}
+	$scope.bank = {
+		cash: 39.0,
+		deposit: 39.0
+	}
+	$scope.createBank = function(){
+		var createForm = $scope.bank;
+		createForm.accountId = $scope.accountId;
+		console.log(createForm);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/banks", createForm, 'CREATE_BANK');
+	}
+	$scope.$on("CREATE_BANK", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.bank = data.data.data.data;		
+			window.location.href = "#banks/" + $scope.bank.bankId;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+	
+	
 })
 
 angular.module('app.booking.ctrl', [])
@@ -1753,8 +1846,102 @@ getTransactions();
 		}
 	});
 })
-.controller('NewPaymentCtrl', function(){
+.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog){
 	console.log("this is NewPaymentCtrl");
+	function getAccounts() {
+		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
+	}
+
+	$scope.$on("GET_BACCOUNTS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.accounts = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+
+	});
+	getAccounts();
+
+	$scope.accDialog = function(ev) {
+		$mdDialog.show({
+			locals: {localAcc: $scope.accounts},
+			controller: DialogController,
+			templateUrl: 'templates/accountPicker.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: ev,
+			clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+  })
+		.then(function(answer) {
+			$scope.accountId = answer.accountId;
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	};
+
+	function DialogController($scope, $mdDialog, Upload, httpService, localAcc) {
+		$scope.accounts = localAcc;
+
+		$scope.itemsOrder = "active";
+		$scope.reverse = true;
+		$scope.order = function(){
+			$scope.reverse = !$scope.reverse;
+		}
+		$scope.currentPageNumber = 1;
+		$scope.itemsPerPage = 10;
+		$scope.search;
+		$scope.getNumberOfPages = function() {
+			var count = $scope.accounts.length / $scope.itemsPerPage;
+			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			return count;
+		}
+
+		$scope.pageDown = function()
+		{
+			if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+		}
+
+		$scope.pageUp = function()
+		{
+			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+		}
+
+		console.log($scope.accounts);
+
+		//test end
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+
+		$scope.answer = function(answer) {
+			$mdDialog.hide(answer);
+		};
+	}
+	$scope.payment = {
+		cash: 39.0,
+		deposit: 39.0
+	}
+	$scope.createPayment = function(){
+		var createForm = $scope.payment;
+		createForm.accountId = $scope.accountId;
+		console.log(createForm);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/payments", createForm, 'CREATE_PAYMENT');
+	}
+	$scope.$on("CREATE_PAYMENT", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.payment = data.data.data.data;		
+			window.location.href = "#payments/" + $scope.payment.paymentId;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+	
 })
 
 
@@ -1826,8 +2013,23 @@ angular.module('app.promotion.ctrl', [])
 	});
 })
 
-.controller("NewPromotionCtrl", function(){
+.controller("NewPromotionCtrl", function($scope, httpService){
 	console.log("this is NewPromotionCtrl");
+	$scope.promotion;
+	$scope.createPromotion = function(){
+		var createForm = $scope.promotion;
+		console.log(createForm);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/promotions", createForm, 'CREATE_PROMOTION');
+	}
+	$scope.$on("CREATE_PROMOTION", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.promotion = data.data.data.data;		
+			window.location.href = "#promotions/" + $scope.promotion.promotionId;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
 })
 
 
@@ -2025,6 +2227,15 @@ getBookings();
 		}
 	})
 })
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
+})
+
+
 
 
 

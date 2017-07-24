@@ -1,3 +1,39 @@
+<div flex flex-gt-md="50" layout-padding>
+<h2>Create new Bank</h2>
+	<md-card>
+		<md-card-content>
+			<form name="createBankForm" ng-submit="createBank()">
+
+				<div layout-align="center center">
+					<div layout="row">
+						<md-input-container flex class="md-block"> 
+							<label>Account</label>
+							<input ng-model="accountId">
+						</md-input-container>
+						<md-button class="md-icon-button" ng-click="accDialog($event)"><i class="fa fa-plus"></i></md-button>
+					</div>
+					<md-input-container class="md-block">
+						<label>Deposit</label>
+						<input ng-model="bank.deposit" >
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Cash</label>
+						<input ng-model="bank.cash" type="number" step="0.01">
+					</md-input-container>
+				</div>
+
+
+				<div>
+					
+					<div flex layout="row">					
+						<md-button class="md-primary md-raised" flex type="submit" ng-disabled="createBankForm.$invalid">Create</md-button>
+					</div>
+				</div>
+			</form>
+		</md-card-content>
+		
+	</md-card>
+</div>
 <div>
 	Create bank here
 	<md-button ng-href="#banks/1">created</md-button>
