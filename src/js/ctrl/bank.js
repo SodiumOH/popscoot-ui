@@ -2,6 +2,13 @@ angular.module('app.bank.ctrl', [])
 
 .controller('BankCtrl', function($scope,$mdDialog,$location, $routeParams, httpService) {
 	console.log('this is BankCtrl')
+	$scope.$emit('BC', [{
+		name: "Banks",
+		url: "#/banks"
+	},
+	{
+		name: "Bank"
+	}])
 	$scope.bank;
 	$scope.url = {
 		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
@@ -76,6 +83,10 @@ angular.module('app.bank.ctrl', [])
 
 .controller('BanksCtrl', function($scope, $location, httpService) {
 	console.log('this is BanksCtrl');
+	$scope.$emit('BC', [{
+		name: "Banks",
+		url: "#/banks"
+	}])
 	$scope.path = "#/banks/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -99,6 +110,13 @@ angular.module('app.bank.ctrl', [])
 })
 .controller("NewBankCtrl", function($scope, $mdDialog, httpService){
 	console.log("this is NewBankCtrl");
+	$scope.$emit('BC', [{
+		name: "Banks",
+		url: "#/banks"
+	},
+	{
+		name: "Create"
+	}])
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
 	}

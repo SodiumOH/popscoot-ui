@@ -2,6 +2,13 @@ angular.module('app.booking.ctrl', [])
 
 .controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
+	$scope.$emit('BC', [{
+		name: "Bookings",
+		url: "#/bookings"
+	},
+	{
+		name: "Booking"
+	}])
 	$scope.booking = {};
 	$scope.url = {
 		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
@@ -82,6 +89,10 @@ getBooking();
 
 .controller('BookingsCtrl', function($scope, $location, httpService) {
 	console.log('this is BookingsCtrl');
+	$scope.$emit('BC', [{
+		name: "Bookings",
+		url: "#/bookings"
+	}])
 	$scope.path = "#/bookings/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -114,6 +125,13 @@ getBooking();
 
 .controller("NewBookingCtrl", function($scope, $mdDialog, httpService, configuration){
 	console.log("this is NewBookingCtrl");
+	$scope.$emit('BC', [{
+		name: "Bookings",
+		url: "#/bookings"
+	},
+	{
+		name: "Create"
+	}])
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
 	}

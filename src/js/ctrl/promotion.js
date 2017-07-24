@@ -1,7 +1,14 @@
 angular.module('app.promotion.ctrl', [])
 
-.controller('PromotionCtrl', function($scope, $routeParams, httpService) {
+.controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location) {
 	console.log('this is PromotionCtrl')
+	$scope.$emit('BC', [{
+		name: "Promotions",
+		url: "#/promotions"
+	},
+	{
+		name: "Promotion"
+	}])
 	$scope.accounts;
 	$scope.promotion;
 	$scope.url = {
@@ -40,10 +47,86 @@ angular.module('app.promotion.ctrl', [])
 	});
 	getPromotion();
 	getAccounts();
+
+	$scope.updatePromotion = function(){
+		var updateForm = $scope.promotion;
+		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/", updateForm, 'UPDAT_PROMOTION');
+	}
+	$scope.$on('UPDAT_PROMOTION', function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.promotion = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+
+	var deletePromotion = function(){
+		httpService.httpDelete("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, 'DELETE_PROMOTION');
+	}
+
+	$scope.$on("DELETE_PROMOTION", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	$scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+    .title('Confirm Deletion')
+    .textContent('Please key in the ID of the promotion to delete')
+    .placeholder('Promotion ID')
+    .ariaLabel('integrate_id')
+    .targetEvent(ev)
+    .ok('Confirm')
+    .cancel('Cancel');
+
+    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+    $mdDialog.show(confirm).then(function(result) {
+    	if (result == $scope.promotion.promotionId) {
+    		deletePromotion();    		
+    		window.location.href = $scope.path + "index.html#/promotions";
+    	} else {
+
+    		$scope.status = 'Username Mismatch';
+    	}
+    	
+    }, function() {
+    	$scope.status = 'Action canceled';
+    });
+};
+
+	$scope.currentPageNumber = 1;
+	$scope.row = 4;
+	$scope.itemsPerPage = 10;
+
+	$scope.getNumberOfPages = function() {
+		var count = $scope.promotions.length / $scope.itemsPerPage;
+		if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+		return count;
+	}
+
+	$scope.pageDown = function()
+	{
+		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+	}
+
+	$scope.pageUp = function()
+	{
+		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+	}
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {
 	console.log('this is PromotionsCtrl');
+	$scope.$emit('BC', [{
+		name: "Promotions",
+		url: "#/promotions"
+	}])
+
 	$scope.path = "#/promotions/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -68,6 +151,13 @@ angular.module('app.promotion.ctrl', [])
 
 .controller("NewPromotionCtrl", function($scope, httpService){
 	console.log("this is NewPromotionCtrl");
+	$scope.$emit('BC', [{
+		name: "Promotions",
+		url: "#/promotions"
+	},
+	{
+		name: "Create"
+	}])
 	$scope.promotion;
 	$scope.createPromotion = function(){
 		var createForm = $scope.promotion;
@@ -84,4 +174,10 @@ angular.module('app.promotion.ctrl', [])
 		}
 	})
 })
-
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
+})

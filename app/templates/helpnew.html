@@ -1,3 +1,44 @@
+<div flex flex-gt-md="50" layout-padding>
+<h2>Create New Help</h2>
+	<md-card>
+		<md-card-content>
+			<md-content layout-padding>
+
+				<form name="createHelpForm" ng-submit="createHelp()">
+
+					<div layout-align="center center">
+						<md-input-container class="md-block"> 
+							<label>Title</label>
+							<input ng-model="help.title">
+						</md-input-container>
+						<md-input-container class="md-block"> 
+							<label>MediaID</label>
+							<input ng-model="help.mediaId" type="number">
+						</md-input-container>
+						<md-input-container class="md-block"> 
+							<label>Order</label>
+							<input ng-model="help.order" type="number">
+						</md-input-container>
+						<md-input-container class="md-block"> 
+							<label>Content</label>
+							<input ng-model="help.content">
+						</md-input-container>
+					</div>
+
+
+
+					<div flex layout="row">					
+						<md-button class="md-primary md-raised" flex type="submit" ng-disabled="createHelpForm.$invalid">Create</md-button>
+					</div>
+
+				</form>
+			</div>
+		</md-content>
+	</md-card-content>
+
+
+</md-card>
+</div>
 <div>
 	create help here
 	<md-button ng-href="#helps/1">created</md-button>

@@ -2,6 +2,13 @@ angular.module('app.help.ctrl', [])
 
 .controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
 	console.log('this is HelpCtrl');
+	$scope.$emit('BC', [{
+		name: "Helps",
+		url: "#/helps"
+	},
+	{
+		name: "Help"
+	}])
 	$scope.url = {
 		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
 	};
@@ -78,6 +85,10 @@ getHelp();
 
 .controller('HelpsCtrl', function($scope, $location, httpService) {
 	console.log('this is HelpsCtrl')
+	$scope.$emit('BC', [{
+		name: "Helps",
+		url: "#/helps"
+	}])
 	$scope.path = "#/helps/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -99,7 +110,29 @@ getHelp();
 		}
 	});
 })
-.controller("NewHelpCtrl", function(){
+.controller("NewHelpCtrl", function($scope, httpService){
 	console.log("this is NewHelpCtrl");
+	$scope.$emit('BC', [{
+		name: "Helps",
+		url: "#/helps"
+	},
+	{
+		name: "Create"
+	}])
+	$scope.help;
+	$scope.createHelp = function(){
+		var createForm = $scope.help;
+		console.log(createForm);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/helps", createForm, 'CREATE_HELP');
+	}
+	$scope.$on("CREATE_HELP", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.help = data.data.data.data;		
+			window.location.href = "#helps/" + $scope.help.helpId;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
 })
 

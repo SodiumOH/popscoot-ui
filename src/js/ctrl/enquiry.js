@@ -2,6 +2,13 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService) {
 	console.log('this is EnquiryCtrl');
+	$scope.$emit('BC', [{
+		name: "Enquiries",
+		url: "#/enquiries"
+	},
+	{
+		name: "Enquiry"
+	}])
 	$scope.enquiry;
 	$scope.url = {
 		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
@@ -76,6 +83,10 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {
 	console.log('this is EnquiriesCtrl')
+	$scope.$emit('BC', [{
+		name: "Enquiries",
+		url: "#/enquiries"
+	}])
 	$scope.path = "#/enquiries/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -126,7 +137,4 @@ angular.module('app.enquiry.ctrl', [])
     		$scope.$emit("GETFINISHED");
     	}
     });
-})
-.controller('NewEnquiryCtrl', function(){
-	console.log("this is NewEnquiryCtrl");
 })

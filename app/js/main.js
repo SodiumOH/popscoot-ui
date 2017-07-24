@@ -1011,6 +1011,13 @@ angular.module('app.bank.ctrl', [])
 
 .controller('BankCtrl', function($scope,$mdDialog,$location, $routeParams, httpService) {
 	console.log('this is BankCtrl')
+	$scope.$emit('BC', [{
+		name: "Banks",
+		url: "#/banks"
+	},
+	{
+		name: "Bank"
+	}])
 	$scope.bank;
 	$scope.url = {
 		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
@@ -1085,6 +1092,10 @@ angular.module('app.bank.ctrl', [])
 
 .controller('BanksCtrl', function($scope, $location, httpService) {
 	console.log('this is BanksCtrl');
+	$scope.$emit('BC', [{
+		name: "Banks",
+		url: "#/banks"
+	}])
 	$scope.path = "#/banks/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -1108,6 +1119,13 @@ angular.module('app.bank.ctrl', [])
 })
 .controller("NewBankCtrl", function($scope, $mdDialog, httpService){
 	console.log("this is NewBankCtrl");
+	$scope.$emit('BC', [{
+		name: "Banks",
+		url: "#/banks"
+	},
+	{
+		name: "Create"
+	}])
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
 	}
@@ -1209,6 +1227,13 @@ angular.module('app.booking.ctrl', [])
 
 .controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
+	$scope.$emit('BC', [{
+		name: "Bookings",
+		url: "#/bookings"
+	},
+	{
+		name: "Booking"
+	}])
 	$scope.booking = {};
 	$scope.url = {
 		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
@@ -1289,6 +1314,10 @@ getBooking();
 
 .controller('BookingsCtrl', function($scope, $location, httpService) {
 	console.log('this is BookingsCtrl');
+	$scope.$emit('BC', [{
+		name: "Bookings",
+		url: "#/bookings"
+	}])
 	$scope.path = "#/bookings/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -1321,6 +1350,13 @@ getBooking();
 
 .controller("NewBookingCtrl", function($scope, $mdDialog, httpService, configuration){
 	console.log("this is NewBookingCtrl");
+	$scope.$emit('BC', [{
+		name: "Bookings",
+		url: "#/bookings"
+	},
+	{
+		name: "Create"
+	}])
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
 	}
@@ -1494,6 +1530,13 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService) {
 	console.log('this is EnquiryCtrl');
+	$scope.$emit('BC', [{
+		name: "Enquiries",
+		url: "#/enquiries"
+	},
+	{
+		name: "Enquiry"
+	}])
 	$scope.enquiry;
 	$scope.url = {
 		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
@@ -1568,6 +1611,10 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {
 	console.log('this is EnquiriesCtrl')
+	$scope.$emit('BC', [{
+		name: "Enquiries",
+		url: "#/enquiries"
+	}])
 	$scope.path = "#/enquiries/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -1619,14 +1666,17 @@ angular.module('app.enquiry.ctrl', [])
     	}
     });
 })
-.controller('NewEnquiryCtrl', function(){
-	console.log("this is NewEnquiryCtrl");
-})
-
 angular.module('app.help.ctrl', [])
 
 .controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
 	console.log('this is HelpCtrl');
+	$scope.$emit('BC', [{
+		name: "Helps",
+		url: "#/helps"
+	},
+	{
+		name: "Help"
+	}])
 	$scope.url = {
 		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
 	};
@@ -1703,6 +1753,10 @@ getHelp();
 
 .controller('HelpsCtrl', function($scope, $location, httpService) {
 	console.log('this is HelpsCtrl')
+	$scope.$emit('BC', [{
+		name: "Helps",
+		url: "#/helps"
+	}])
 	$scope.path = "#/helps/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -1724,8 +1778,30 @@ getHelp();
 		}
 	});
 })
-.controller("NewHelpCtrl", function(){
+.controller("NewHelpCtrl", function($scope, httpService){
 	console.log("this is NewHelpCtrl");
+	$scope.$emit('BC', [{
+		name: "Helps",
+		url: "#/helps"
+	},
+	{
+		name: "Create"
+	}])
+	$scope.help;
+	$scope.createHelp = function(){
+		var createForm = $scope.help;
+		console.log(createForm);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/helps", createForm, 'CREATE_HELP');
+	}
+	$scope.$on("CREATE_HELP", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.help = data.data.data.data;		
+			window.location.href = "#helps/" + $scope.help.helpId;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
 })
 
 
@@ -1947,8 +2023,15 @@ getTransactions();
 
 angular.module('app.promotion.ctrl', [])
 
-.controller('PromotionCtrl', function($scope, $routeParams, httpService) {
+.controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location) {
 	console.log('this is PromotionCtrl')
+	$scope.$emit('BC', [{
+		name: "Promotions",
+		url: "#/promotions"
+	},
+	{
+		name: "Promotion"
+	}])
 	$scope.accounts;
 	$scope.promotion;
 	$scope.url = {
@@ -1987,10 +2070,86 @@ angular.module('app.promotion.ctrl', [])
 	});
 	getPromotion();
 	getAccounts();
+
+	$scope.updatePromotion = function(){
+		var updateForm = $scope.promotion;
+		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/", updateForm, 'UPDAT_PROMOTION');
+	}
+	$scope.$on('UPDAT_PROMOTION', function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.promotion = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+
+	var deletePromotion = function(){
+		httpService.httpDelete("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, 'DELETE_PROMOTION');
+	}
+
+	$scope.$on("DELETE_PROMOTION", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+		} else {
+			console.log(data.data.data.message);
+		}
+	});
+
+	$scope.showPrompt = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.prompt()
+    .title('Confirm Deletion')
+    .textContent('Please key in the ID of the promotion to delete')
+    .placeholder('Promotion ID')
+    .ariaLabel('integrate_id')
+    .targetEvent(ev)
+    .ok('Confirm')
+    .cancel('Cancel');
+
+    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+    $mdDialog.show(confirm).then(function(result) {
+    	if (result == $scope.promotion.promotionId) {
+    		deletePromotion();    		
+    		window.location.href = $scope.path + "index.html#/promotions";
+    	} else {
+
+    		$scope.status = 'Username Mismatch';
+    	}
+    	
+    }, function() {
+    	$scope.status = 'Action canceled';
+    });
+};
+
+	$scope.currentPageNumber = 1;
+	$scope.row = 4;
+	$scope.itemsPerPage = 10;
+
+	$scope.getNumberOfPages = function() {
+		var count = $scope.promotions.length / $scope.itemsPerPage;
+		if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+		return count;
+	}
+
+	$scope.pageDown = function()
+	{
+		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+	}
+
+	$scope.pageUp = function()
+	{
+		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+	}
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {
 	console.log('this is PromotionsCtrl');
+	$scope.$emit('BC', [{
+		name: "Promotions",
+		url: "#/promotions"
+	}])
+
 	$scope.path = "#/promotions/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -2015,6 +2174,13 @@ angular.module('app.promotion.ctrl', [])
 
 .controller("NewPromotionCtrl", function($scope, httpService){
 	console.log("this is NewPromotionCtrl");
+	$scope.$emit('BC', [{
+		name: "Promotions",
+		url: "#/promotions"
+	},
+	{
+		name: "Create"
+	}])
 	$scope.promotion;
 	$scope.createPromotion = function(){
 		var createForm = $scope.promotion;
@@ -2031,7 +2197,13 @@ angular.module('app.promotion.ctrl', [])
 		}
 	})
 })
-
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
+})
 
 angular.module('app.scooter.ctrl', [])
 
