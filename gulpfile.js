@@ -126,7 +126,7 @@ var INJECTRES = [
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {
 	console.log(INJECTRES)
-	return gulp.src(SRC + '/index.html', {
+	return gulp.src([SRC + '/index.html', SRC + '/auth.html'], {
 		base: SRC
 	})
 	.pipe(inject(gulp.src(INJECTRES, {
