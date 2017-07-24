@@ -1,4 +1,4 @@
-<md-dialog aria-label="Mango (Fruit)">
+<md-dialog aria-label="">
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -27,26 +27,20 @@
         <div layout="column">
           <span ng-if="croppedDataUrl">Preview</span>
           <img ng-src="{{croppedDataUrl}}" />
+          <span ng-if="croppedDataUrl">Status</span>
+          <span>{{uploadStatus}}</span>
         </div> 
       </div>
 
-      <md-button class="md-raised" ng-click="upload(croppedDataUrl, picFile.name)">Submit</md-button> 
+      <md-button class="md-raised" ng-click="upload(croppedDataUrl, picFile.name)">Upload</md-button> 
 
-      <span class="progress" ng-show="progress >= 0">
-        <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
-      </span>
-      <span ng-show="result">Upload Successful</span>
-      <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
     </form>
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <span flex></span>
-   <!--  <md-button ng-click="answer('not useful')">
-     Not Useful
-   </md-button> -->
-   <md-button ng-click="answer()">
-     Cancel
+    <span ng-if="uploadStatus!=='Success'" flex>Please successfully upload image before "Update"</span>
+   <md-button class="md-raised md-primary" ng-click="updateMedia()" ng-disabled="uploadStatus!=='Success'">
+     Update
    </md-button>
  </md-dialog-actions>
 </form>

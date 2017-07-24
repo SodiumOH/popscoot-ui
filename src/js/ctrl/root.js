@@ -1,6 +1,14 @@
 angular.module('app.root.ctrl', [])
 
 .controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+	$scope.$on('BC', function(evt, data){
+		$scope.breadcrumbs = data;
+		console.log($scope.breadcrumbs);
+	});
+	$scope.goHome = function(){
+		window.location.href =  $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/" +"index.html";
+		$scope.breadcrumbs = [];
+	}
 	$scope.$on('GETLOADING', function(){
 		$scope.getLoad = true;
 
@@ -8,9 +16,6 @@ angular.module('app.root.ctrl', [])
 	$scope.$on('GETFINISHED', function(){
 		$scope.getLoad = false;
 
-	})
-	$scope.$on('breadcrumbs', function(arg){
-		$scope.breadcrumbs = arg();
 	})
 	$scope.path = "#/accounts/";
 	function getLoginAccount(){
@@ -124,7 +129,9 @@ angular.module('app.root.ctrl', [])
 		$scope.goPage = function(path) {
 			if (path == "logout") {
 				var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+
 				window.location.href = (path + "auth.html");
+				localStorage.removeItem("UI_SECRET");
 			} else if(path == "miscellaneous") {
 				$scope.menu.main[6].colapsed = !$scope.menu.main[6].colapsed;
 			} else if(path == "finance") {
@@ -167,6 +174,7 @@ angular.module('app.root.ctrl', [])
       // This never happens.
   };
 
+  
   getLoginAccount();
 
 })

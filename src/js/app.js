@@ -2,8 +2,17 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.accountPromo.ctrl'
 	])
 
-.run(function($rootScope) {
+.run(function($rootScope, $location) {
 	console.log("welcome to popscoot");
+	
+	var isAuthenticated = function(){
+		if (localStorage.getItem("UI_SECRET") === null) {
+			var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
+			window.location.href = path + "auth.html";
+		}
+	}
+	isAuthenticated();
+
 })
 
 .config(function($routeProvider, $locationProvider) {

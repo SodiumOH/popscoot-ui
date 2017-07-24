@@ -76,7 +76,7 @@ angular.module('app.booking.ctrl', [])
     	$scope.status = 'Action canceled';
     });
 };
-	getBooking();
+getBooking();
 
 })
 
@@ -112,7 +112,166 @@ angular.module('app.booking.ctrl', [])
 	});
 })
 
-.controller("NewBookingCtrl", function(){
+.controller("NewBookingCtrl", function($scope, $mdDialog, httpService, configuration){
 	console.log("this is NewBookingCtrl");
+	function getAccounts() {
+		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
+	}
+
+	$scope.$on("GET_TACCOUNTS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.accounts = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+		
+	});
+	function getScooters() {
+		httpService.httpGet("http://test.popscoot.com/popscoot/service/scooters", 'GET_TSCOOTERS');
+	}
+
+	$scope.$on("GET_TSCOOTERS", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.scooters = data.data.data.data;
+		} else {
+			console.log(data.data.data.message);
+		}
+		
+	});
+
+	getScooters();
+	getAccounts();
+
+
+
+	$scope.accDialog = function(ev) {
+		$mdDialog.show({
+			locals: {localAcc: $scope.accounts},
+			controller: DialogController,
+			templateUrl: 'templates/accountPicker.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: ev,
+			clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+  })
+		.then(function(answer) {
+			$scope.accountId = answer.accountId;
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	};
+	
+	function DialogController($scope, $mdDialog, Upload, httpService, localAcc) {
+		$scope.accounts = localAcc;
+
+		$scope.itemsOrder = "active";
+		$scope.reverse = true;
+		$scope.order = function(){
+			$scope.reverse = !$scope.reverse;
+		}
+		$scope.currentPageNumber = 1;
+		$scope.itemsPerPage = 10;
+		$scope.search;
+		$scope.getNumberOfPages = function() {
+			var count = $scope.accounts.length / $scope.itemsPerPage;
+			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			return count;
+		}
+
+		$scope.pageDown = function()
+		{
+			if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+		}
+
+		$scope.pageUp = function()
+		{
+			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+		}
+
+		console.log($scope.accounts);
+		
+		//test end
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+
+		$scope.answer = function(answer) {
+			$mdDialog.hide(answer);
+		};
+	}
+
+	$scope.scoDialog = function(ev) {
+		$mdDialog.show({
+			locals: {localSco: $scope.scooters},
+			controller: DialogController2,
+			templateUrl: 'templates/scooterPicker.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: ev,
+			clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+  })
+		.then(function(answer) {
+			$scope.scooterId = answer.scooterId;
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	};
+	
+	function DialogController2($scope, $mdDialog, Upload, httpService, localSco) {
+		$scope.scooters = localSco;
+		console.log($scope.scooters);
+
+		$scope.itemsOrder = "active";
+		$scope.reverse = true;
+		$scope.order = function(){
+			$scope.reverse = !$scope.reverse;
+		}
+		$scope.currentPageNumber = 1;
+		$scope.itemsPerPage = 10;
+		$scope.search;
+		$scope.getNumberOfPages = function() {
+			var count = $scope.accounts.length / $scope.itemsPerPage;
+			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			return count;
+		}
+
+		$scope.pageDown = function()
+		{
+			if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+		}
+
+		$scope.pageUp = function()
+		{
+			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+		}
+
+		
+		
+		//test end
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+
+		$scope.answer = function(answer) {
+			$mdDialog.hide(answer);
+		};
+	}
+})
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
 })
 

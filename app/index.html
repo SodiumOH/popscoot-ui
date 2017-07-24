@@ -52,7 +52,8 @@
 							<i class="fa fa-bars fa-2x" aria-hidden="true" ></i>
 						</md-button>
 						<h2 flex md-truncate>
-							<md-button ng-repeat="breadcrumb in breadcrumbs">{{breadcrumb.name}}></md-button>
+							<md-button ng-click="goHome()">Home></md-button>
+							<md-button ng-repeat="item in breadcrumbs" ng-href="{{item.url}}">{{item.name}}></md-button>
 						</h2>
 						<md-menu md-offset="0 50">
 							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">

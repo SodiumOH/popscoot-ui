@@ -1,0 +1,82 @@
+  <md-dialog>
+    <form ng-cloak>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>Selet Scooter</h2>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="cancel()">
+            <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+          </md-button>
+        </div>
+      </md-toolbar>
+
+      <md-dialog-content md-padding>
+
+        <md-content>  
+
+          <div flex>
+            <md-card>
+             <div layout="row" layout-align="space-between center" layout-padding>
+              <div layout="row" layout-align="start center" layout-padding>
+                <span>Items Per Page</span>
+                <md-select ng-model="itemsPerPage" placeholder="Item per page">
+                  <md-option value=10>10</md-option>
+                  <md-option value=20>20</md-option>
+                  <md-option value=30>30</md-option>
+                </md-select>
+                <span>Order by</span>
+                <md-select ng-model="itemsOrder" placeholder="Item per page">
+                  <md-option value="date" ng-click="order()">Latest</md-option>
+                  <md-option value="username" ng-click="order()">Username</md-option>
+                  <md-option value="active" ng-click="order()">Active</md-option>
+                </md-select>
+
+
+              </div> 
+              <div>
+                <md-input-container>
+                  <label>Search...</label>
+                  <input ng-model="search"></md-input-container>
+                </md-input-container>    
+              </div>
+              <div>
+                Click on 'select' to select a scooter for this booking...
+              </div>      
+            </div>
+            <md-divider></md-divider>
+            <div layout="row" layout-wrap>
+            <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in scooters|filter: search|orderBy:itemsOrder:reverse">
+                <md-card>
+                  <md-card-title>
+                    <md-card-title-text>
+                      <span class="md-headline">{{item.integrateId}}</span>
+                      <span class="md-subhead">ScooterID: {{item.scooterId}}</span>
+                      <span class="md-subhead">Battery: {{item.battery}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                      <div class="md-media-sm" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+                      </div>
+                    </md-card-title-media>
+                  </md-card-title>
+
+                  <md-card-actions layout="row" layout-align="end center"> 
+                   <md-button ng-click="answer(item)">Select</md-button>
+                 </md-card-actions>
+               </md-card>
+             </div>
+
+           </div>  
+           <div layout="row" layout-align="space-around center">
+            <md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+            <md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+          </div>
+        </div>
+      </md-card>
+
+    </div>
+
+
+  </md-content>
+</md-dialog-content>
+</form>
+</md-dialog>

@@ -2,6 +2,13 @@ angular.module('app.scooter.ctrl', [])
 
 .controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
 	console.log('this is ScooterCtrl')
+	$scope.$emit('BC', [{
+		name: "Scooters",
+		url: "#/scooters"
+	},
+	{
+		name: "Scooter"
+	}]);
 	$scope.scooter = {};
 	$scope.bookings = [];
 	$scope.url = {
@@ -94,6 +101,10 @@ getBookings();
 
 .controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService) {
 	console.log('this is ScootersCtrl');
+	$scope.$emit('BC', [{
+		name: "Scooters",
+		url: "#/scooters"
+	}]);
 	$scope.path = "#/scooters/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -151,7 +162,35 @@ getBookings();
 	    }
     //pagination end
 })
-.controller('NewScooterCtrl', function(){
-	console.log("this is NewScooterCtrl")
-	;})
+.controller('NewScooterCtrl', function($scope, configuration, httpService){
+	console.log("this is NewScooterCtrl");
+	$scope.$emit('BC', [{
+		name: "Scooters",
+		url: "#/scooters"
+	},
+	{
+		name: "Create"
+	}]);
+	var domain = configuration.domain();
+	$scope.url = {
+		scooter: domain + "/service/scooters/"
+	};
+	console.log("this is NewscooterCtrl");
+	$scope.scooter;
+	$scope.createScooter = function(){
+		var createForm = $scope.scooter;
+		console.log(createForm);
+		httpService.httpPost($scope.url.scooter, createForm, 'CREATE_Scooter');
+	}
+	$scope.$on("CREATE_Scooter", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.scooter = data.data.data.data;		
+			window.location.href = "#scooters/" + $scope.scooter.scooterId
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
+})
+
 
