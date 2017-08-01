@@ -1,17 +1,17 @@
 var LANG_EN = {
-	dashboard: "dashboard",
-	splash: "splash",
-	account: "account",
-	analytics: "analytics",
-	bank: "bank",
-	booking: "booking",
-	enquiry: "enquiry",
-	help: "help",
-	payment: "payment",
-	promotion: "promotion",
-	scooter: "scooter",
-	finance: "finance",
-	miscellaneous: "miscellaneous"
+	dashboard: "DASHBOARD",
+	splash: "SPLASH",
+	account: "ACCOUNTS",
+	analytics: "ANALYTICS",
+	bank: "banks",
+	booking: "BOOKINGS",
+	enquiry: "ENQUIRIES",
+	help: "helps",
+	payment: "payments",
+	promotion: "promotions",
+	scooter: "SCOOTERS",
+	finance: "FINANCE",
+	miscellaneous: "MISCELLANEOUS"
 };
 
 var LANG_CH = {

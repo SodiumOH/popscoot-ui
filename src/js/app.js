@@ -1,5 +1,5 @@
-angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
-	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.accountPromo.ctrl'
+angular.module('POPSCOOT', ['dndLists', 'ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.tracking.ctrl', 'app.accountPromo.ctrl'
 	])
 
 .run(function($rootScope, $location) {
@@ -88,6 +88,10 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 		templateUrl: "templates/scooter.html",
 		controller: "ScooterCtrl"
 	})
+	.when('/tracking/:id', {
+		templateUrl: "templates/tracking.html",
+		controller: "TrackingCtrl"
+	})
 	
 	.when('/new/account', {
 		templateUrl: "templates/accountnew.html",
@@ -97,7 +101,19 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 		templateUrl: "templates/banknew.html",
 		controller: "NewBankCtrl"
 	})
+	.when('/new/bank/:id', {
+		templateUrl: "templates/banknew.html",
+		controller: "NewBankCtrl"
+	})
 	.when('/new/booking', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
+	})
+	.when('/new/booking/acc:aid', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
+	})
+	.when('/new/booking/sco:sid', {
 		templateUrl: "templates/bookingnew.html",
 		controller: "NewBookingCtrl"
 	})
@@ -106,6 +122,10 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 		controller: "NewHelpCtrl"
 	})
 	.when('/new/payment', {
+		templateUrl: "templates/paymentnew.html",
+		controller: "NewPaymentCtrl"
+	})	
+	.when('/new/payment/:id', {
 		templateUrl: "templates/paymentnew.html",
 		controller: "NewPaymentCtrl"
 	})	

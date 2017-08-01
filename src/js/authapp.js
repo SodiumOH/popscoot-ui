@@ -4,7 +4,8 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 	console.log("welcome to popscoot Auth");
 })
 
-.config(function($routeProvider, $locationProvider) {
+.config(function($routeProvider, $locationProvider, $mdThemingProvider) {
+	$mdThemingProvider.theme("error-toast");
 	$locationProvider.hashPrefix("");
 
 	$routeProvider

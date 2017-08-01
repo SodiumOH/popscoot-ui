@@ -2,15 +2,22 @@
 	<div flex flex-md="35" flex-gt-md="30">
 		<h2 class="title">Basic Information</h2>
 		<md-card>
-			<md-card-title>
+			<md-card-title id="cardAccount">
 				<md-card-title-text>
 					<span class="md-headline">{{account.username}}</span>
 				</md-card-title-text>
 
 				<md-card-title-media>
-					<div class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+					<div ng-if="!uploadImage" class="md-media-lg card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">   
+						<md-button class="md-icon-button" ng-click="uploadPrompt()"><i class="fa fa-camera" aria-hidden="true"></i></md-button>
+					</div>	
 
-					</div>
+					<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="drop-box md-media-lg card-media" 
+					ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+					accept="image/*" 
+					ngf-pattern="'image/*'"><div style="padding-top: 50px">Drop images here or click to upload, {{uploadStatus}}</div></div>
+					<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> 
+					
 				</md-card-title-media>
 
 			</md-card-title>
@@ -32,16 +39,16 @@
 									<label>Social Media</label>
 									<input ng-model="account.socialMedia" disabled>
 								</md-input-container>
-								<md-input-container class="md-block">
-									<label>Enter Birthday</label>
-									<md-datepicker ng-model="account.birthday"></md-datepicker>
-								</md-input-container>
+								<div layout="row" layout-align="space-between center">									
+									<md-input-container flex="50" class="md-block">
+										<label>Enter Birthday</label>
+										<md-datepicker ng-model="account.birthday"></md-datepicker>
+									</md-input-container>
+									<md-switch flex="40" ng-model="account.active" aria-label="Switch 1" ng-change="">{{getActive(account)}}</md-switch>
+								</div>
 							</div>
-							<md-button ng-click="uploadDialog($event)">upload</md-button>
-
-
 							<div>
-								<md-switch flex="50" ng-model="account.active" aria-label="Switch 1" ng-change="">{{getActive(account)}}</md-switch>
+								
 								<div flex layout="row">					
 									<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updateAccountForm.$invalid">Update</md-button>
 									<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
@@ -58,28 +65,60 @@
 	<div flex>
 		<h2 class="title">Usage</h2>
 		<md-card>
-			<md-tabs md-dynamic-height md-border-bottom>
+			<md-tabs md-dynamic-height md-border-bottom style="min-height: 607.898px">
 				<md-tab>
 					<md-tab-label>
 						<i class="fa fa-book"></i> Bookings
 					</md-tab-label>
 					<md-tab-body>
-						<md-content class="md-padding">
-							<md-list flex>
-								
-								<md-button ng-href="#/new/booking" class="md-raised">Create bookings</md-button>
-								<H2 ng-if="bookings.length === 0">There are currently no bookings under this account</H2>
-								<md-list-item class="md-3-line" ng-repeat="item in bookings" ng-href="#/bookings/{{item.bookingId}}">
-									<div class="md-list-item-text" layout="column">
-										<h3>BookingID: {{item.bookingId}}</h3>
-										<h4>Start Time: {{ item.startDate }}</h4>
-										<h4>End Time: {{ item.endDate }}</h4>
-										<p>Destination: {{ item.destinationName}}</p>
-									</div>								
-									<md-divider ></md-divider>
-								</md-list-item>
-							</md-list>
-						</md-content>
+						<div ng-if="bookings.length === 0" layout-padding layout-align="center start">
+							<H2>There are currently no bookings</H2>
+							<md-button class="md-raised" ng-href="#/new/booking/acc{{account.accountId}}">Create Booking</md-button>
+						</div>
+						
+						<md-card ng-if="bookings.length !== 0">
+							<div layout="row" layout-align="space-between center" layout-padding>
+								<div layout="row" layout-align="start center" layout-padding>
+									
+									<span>Order by</span>
+									<md-select ng-model="itemsOrder" placeholder="Item per page">
+										<md-option value="date" ng-click="order()">Latest</md-option>
+										<md-option value="username" ng-click="order()">Username</md-option>
+										<md-option value="active" ng-click="order()">Active</md-option>
+									</md-select>				
+								</div> 
+								<div>
+									<span>Create New Booking</span>
+									<md-button class="md-raised md-icon-button" ng-href="#/new/booking/acc{{account.accountId}}">           
+										<i class="fa fa-plus-circle"></i>
+									</md-button>
+								</div>			
+							</div>
+
+							<md-divider></md-divider>
+
+							<md-content layout="row" layout-wrap>				
+								<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
+									<md-card id="bookingCard">
+										<md-card-title>
+											<md-card-title-text>
+												<span class="md-headline">Booking: {{item.bookingId}}</span>
+												<span class="sub-head">Start Time: {{ item.startDate|rd:1 }}</span>
+												<span class="sub-head">End Time: {{ item.endDate|rd:1 }}</span>
+												<span class="sub-head">Destination: {{ item.destinationName}}</span>
+												<span>
+													Scooter: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
+												</span>						
+											</md-card-title-text>
+										</md-card-title>
+										<md-card-actions layout="row" layout-align="end center">							
+											<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">Details</md-button>	
+										</md-card-actions>
+									</md-card>
+
+								</div>
+							</md-content>
+						</md-card>
 					</md-tab-body>			
 				</md-tab>		
 				<md-tab>
@@ -87,20 +126,21 @@
 						<i class="fa fa-money"></i> Banks
 					</md-tab-label>
 					<md-tab-body>
-						<md-content class="md-padding">
+						<div ng-if="banks.length === 0" layout-padding layout-align="center start">
+							<H2>There are currently no banks</H2>
+							<md-button class="md-raised" ng-href="#/new/bank/{{account.accountId}}">Create Bank</md-button>
+						</div>
+						<md-content ng-if="banks.length !== 0" class="md-padding">
 							<div flex="100">
-								<H2 ng-if="!hasBank">There is no bank under this account</H2>
-								<md-button class="md-raised" ng-href="#/new/bank" ng-if="!hasBank">Create bank</md-button>
-								<md-button class="md-raised" ng-href="#/accounts/1" ng-if="!hasBank">Add bank</md-button>
 								<md-content  ng-repeat="item in banks">
 									<h3>Bank ID: {{item.bankId}}</h3>
 									<h4>Deposit: {{ item.deposit }}</h4>
 									<h4>Cash Amount: {{ item.cash }}</h4>
 									<p>Stamps: {{item.stamps}}</p>
-									<p>Create Date: {{ item.date}}</p>
-
+									<p>Create Date: {{ item.date|rd:0}}</p>
+									<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" style="margin-left: 0px">details</md-button>
 								</md-content>	
-								<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" style="margin-left: 0px">details</md-button>
+
 							</md-tab-body>					
 						</div>				
 					</md-tab>		
@@ -109,21 +149,48 @@
 							<i class="fa fa-question-circle"></i> Enquiries
 						</md-tab-label>
 						<md-tab-body>
-							<md-content class="md-padding">
-								<md-list flex>
+							<div ng-if="enquiries.length === 0" layout-padding layout-align="center start">
+								<H2>There are currently no enquiries</H2>
+							</div>
+							<md-card ng-if="enquiries.length !== 0">
+								<div layout="row" layout-align="start center" layout-padding>
 									
-									<H2 ng-if="enquiries.length === 0">There are currently no enquiries under this account</H2>
-									<md-list-item class="md-3-line" ng-repeat="item in enquiries" ng-href="#/enquiries/{{item.enquiryId}}">
-										<div class="md-list-item-text" layout="column">
-											<h3>Time: {{item.time}}</h3>
-											<h4>Enquiry ID: {{item.enquiryId}}</h4>
-											<p>Date: {{item.date}}</p>
-											<span md-truncate style="max-width: 250px;">Comment: {{item.comment}}</span>
-										</div>								
-										<md-divider ></md-divider>
-									</md-list-item>
-								</md-list>							
-							</md-content>
+									<span>Order by</span>
+									<md-select ng-model="itemsOrder" placeholder="Item per page">
+										<md-option value="date" ng-click="order()">Latest</md-option>
+										<md-option value="scooterId" ng-click="order()">Scooter</md-option>
+										<md-option value="accountId" ng-click="order()">Account</md-option>
+									</md-select>
+								</div> 
+								<md-divider></md-divider>
+								<div layout="row" layout-wrap>
+									<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in enquiries">
+										<md-card>
+											<md-card-title>
+												<md-card-title-text >
+													<span class="md-headline" md-truncate style="max-width: 330px">{{item.comment}}</span>
+													<span class="md-subhead">EnquiryID: {{item.enquiryId}}</span>
+
+												</md-card-title-text>
+
+												<md-card-title-media>
+													<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+													</div>
+												</md-card-title-media>
+											</md-card-title>
+											<md-card-content>
+												<span>Account: {{item.account.username}}</span>
+											</md-card-content>
+											<md-card-actions layout="row" layout-align="end center"> 
+												<md-button class="md-raised" ng-href="{{'#/'+item.enquiryId}}">Details</md-button>
+											</md-card-actions>
+										</md-card>
+									</div>
+								</div>
+
+								
+							</md-card>
+
 						</md-tab-body>				
 					</md-tab>		
 					<md-tab>
@@ -131,25 +198,52 @@
 							<i class="fa fa-credit-card"></i> Payments
 						</md-tab-label>
 						<md-tab-body>
-							<md-content class="md-padding">
-								<md-list flex>
-									
-									<md-button ng-href="#/new/payment" class="md-raised">Create payment</md-button>
-									<H2 ng-if="payments.length === 0">There are currently no payments under this account</H2>
-									<md-list-item class="md-3-line" ng-repeat="item in payments" ng-href="#/payments/{{item.paymentId}}">
-										<div class="md-list-item-text" layout="column">
-											<h3>Payment ID: {{item.paymentId}}</h3>
-											<h4>Active: {{ item.startDate }}</h4>
-											<h4>Method: {{ item.method }}</h4>
-											<p>Card Number: {{ item.credential1}}</p>
-											<p>Expiry: {{item.credential2}}</p>
-											<P>CSV: {{item.credential3}}</P>
-											<p>Date: {{item.date}}</p>
-										</div>								
-										<md-divider ></md-divider>
-									</md-list-item>
-								</md-list>
-							</md-content>
+							<div ng-if="payments.length === 0" layout-padding layout-align="center start">
+								<H2>There are currently no payments</H2>
+								<md-button class="md-raised" ng-href="#/new/payment/{{account.accountId}}">Create Payments</md-button>
+							</div>
+							<md-card ng-if="payments.length !== 0">
+								<div layout="row" layout-align="space-between center" layout-padding>
+									<div layout="row" layout-align="start center" layout-padding>
+										
+										<span>Order by</span>
+										<md-select ng-model="itemsOrder" placeholder="Item per page">
+											<md-option value="date" ng-click="order()">Latest</md-option>
+											<md-option value="username" ng-click="order()">Username</md-option>
+											<md-option value="active" ng-click="order()">Active</md-option>
+										</md-select>				
+									</div> 
+									<div>
+										<span>Create New Payment</span>
+										<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
+											<i class="fa fa-plus"></i>
+										</md-button>
+									</div>			
+								</div>
+								<md-divider></md-divider>
+
+								<md-content layout="row" layout-wrap>
+									<div ng-repeat="item in payments" flex="100" flex-gt-xs="50" flex-gt-md="33">
+										<md-card id="bookingCard">
+											<md-card-title>
+												<md-card-title-text>
+													<span class="md-headline">Payment ID: {{item.paymentId}}</span>
+													<span class="sub-head">Method: {{ item.method }}</span>
+													<span class="sub-head">Credential1: {{ item.credential1}}</span>
+													<span class="sub-head">Credential2: {{item.credential2}}</span>								
+													<span class="sub-head">Credential3: {{item.credential3}}</span>																
+													<span class="sub-head">Date: {{item.date|rd:0}}</span>					
+												</md-card-title-text>
+											</md-card-title>
+											<md-card-actions layout="row" layout-align="end center">							
+												<md-button class="md-raised" ng-href="{{path+item.paymentId}}">Details</md-button>	
+											</md-card-actions>
+										</md-card>
+
+									</div>
+								</md-content>
+
+							</md-card>
 						</md-tab-body>
 
 					</md-tab>		
@@ -158,21 +252,41 @@
 							<i class="fa fa-refresh"></i> Tansactions
 						</md-tab-label>
 						<md-tab-body>
-							<md-content class="md-padding">
-								<md-list flex>
-									
-									<H2 ng-if="transactions.length === 0">There are currently no transactions under this account</H2>
-									<md-list-item class="md-3-line" ng-repeat="item in transactions" ng-href="#/transactions/{{item.transactionId}}">
-										<div class="md-list-item-text" layout="column">
-											<h3>Transaction ID: {{item.transactionId}}</h3>
-											<h4>Status: {{ item.status }}</h4>
-											<h4>Amount: {{ item.amount }}</h4>
-											<p>Date: {{item.date}}</p>
-										</div>								
-										<md-divider ></md-divider>
-									</md-list-item>
-								</md-list>
-							</md-content>
+							<div ng-if="transactions.length === 0" layout-padding layout-align="center start">
+								<H2>There are currently no transactions</H2>
+							</div>
+							<md-card ng-if="transactions.length !== 0">
+								<div layout="row" layout-align="space-between center" layout-padding>
+									<div layout="row" layout-align="start center" layout-padding>
+										
+										<span>Order by</span>
+										<md-select ng-model="itemsOrder" placeholder="Item per page">
+											<md-option value="date" ng-click="order()">Latest</md-option>
+											<md-option value="username" ng-click="order()">Username</md-option>
+											<md-option value="active" ng-click="order()">Active</md-option>
+										</md-select>				
+									</div> 
+								</div>
+
+								<md-divider></md-divider>
+
+								<md-content layout="row" layout-wrap>			
+									<div ng-repeat="item in transactions" flex="100" flex-gt-xs="50" flex-gt-md="33">
+										<md-card id="transactionCard">
+											<md-card-title>
+												<md-card-title-text>
+													<span class="md-headline">TransactionID: {{item.transactionId}}</span>
+													<span class="sub-head">Amount: {{ item.amount }}</span>
+													<span class="sub-head">Date: {{ item.date|rd:0 }}</span>
+													<span class="sub-head">Status: {{ item.status}}</span>						
+												</md-card-title-text>
+											</md-card-title>
+										</md-card>
+
+									</div>
+								</md-content>
+
+							</md-card>
 						</md-tab-body>
 
 					</md-tab>		
@@ -181,20 +295,25 @@
 							<i class="fa fa-facebook"></i> ShareLogs
 						</md-tab-label>
 						<md-tab-body>
-							<md-content class="md-padding">
-								<md-list flex>
-									
-									<H2 ng-if="shareLogs.length === 0">There are currently no share logs under this account</H2>
-									<md-list-item class="md-3-line" ng-repeat="item in shareLogs">
-										<div class="md-list-item-text" layout="column">
-											<h3>ShareLog ID: {{item.sharelogId}}</h3>
-											<h4>Gateway: {{ item.gateway }}</h4>
-											<h4>Date: {{ item.date }}</h4>
-										</div>								
-										<md-divider ></md-divider>
-									</md-list-item>
-								</md-list>
-							</md-content>
+							<div ng-if="shareLogs.length === 0" layout-padding layout-align="center start">
+								<H2>There are currently no sharelogs</H2>
+							</div>
+							<md-card ng-if="shareLogs.length !== 0">
+								<md-content layout="row" layout-wrap>		
+									<div ng-repeat="item in shareLogs" flex="100" flex-gt-xs="50" flex-gt-md="33">
+										<md-card id="transactionCard">
+											<md-card-title>
+												<md-card-title-text>
+													<span class="md-headline">ShareLog ID: {{item.sharelogId}}</span>
+													<span class="sub-head">Gateway: {{ item.gateway }}</span>
+													<span class="sub-head">Date: {{ item.date|rd:0 }}</span>						
+												</md-card-title-text>
+											</md-card-title>
+										</md-card>
+
+									</div>
+								</md-content>
+							</md-card>
 						</md-tab-body>
 
 					</md-tab>
@@ -203,23 +322,28 @@
 							<i class="fa fa-bell"></i> PushTokens
 						</md-tab-label>
 						<md-tab-body>
-							<md-content class="md-padding">
-								<md-list flex>
-									<md-button class="md-raised">Add PushToken</md-button>
-									
-									<H2 ng-if="pushTokens.length === 0">There are currently no pushtokens under this account</H2>
-									<md-list-item class="md-3-line" ng-repeat="item in pushTokens">
-										<div class="md-list-item-text" layout="column">
-											<h3>PushToken ID: {{item.pushTokenId}}</h3>
-											<h4>Token: {{ item.token }}</h4>
-											<h4>Device: {{ item.device }}</h4>
-											<h4>Active: {{item.active}}</h4>
-											<p>Date: {{item.date}}</p>
-										</div>								
-										<md-divider ></md-divider>
-									</md-list-item>
-								</md-list>
-							</md-content>
+							<div ng-if="pushTokens.length === 0" layout-padding layout-align="center start">
+								<H2>There are currently no pushtokens</H2>
+								<md-button class="md-raised" ng-href="">Create Pushtokens</md-button>
+							</div>
+							<md-card ng-if="pushTokens.length !== 0">
+								<md-content layout="row" layout-wrap>		
+									<div ng-repeat="item in pushTokens" flex="100" flex-gt-xs="50" flex-gt-md="33">
+										<md-card id="transactionCard">
+											<md-card-title>
+												<md-card-title-text>
+													<span class="md-headline">PushToken ID: {{item.pushTokenId}}</span>
+													<span class="sub-head">Token: {{ item.token }}</span>
+													<span class="sub-head">Device: {{ item.device }}</span>	
+													<span class="sub-head">Active: {{item.active}}</span>	
+													<span class="sub-head">Date: {{item.date|rd:0}}</span>					
+												</md-card-title-text>
+											</md-card-title>
+										</md-card>
+
+									</div>
+								</md-content>
+							</md-card>
 						</md-tab-body>
 
 					</md-tab>		
@@ -228,26 +352,55 @@
 							<i class="fa fa-gift"></i> Promotions
 						</md-tab-label>
 						<md-tab-body>
-							<md-content class="md-padding">					
-								<md-list flex>
-									<md-button class="md-raised" ng-href="#/new/accountPromo">Apply Promotion</md-button>
-									<H2 ng-if="promotions.length === 0">There are currently no promotions available to this account</H2>
-									
-									<md-list-item class="md-3-line" ng-repeat="item in promotions" ng-href="#/promotions/{{item.promotionId}}">
-										<div class="md-list-item-text" layout="column">
-											<h3>Name: {{ item.name }}</h3>
-											<h4>Promotion ID: {{item.promotionId}}</h4>
-											<h4>Description: {{ item.description }}</h4>
-											<h4>Amount: {{item.amount}}</h4>
-											<p>Date: {{item.date}}</p>
-											<md-button class="md-raised" ng-href="#/accounts/5">Remove</md-button>
-										</div>								
-										<md-divider ></md-divider>
-									</md-list-item>
-								</md-list>
-							</md-tab-body>
+							<div ng-if="promotions.length === 0" layout-padding layout-align="center start">
+								<H2>There are currently no promotion used</H2>
+								<md-button class="md-raised" ng-click="promoDialog($event)">Apply Promotions</md-button>
+							</div>
+							<md-card ng-if="promotions.length !== 0">
+								<div layout="row" layout-align="space-between center" layout-padding>
+									<div layout="row" layout-align="start center" layout-padding>
+										
+										<span>Order by</span>
+										<md-select ng-model="itemsOrder" placeholder="Item per page">
+											<md-option value="date" ng-click="order()">Latest</md-option>
+											<md-option value="username" ng-click="order()">Username</md-option>
+											<md-option value="active" ng-click="order()">Active</md-option>
+										</md-select>				
+									</div> 
+									<div>
+										<span>Apply Promotion</span>
+										<md-button class="md-raised md-icon-button" ng-click="promoDialog($event)">           
+											<i class="fa fa-plus"></i>
+										</md-button>
+									</div>			
+								</div>
+								<md-divider></md-divider>
+								<md-content layout="row" layout-wrap>
+									<H2 ng-if="promotions.length === 0">There are currently no promotions</H2>
+									<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in promotions">
+										<md-card>
+											<md-card-title>
+												<md-card-title-text>
+													<span class="md-headline">Name: {{ item.name }}</span>
+													<span class="md-subhead">Promotion ID: {{item.promotionId}}</span>
+													<span class="md-subhead">Description: {{ item.description }}</span>
+													<span class="md-subhead">Amount: {{item.amount}}</span>
+													<span class="md-subhead">Date: {{item.date|rd:0}}</span>
+												</md-card-title-text>
+												<md-card-title-media>
+													<div class="md-media-sm card-media" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+													</div>
+												</md-card-title-media> 
+											</md-card-title>
+											<md-card-actions layout="row" layout-align="end center"> 
+												<md-button class="md-raised" ng-href="{{'#/promotions/'+item.promotionId}}">Details</md-button>
+											</md-card-actions>
+										</md-card>
+									</div>
+								</md-content>
 
-						</md-content>
+							</md-card>
+						</md-tab-body>
 					</md-tab>							
 				</md-tabs>
 			</md-card>

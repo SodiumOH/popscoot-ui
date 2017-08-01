@@ -6,6 +6,11 @@ angular.module('app.payment.ctrl', [])
 		payment: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id,
 		transactions: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id+"/transactions"
 	};
+	$scope.$emit('BC', 
+	{
+		name: "Payment",
+		url: "payments/"+$routeParams.id
+	});
 	$scope.payment;
 	$scope.transactions;
 	function getPayment(){
@@ -104,6 +109,11 @@ getTransactions();
 
 	httpService.httpGet($scope.url, 'GET_PAYMENTS');
 
+	$scope.$emit('BC', 
+	{
+		name: "Payments",
+		url: "payments"
+	});
 	$scope.$on("GET_PAYMENTS", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -120,13 +130,20 @@ getTransactions();
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
 	}
+	$scope.$emit('BC', 
+	{
+		name: "Create Payment",
+		url: "new/payment"
+	});
 
 	$scope.$on("GET_BACCOUNTS", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 
 	});

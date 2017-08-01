@@ -1,5 +1,5 @@
 angular.module('app.login.ctrl', [])
-.controller('LoginCtrl', function($scope, httpService, $location, configuration, toastService){
+.controller('LoginCtrl', function($scope, httpService, $location, configuration, toastService, $mdToast){
 	$scope.authSecret;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	var domain = configuration.domain();
@@ -32,9 +32,16 @@ angular.module('app.login.ctrl', [])
 				alert("not admin");
 			}*/
 		} else {
-			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(30000)
+				.position("top right")
+				.parent("#authPage")
+				.theme('error-toast')
+				);
 		}
 	})
- 	
-  console.log("LoginCtrl");
+
+	console.log("LoginCtrl");
 })

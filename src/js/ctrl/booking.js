@@ -2,13 +2,10 @@ angular.module('app.booking.ctrl', [])
 
 .controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
-	$scope.$emit('BC', [{
-		name: "Bookings",
-		url: "#/bookings"
-	},
-	{
-		name: "Booking"
-	}])
+	$scope.$emit('BC', {
+		name: "Booking",
+		url: "bookings/"+$routeParams.id
+	})
 	$scope.booking = {};
 	$scope.url = {
 		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
@@ -89,10 +86,10 @@ getBooking();
 
 .controller('BookingsCtrl', function($scope, $location, httpService) {
 	console.log('this is BookingsCtrl');
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Bookings",
-		url: "#/bookings"
-	}])
+		url: "bookings"
+	})
 	$scope.path = "#/bookings/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -123,15 +120,20 @@ getBooking();
 	});
 })
 
-.controller("NewBookingCtrl", function($scope, $mdDialog, httpService, configuration){
+.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration){
 	console.log("this is NewBookingCtrl");
-	$scope.$emit('BC', [{
-		name: "Bookings",
-		url: "#/bookings"
-	},
-	{
-		name: "Create"
-	}])
+	$scope.$emit('BC', {
+		name: "Create Bookings",
+		url: "new/booking"
+	})
+	$scope.booking = {
+		startDate: moment().toDate(),
+		endDate: moment().toDate()
+	}
+	$scope.createBooking = function(){
+		httpService.httpPost
+	}
+
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
 	}
@@ -140,8 +142,10 @@ getBooking();
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 		
 	});
@@ -162,7 +166,8 @@ getBooking();
 	getScooters();
 	getAccounts();
 
-
+	$scope.booking.accountId = $routeParams.aid;
+	$scope.booking.scooterId = $routeParams.sid;
 
 	$scope.accDialog = function(ev) {
 		$mdDialog.show({
@@ -175,7 +180,7 @@ getBooking();
       fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
   })
 		.then(function(answer) {
-			$scope.accountId = answer.accountId;
+			$scope.booking.accountId = answer.accountId;
 		}, function() {
 			$scope.status = 'You cancelled the dialog.';
 		});
@@ -207,8 +212,6 @@ getBooking();
 		{
 			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
 		}
-
-		console.log($scope.accounts);
 		
 		//test end
 		$scope.hide = function() {
@@ -224,18 +227,18 @@ getBooking();
 		};
 	}
 
-	$scope.scoDialog = function(ev) {
+	$scope.scoDialog = function(eve) {
 		$mdDialog.show({
 			locals: {localSco: $scope.scooters},
 			controller: DialogController2,
 			templateUrl: 'templates/scooterPicker.tmpl.html',
 			parent: angular.element(document.body),
-			targetEvent: ev,
+			targetEvent: eve,
 			clickOutsideToClose:true,
       fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
   })
 		.then(function(answer) {
-			$scope.scooterId = answer.scooterId;
+			$scope.booking.scooterId = answer.scooterId;
 		}, function() {
 			$scope.status = 'You cancelled the dialog.';
 		});
@@ -284,6 +287,23 @@ getBooking();
 			$mdDialog.hide(answer);
 		};
 	}
+
+
+	$scope.createBooking = function(){
+		var create = $scope.booking;
+		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
+		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
+		console.log(create);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/bookings", create, "CREATE_BOOKING");
+	}
+	$scope.$on("CREATE_BOOKING", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);	
+			window.location.href = "#bookings/" + $scope.booking.bookingId
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
 })
 .filter('paginate', function(){
 	return function(array, pageNumber, itemsPerPage){

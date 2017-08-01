@@ -8,7 +8,15 @@
 			</md-card-title-text>
 		</md-card-title>
 		<md-content layout-padding>
-			<div flex style="background-image: url({{help.image.url}}); background-repeat: no-repeat; background-position: center; background-size: contain;min-height: 500px; min-width: 500px"></div>
+			<div ng-if="!uploadImage" flex style="background-image: url({{help.image.url}}); background-repeat: no-repeat; background-position: center; background-size: contain;min-height: 500px; min-width: 500px">   
+				<md-button class="md-icon-button" ng-click="uploadPrompt()"><i class="fa fa-camera" aria-hidden="true"></i></md-button>
+			</div>	
+
+			<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="md-media-lg card-media drop-box" 
+			ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+			accept="image/*" 
+			ngf-pattern="'image/*'" style="min-height: 500px; min-width: 670px"><div style="padding-top: 80px">Drop pdfs or images here or click to upload, {{uploadStatus}}</div></div>
+			<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> 
 			<div>
 				<form name="updateEnquiryForm" ng-submit="updateHelp()">
 

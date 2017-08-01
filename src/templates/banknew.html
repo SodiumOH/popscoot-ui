@@ -8,16 +8,19 @@
 					<div layout="row">
 						<md-input-container flex class="md-block"> 
 							<label>Account</label>
+							<md-icon><i class="fa fa-user"></i></md-icon>
 							<input ng-model="accountId">
 						</md-input-container>
 						<md-button class="md-icon-button" ng-click="accDialog($event)"><i class="fa fa-plus"></i></md-button>
 					</div>
 					<md-input-container class="md-block">
 						<label>Deposit</label>
+						<md-icon><i class="fa fa-money"></i></md-icon>
 						<input ng-model="bank.deposit" >
 					</md-input-container>
 					<md-input-container class="md-block">
 						<label>Cash</label>
+						<md-icon><i class="fa fa-usd"></i></md-icon>
 						<input ng-model="bank.cash" type="number" step="0.01">
 					</md-input-container>
 				</div>

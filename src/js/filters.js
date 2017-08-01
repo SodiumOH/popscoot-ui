@@ -21,7 +21,30 @@ angular.module('app.filters', [])
     return function (value) {
         return (!value) ? '' : value.replace(/ /g, '');
     };
-});
+})
+.filter('rd', function(){
+	return function(value, opt){
+		switch(opt){
+			case 0:
+				return moment(value).format("YYYY MMM DD");
+			case 1:
+				return moment(value).format("YYYY MMM DD hh:mm");
+			case 2:
+				return moment(value).format("hh:mm");
+			default:
+				return moment(value).format("YYYY MMM DD");
+		}
+		return 
+	}
+})
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
+})
+
 
 
 	

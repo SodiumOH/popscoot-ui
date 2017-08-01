@@ -1,8 +1,9 @@
 angular.module('app.root.ctrl', [])
 
 .controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+	$scope.breadcrumbs = [];
 	$scope.$on('BC', function(evt, data){
-		$scope.breadcrumbs = data;
+		$scope.breadcrumbs.push(data);
 		console.log($scope.breadcrumbs);
 	});
 	$scope.goHome = function(){
@@ -26,8 +27,10 @@ angular.module('app.root.ctrl', [])
 			if(data.data.data.status == 1) {
 				console.log(data.data.data.data);
 				$scope.Laccount = data.data.data.data;
+				$scope.$emit("GETFINISHED");
 			} else {
 				console.log(data.data.data.message);
+				$scope.$emit("GETFINISHED");
 			}
 		});
 	}
@@ -38,6 +41,7 @@ angular.module('app.root.ctrl', [])
 			$scope.language = LANG_EN;
 		}
 	}
+	$scope.browserHeight = $window.innerHeight;
 	angular.element($window).on('resize', function () {
 		$scope.browserHeight = $window.innerHeight;
 	});
@@ -77,17 +81,20 @@ angular.module('app.root.ctrl', [])
 			icon2: {
 				colapsed: "fa fa-caret-up",
 				folded: "fa fa-caret-down"
-			},
-			child: [{
-				path: "banks",
-				name: $scope.language.bank,
-				icon: "fa fa-credit-card"
-			}, {
-				path: "payments",
-				name: $scope.language.payment,
-				icon: "fa fa-money"
-			}]
+			}
 		}, {
+			path: "banks",
+			name: $scope.language.bank,
+			icon: "fa fa-credit-card",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},{
+			path: "payments",
+			name: $scope.language.payment,
+			icon: "fa fa-money",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},{
 			path: "miscellaneous",
 			name: $scope.language.miscellaneous,
 			colapsed: false,
@@ -95,17 +102,20 @@ angular.module('app.root.ctrl', [])
 			icon2: {
 				colapsed: "fa fa-caret-up",
 				folded: "fa fa-caret-down"
-			},
-			child: [{
-				path: "promotions",
-				name: $scope.language.promotion,
-				icon: "fa fa-gift"
-			}, {
-				path: "helps",
-				name: $scope.language.help,
-				icon: "fa fa-info-circle"
-			}]
-		}, {
+			}
+		},{
+			path: "promotions",
+			name: $scope.language.promotion,
+			icon: "fa fa-gift",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},  {
+			path: "helps",
+			name: $scope.language.help,
+			icon: "fa fa-info-circle",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},{
 			path: "analytics",
 			name: $scope.language.analytics,
 			icon: "fa fa-line-chart"
@@ -132,14 +142,22 @@ angular.module('app.root.ctrl', [])
 
 				window.location.href = (path + "auth.html");
 				localStorage.removeItem("UI_SECRET");
-			} else if(path == "miscellaneous") {
-				$scope.menu.main[6].colapsed = !$scope.menu.main[6].colapsed;
 			} else if(path == "finance") {
 				$scope.menu.main[5].colapsed = !$scope.menu.main[5].colapsed;
+				$scope.menu.main[6].hide = !$scope.menu.main[6].hide;				
+				$scope.menu.main[7].hide = !$scope.menu.main[7].hide;
+			} else if(path == "miscellaneous") {
+				$scope.menu.main[8].colapsed = !$scope.menu.main[8].colapsed;
+				$scope.menu.main[9].hide = !$scope.menu.main[9].hide;			
+				$scope.menu.main[10].hide = !$scope.menu.main[10].hide;
 			} else {
 				$location.path(path);
 			}		
 		};
+		$scope.goBC = function(path, index){
+			$location.path(path);
+			$scope.breadcrumbs.splice(index);
+		}
 
 		
 

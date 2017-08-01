@@ -2,6 +2,12 @@
 	<div flex>
 		<md-card>
 			<div layout="row" layout-align="space-between center" layout-padding>
+				<div>
+					<span>Create New Payment</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
+						<i class="fa fa-plus"></i>
+					</md-button>
+				</div>			
 				<div layout="row" layout-align="start center" layout-padding>
 					<span>Items Per Page</span>
 					<md-select ng-model="itemsPerPage" placeholder="Item per page">
@@ -17,12 +23,6 @@
 						<md-option value="active" ng-click="order()">Active</md-option>
 					</md-select>				
 				</div> 
-				<div>
-					<span>Create New Payment</span>
-					<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
-						<i class="fa fa-plus-circle"></i>
-					</md-button>
-				</div>			
 			</div>
 			<md-divider></md-divider>
 
@@ -33,14 +33,16 @@
 						<md-card-title>
 							<md-card-title-text>
 								<span class="md-headline">Payment ID: {{item.paymentId}}</span>
-								<span class="sub-head">Method: {{ item.method }}</span>
-								<span class="sub-head">Card Number: {{ item.credential1}}</span>
-								<span class="sub-head">Expiry: {{item.credential2}}</span>								
-								<span class="sub-head">CSV: {{item.credential3}}</span>																
-								<span class="sub-head">Date: {{item.date}}</span>					
+								<table>
+									<tr><td class="ulli">Method: </td><td>{{ item.method }}</td></tr>
+									<tr><td class="ulli">Credential1: </td><td>{{ item.credential1}}</td></tr>
+									<tr><td class="ulli">Credential2: </td><td>{{item.credential2}}</td></tr>
+									<tr><td class="ulli">Credential3: </td><td>{{item.credential3}}</td></tr>
+									<tr><td class="ulli">Date: </td><td>{{item.date|rd:1}}</td></tr>
+								</table>				
 							</md-card-title-text>
 						</md-card-title>
-						<md-card-actions>							
+						<md-card-actions layout="row" layout-align="end center">							
 							<md-button class="md-raised" ng-href="{{path+item.paymentId}}">Details</md-button>	
 						</md-card-actions>
 					</md-card>
@@ -51,8 +53,8 @@
 				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
 				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
 			</div>
-		</div>
-	</md-card>
+			
+		</md-card>
 
-</div>
+	</div>
 </div>

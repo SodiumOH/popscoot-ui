@@ -2,13 +2,10 @@ angular.module('app.help.ctrl', [])
 
 .controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
 	console.log('this is HelpCtrl');
-	$scope.$emit('BC', [{
-		name: "Helps",
-		url: "#/helps"
-	},
-	{
-		name: "Help"
-	}])
+	$scope.$emit('BC', {
+		name: "Help",
+		url: "helps/"+$routeParams.id
+	})
 	$scope.url = {
 		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
 	};
@@ -28,14 +25,70 @@ angular.module('app.help.ctrl', [])
 		}
 	});
 
+
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+
+	var mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		console.log(files);
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+
+
+
 	$scope.updateHelp = function(){
 		var updateForm = $scope.help;
+		updateForm.mediaId = mediaId;
 		httpService.httpPut($scope.url.help, updateForm, 'UPDATE_Help');
 	}
 	$scope.$on('UPDATE_Help', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.help = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -85,17 +138,30 @@ getHelp();
 
 .controller('HelpsCtrl', function($scope, $location, httpService) {
 	console.log('this is HelpsCtrl')
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Helps",
-		url: "#/helps"
-	}])
+		url: "helps"
+	});
 	$scope.path = "#/helps/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
 	$scope.url = "http://test.popscoot.com/popscoot/service/helps"
+
+	$scope.itemsOrder = "order";
+	$scope.reverse = true;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}	
+
+	$scope.arrangeB = false;
+	$scope.arrange = function(){
+		$scope.arrangeB = !$scope.arrangeB;
+	}
+
 	$scope.helps;
+
 
 	httpService.httpGet($scope.url, 'GET_HELPS');
 
@@ -109,16 +175,91 @@ getHelp();
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+
+	//drag and drop arrage
+	$scope.dragoverCallback = function(index, external, type, callback) {
+		$scope.logListEvent('dragged over', index, external, type);
+        // Invoke callback to origin for container types.
+        if (type == 'container' && !external) {
+        	console.log('Container being dragged contains ' + callback() + ' items');
+        }
+        return index < 10; // Disallow dropping in the third row.
+    };
+
+    $scope.dropCallback = function(index, item, external, type) {
+    	$scope.logListEvent('dropped at', index, external, type);
+
+    	/*var tempIndex = 0
+    	$scope.helps.forEach(function(help){
+    		if(item.helpId === help.helpId){
+    			$scope.toRemove = tempIndex;
+    		}
+    		tempIndex++;
+    	})
+    	$scope.helps.splice(tempIndex, 1);*/
+
+    	$scope.helps.splice(index, 0, item);
+        // Return false here to cancel drop. Return true if you insert the item yourself.
+        $scope.helpOrders = [];
+        $scope.helps.forEach(function(help){
+        	$scope.helpOrders.push(help.helpId);
+        })
+        var orders = {
+        	orders:  $scope.helpOrders
+        }
+        console.log("hihihihi");
+        console.log(orders);
+        httpService.httpPut("http://test.popscoot.com/popscoot/service/helps", orders, "UPDATE_ORDERS");
+        $scope.$on("UPDATE_ORDERS", function(eve, data){
+        	if(data.data.data.status == 1) {
+        		console.log(data.data.data.data);
+        		$scope.updatedHelps = data.data.data.data;
+        	} else {
+        		console.log(data.data.data.message);
+        	}
+        })
+
+
+    };
+
+    $scope.doneShifting = function(){
+    	$scope.arrangeB = !$scope.arrangeB;
+    	$scope.helps = $scope.updatedHelps;
+    }
+
+    $scope.logEvent = function(message) {
+    	console.log(message);
+    };
+
+    $scope.logListEvent = function(action, index, external, type) {
+    	var message = external ? 'External ' : '';
+    	message += type + ' element was ' + action + ' position ' + index;
+    	console.log(message);
+    };
+
+    // Initialize model
+    $scope.model = [[], []];
+    var id = 10;
+    angular.forEach(['all', 'move', 'copy', 'link', 'copyLink', 'copyMove'], function(effect, i) {
+    	var container = {items: [], effectAllowed: effect};
+    	for (var k = 0; k < 7; ++k) {
+    		container.items.push({label: effect + ' ' + id++, effectAllowed: effect});
+    	}
+    	$scope.model[i % $scope.model.length].push(container);
+    });
+
+    $scope.$watch('model', function(model) {
+    	$scope.modelAsJson = angular.toJson(model, true);
+    }, true);
+
 })
 .controller("NewHelpCtrl", function($scope, httpService){
 	console.log("this is NewHelpCtrl");
-	$scope.$emit('BC', [{
-		name: "Helps",
-		url: "#/helps"
-	},
-	{
-		name: "Create"
-	}])
+	$scope.$emit('BC', {
+		name: "Create Helps",
+		url: "new/help"
+	})
 	$scope.help;
 	$scope.createHelp = function(){
 		var createForm = $scope.help;

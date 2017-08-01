@@ -90,11 +90,12 @@ angular.module('app.service', [])
 })
 .factory('toastService', function($rootScope, $http, $mdToast){
     return {
-        showSimpleToast: function(textContent, position, hideDelay, parent) {
+        showSimpleToast: function(textContent, position, hideDelay, theme) {
 
             $mdToast.show(
                 $mdToast.simple()
                 .textContent(textContent)
+                .theme(theme)
                 .position(position)
                 .hideDelay(hideDelay)
                 .parent(parent)

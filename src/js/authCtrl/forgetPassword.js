@@ -8,6 +8,7 @@ angular.module('app.forgetPassword.ctrl', [])
 	$scope.form = {
 		email: ""
 	}
+	$scope.success = false;
 	$scope.forgetPassword = function(){
 		var body = {
 			email: $scope.form.email
@@ -21,10 +22,10 @@ angular.module('app.forgetPassword.ctrl', [])
 		hoster = mail.substring(atPos + 1);
 		window.location.href = 'http://' + hoster;
 	}
-	var showActionToast = function(textContent, position, hideDelay, parent, email) {
+	var showActionToast = function(textContent, position, hideDelay, parent) {
 		var toast = $mdToast.simple()
-		.textContent('Activation email sent...')
-		.action('To Inbox')
+		.textContent('Email sent...')
+		.hideDelay('hideDelay')
 		.highlightAction(true)
       .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
       .position(position)
@@ -34,24 +35,50 @@ angular.module('app.forgetPassword.ctrl', [])
       	if ( response == 'ok' ) {
       		directInbox(email);
       	}else{
-      		window.location.href = $scope.path + "auth.html";
+      		$scope.success = true;
       	}
       });
-  }
-  $scope.$on("FORGETPASSWORD", function(event, data){
-  	console.log(data);
-  	if(data.data.data.status == 1) {
-  		/*if (data.data.data.data.type === "admin") {	*/			
-  			console.log(data.data.data.data);
-  			showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
+    }
+    $scope.$on("FORGETPASSWORD", function(event, data){
+     console.log(data);
+     if(data.data.data.status == 1) {
+      /*if (data.data.data.data.type === "admin") {	*/			
+       console.log(data.data.data.data);
+       showActionToast('Activation email sent', 'top right', 3000);
 
 			/*} else {
 				alert("not admin");
 			}*/
 		} else {
-			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+			$mdToast.show(
+        $mdToast.simple()
+        .textContent(data.data.data.message)
+        .hideDelay(30000)
+        .position("top right")
+        .parent("#authPage")
+        .theme('error-toast')
+        );
+
 		}
 	})
 
-	console.log("ForgetPasswordCtrl");
-})
+    $scope.updatePWForm;
+    $scope.updatePassword = function(){
+     console.log($scope.updatePWForm);
+     httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
+   }
+   $scope.$on('CHANGE_PASSOWRD', function(event, data){
+     if(data.data.data.status == 1) {
+      console.log(data.data.data.data);
+      $mdToast.showSimple("Update success").position("top right").hideDelay(500);
+      $timeout(function(){
+       window.location.href = "#/login"
+     }, 500);  		
+    } else {
+      console.log(data.data.data.message);
+      $scope.display = data.data.data.message;
+    }
+  })
+
+   console.log("ForgetPasswordCtrl");
+ })

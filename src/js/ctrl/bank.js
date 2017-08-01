@@ -2,13 +2,10 @@ angular.module('app.bank.ctrl', [])
 
 .controller('BankCtrl', function($scope,$mdDialog,$location, $routeParams, httpService) {
 	console.log('this is BankCtrl')
-	$scope.$emit('BC', [{
-		name: "Banks",
-		url: "#/banks"
-	},
-	{
-		name: "Bank"
-	}])
+	$scope.$emit('BC', {
+		name: "Bank",
+		url: "banks/"+$routeParams.id
+	})
 	$scope.bank;
 	$scope.url = {
 		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
@@ -76,17 +73,17 @@ angular.module('app.bank.ctrl', [])
     }, function() {
     	$scope.status = 'Action canceled';
     });
-   
+    
 };
 
 })
 
 .controller('BanksCtrl', function($scope, $location, httpService) {
 	console.log('this is BanksCtrl');
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Banks",
-		url: "#/banks"
-	}])
+		url: "banks"
+	})
 	$scope.path = "#/banks/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -107,16 +104,33 @@ angular.module('app.bank.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		}
 	});
-})
-.controller("NewBankCtrl", function($scope, $mdDialog, httpService){
-	console.log("this is NewBankCtrl");
-	$scope.$emit('BC', [{
-		name: "Banks",
-		url: "#/banks"
-	},
+
+	$scope.currentPageNumber = 1;
+	$scope.itemsPerPage = 10;
+	$scope.search;
+	$scope.getNumberOfPages = function() {
+		var count = $scope.banks.length / $scope.itemsPerPage;
+		if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
+		return count;
+	}
+
+	$scope.pageDown = function()
 	{
-		name: "Create"
-	}])
+		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+	}
+
+	$scope.pageUp = function()
+	{
+		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+	}
+
+})
+.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService){
+	console.log("this is NewBankCtrl");
+	$scope.$emit('BC', {
+		name: "Create Banks",
+		url: "new/bank"
+	})
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
 	}
@@ -125,8 +139,10 @@ angular.module('app.bank.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 
 	});
@@ -161,8 +177,8 @@ angular.module('app.bank.ctrl', [])
 		$scope.itemsPerPage = 10;
 		$scope.search;
 		$scope.getNumberOfPages = function() {
-			var count = $scope.accounts.length / $scope.itemsPerPage;
-			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			var count = $scope.banks.length / $scope.itemsPerPage;
+			if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
 			return count;
 		}
 
@@ -195,9 +211,10 @@ angular.module('app.bank.ctrl', [])
 		cash: 39.0,
 		deposit: 39.0
 	}
+	$scope.accountId = $routeParams.id;
 	$scope.createBank = function(){
 		var createForm = $scope.bank;
-		createForm.accountId = $scope.accountId;
+		createForm.accountId = parseInt($scope.accountId);
 		console.log(createForm);
 		httpService.httpPost("http://test.popscoot.com/popscoot/service/banks", createForm, 'CREATE_BANK');
 	}

@@ -2,6 +2,13 @@
 	<div flex>
 		<md-card>
 			<div layout="row" layout-align="space-between center" layout-padding>
+				<div ng-if="!arrangeB">
+					<span>Create New Help</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/help">           
+						<i class="fa fa-plus" aria-hidden="true"></i>
+					</md-button>
+				</div>		
+				
 				<div layout="row" layout-align="start center" layout-padding>
 					<span>Items Per Page</span>
 					<md-select ng-model="itemsPerPage" placeholder="Item per page">
@@ -12,46 +19,58 @@
 					</md-select>
 					<span>Order by</span>
 					<md-select ng-model="itemsOrder" placeholder="Item per page">
-						<md-option value="date" ng-click="order()">Latest</md-option>
-						<md-option value="username" ng-click="order()">Username</md-option>
-						<md-option value="active" ng-click="order()">Active</md-option>
+						<md-option value="helpId" ng-click="order()">ID</md-option>
+						<md-option value="order" ng-click="order()">Order</md-option>
 					</md-select>				
-				</div> 
-				<div>
-					<span>Create New Help</span>
-					<md-button class="md-raised md-icon-button" ng-href="#/new/help">           
-						<i class="fa fa-plus-circle"></i>
-					</md-button>
-				</div>			
+				</div> 	
 			</div>
 			<md-divider></md-divider>
-			<div layout=row layout-wrap>
-				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in helps">
-					<md-card>
-						<md-card-title layout-align="space-between center">
-							<md-card-title-text style="max-width: 330px">
-								<span class="md-headline">Title: {{ item.title }}</span>
-								<span class="md-subhead">Help ID: {{item.helpId}}</span>
-								<span class="md-subhead">Order: {{ item.order }}</span>
-								<span class="md-subhead" md-truncate>Content: {{item.content}}</span>
-								<span class="md-subhead">Date: {{item.date}}</span>
-							</md-card-title-text>
-							<md-card-title-media>
-								<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-position: center; background-repeat: no-repeat;background-size: contain;">            
-								</div>
-							</md-card-title-media>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center"> 
-							<md-button class="md-raised" ng-href="{{path+item.helpId}}">Details</md-button>
-						</md-card-actions>
-					</md-card>
-				</div>
-			</div>
-
-			<div layout="row" layout-align="space-around center">
-				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
-				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
-			</div>
+			<div class="container-element box box-blue">
+				<ul dnd-list="container.items"
+				dnd-allowed-types="['item']"
+				dnd-horizontal-list="true"
+				dnd-external-sources="false"
+				dnd-effect-allowed="move"
+				dnd-dragover="dragoverCallback(index, external, type)"
+				dnd-drop="dropCallback(index, item, external, type)"
+				dnd-inserted="logListEvent('inserted at', index, external, type)"
+				class="itemlist"
+				layout="row"
+				layout-wrap>
+				<li ng-repeat="item in helps"
+				dnd-draggable="item"
+				dnd-type="'item'"
+				dnd-effect-allowed="move"
+				dnd-dragstart="helps.splice($index, 1)"
+				dnd-moved=""
+				dnd-dragend="logEvent('Drag operation ended. Drop effect: ' + dropEffect)"
+				flex="100" flex-gt-xs="50" flex-gt-md="33">
+				<md-card flex>
+					<md-card-title layout-align="space-between center">
+						<md-card-title-text style="max-width: 330px">
+							<span class="md-headline">Title: {{ item.title }}</span>
+							<table>
+								<tr><td class="ulli">Help ID: </td><td>{{item.helpId}}</td></tr>
+								<tr><td class="ulli">Order: </td><td>{{ item.order }}</td></tr>
+								<tr><td class="ulli">Content: </td><td md-truncate style="max-width: 150px">{{item.content}}</td></tr>
+								<tr><td class="ulli">Date: </td><td>{{item.date|rd:0}}</td></tr>
+							</table>
+						</md-card-title-text>
+						<md-card-title-media>
+							<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-position: center; background-repeat: no-repeat;background-size: contain;">            
+							</div>
+						</md-card-title-media>
+					</md-card-title>
+					<md-card-actions layout="row" layout-align="end center"> 
+						<md-button class="md-raised" ng-href="{{path+item.helpId}}">Details</md-button>
+					</md-card-actions>
+				</md-card>
+			</li>
+		</ul>
+		<div class="clearfix"></div>
+	</div>
+	
+			
 
 		</md-card>
 

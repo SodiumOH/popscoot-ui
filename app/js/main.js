@@ -1,5 +1,5 @@
-angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
-	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.accountPromo.ctrl'
+angular.module('POPSCOOT', ['dndLists', 'ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.tracking.ctrl', 'app.accountPromo.ctrl'
 	])
 
 .run(function($rootScope, $location) {
@@ -88,6 +88,10 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 		templateUrl: "templates/scooter.html",
 		controller: "ScooterCtrl"
 	})
+	.when('/tracking/:id', {
+		templateUrl: "templates/tracking.html",
+		controller: "TrackingCtrl"
+	})
 	
 	.when('/new/account', {
 		templateUrl: "templates/accountnew.html",
@@ -97,7 +101,19 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 		templateUrl: "templates/banknew.html",
 		controller: "NewBankCtrl"
 	})
+	.when('/new/bank/:id', {
+		templateUrl: "templates/banknew.html",
+		controller: "NewBankCtrl"
+	})
 	.when('/new/booking', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
+	})
+	.when('/new/booking/acc:aid', {
+		templateUrl: "templates/bookingnew.html",
+		controller: "NewBookingCtrl"
+	})
+	.when('/new/booking/sco:sid', {
 		templateUrl: "templates/bookingnew.html",
 		controller: "NewBookingCtrl"
 	})
@@ -106,6 +122,10 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 		controller: "NewHelpCtrl"
 	})
 	.when('/new/payment', {
+		templateUrl: "templates/paymentnew.html",
+		controller: "NewPaymentCtrl"
+	})	
+	.when('/new/payment/:id', {
 		templateUrl: "templates/paymentnew.html",
 		controller: "NewPaymentCtrl"
 	})	
@@ -197,8 +217,9 @@ angular.module('POPSCOOT', ['ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInpu
 angular.module('app.root.ctrl', [])
 
 .controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+	$scope.breadcrumbs = [];
 	$scope.$on('BC', function(evt, data){
-		$scope.breadcrumbs = data;
+		$scope.breadcrumbs.push(data);
 		console.log($scope.breadcrumbs);
 	});
 	$scope.goHome = function(){
@@ -222,8 +243,10 @@ angular.module('app.root.ctrl', [])
 			if(data.data.data.status == 1) {
 				console.log(data.data.data.data);
 				$scope.Laccount = data.data.data.data;
+				$scope.$emit("GETFINISHED");
 			} else {
 				console.log(data.data.data.message);
+				$scope.$emit("GETFINISHED");
 			}
 		});
 	}
@@ -234,6 +257,7 @@ angular.module('app.root.ctrl', [])
 			$scope.language = LANG_EN;
 		}
 	}
+	$scope.browserHeight = $window.innerHeight;
 	angular.element($window).on('resize', function () {
 		$scope.browserHeight = $window.innerHeight;
 	});
@@ -273,17 +297,20 @@ angular.module('app.root.ctrl', [])
 			icon2: {
 				colapsed: "fa fa-caret-up",
 				folded: "fa fa-caret-down"
-			},
-			child: [{
-				path: "banks",
-				name: $scope.language.bank,
-				icon: "fa fa-credit-card"
-			}, {
-				path: "payments",
-				name: $scope.language.payment,
-				icon: "fa fa-money"
-			}]
+			}
 		}, {
+			path: "banks",
+			name: $scope.language.bank,
+			icon: "fa fa-credit-card",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},{
+			path: "payments",
+			name: $scope.language.payment,
+			icon: "fa fa-money",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},{
 			path: "miscellaneous",
 			name: $scope.language.miscellaneous,
 			colapsed: false,
@@ -291,17 +318,20 @@ angular.module('app.root.ctrl', [])
 			icon2: {
 				colapsed: "fa fa-caret-up",
 				folded: "fa fa-caret-down"
-			},
-			child: [{
-				path: "promotions",
-				name: $scope.language.promotion,
-				icon: "fa fa-gift"
-			}, {
-				path: "helps",
-				name: $scope.language.help,
-				icon: "fa fa-info-circle"
-			}]
-		}, {
+			}
+		},{
+			path: "promotions",
+			name: $scope.language.promotion,
+			icon: "fa fa-gift",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},  {
+			path: "helps",
+			name: $scope.language.help,
+			icon: "fa fa-info-circle",
+			hide: true,
+			margin: {'margin-left':'25px'}
+		},{
 			path: "analytics",
 			name: $scope.language.analytics,
 			icon: "fa fa-line-chart"
@@ -328,14 +358,22 @@ angular.module('app.root.ctrl', [])
 
 				window.location.href = (path + "auth.html");
 				localStorage.removeItem("UI_SECRET");
-			} else if(path == "miscellaneous") {
-				$scope.menu.main[6].colapsed = !$scope.menu.main[6].colapsed;
 			} else if(path == "finance") {
 				$scope.menu.main[5].colapsed = !$scope.menu.main[5].colapsed;
+				$scope.menu.main[6].hide = !$scope.menu.main[6].hide;				
+				$scope.menu.main[7].hide = !$scope.menu.main[7].hide;
+			} else if(path == "miscellaneous") {
+				$scope.menu.main[8].colapsed = !$scope.menu.main[8].colapsed;
+				$scope.menu.main[9].hide = !$scope.menu.main[9].hide;			
+				$scope.menu.main[10].hide = !$scope.menu.main[10].hide;
 			} else {
 				$location.path(path);
 			}		
 		};
+		$scope.goBC = function(path, index){
+			$location.path(path);
+			$scope.breadcrumbs.splice(index);
+		}
 
 		
 
@@ -451,16 +489,21 @@ angular.module('app.account.ctrl', [])
 	console.log('this is AccountCtrl');
 
 
-	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-	$scope.$emit('BC', [{
-		name: "Accounts",
-		url: "#/accounts"
-	},
-	{
-		name: "Account"
-	}])
-	$scope.isEdit = false;
+
+	var element = angular.element(document.querySelector('#cardAccount')); 
+	var height = element[0].offsetHeight;
+	$scope.minHeight = height;
+
+	$scope.search;
+	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";	
 	var accountId = $routeParams.id;
+	$scope.$emit('BC', 
+	{
+		name: "Account",
+		url: "accounts/"+accountId
+	});
+
+	$scope.isEdit = false;
 	var domain = configuration.domain();
 	$scope.url = {
 		account: domain + "/service/accounts/" + accountId,
@@ -478,17 +521,6 @@ angular.module('app.account.ctrl', [])
 	
 
 
-	$scope.$emit('breadcrumbs', function(){
-		return([
-		{
-			name: Accounts,
-			url: domain + "/service/accounts/"
-		},
-		{
-			name: Account,
-			url: domain + "/service/accounts/" + accountId
-		}])
-	})
 	$scope.init_form = {};
 	$scope.account = {};
 	$scope.bookings = [];
@@ -500,6 +532,8 @@ angular.module('app.account.ctrl', [])
 	$scope.pushTokens = [];
 	$scope.enquiries = [];
 	$scope.hasBank = false;
+
+
 
 	function getAccount() {
 		httpService.httpGet($scope.url.account, 'GET_ACCOUNT');
@@ -560,6 +594,8 @@ angular.module('app.account.ctrl', [])
 			/*console.log("test", data);*/
 			console.log(data.data.data.data.appliedPromotions);
 			$scope.promotions = data.data.data.data.appliedPromotions;
+			$scope.apromotions = data.data.data.data.availablePromotions;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
 			redirect();
@@ -632,12 +668,145 @@ angular.module('app.account.ctrl', [])
 	});
 
 
+	//fileUpload without dialog
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+
+	var mediaId = $scope.account.mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+	
+
+	$scope.promoDialog = function(even) {
+		
+		
+		$mdDialog.show({
+			locals: {localPro: $scope.apromotions},
+			controller: DialogController1,
+			templateUrl: 'templates/promotionPicker.tmpl.html',
+			parent: angular.element(document.body),
+			targetEvent: even,
+			clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+  })
+		.then(function(answer) {
+			updateForm = {
+				accountId: $scope.account.accountId,
+				promotionId: answer.promotionId
+			}
+			console.log(updateForm);
+			httpService.httpPost("http://test.popscoot.com/popscoot/api/promotion/apply", updateForm ,'APPLY_PROMOTION');
+			$scope.$on("APPLY_PROMOTION", function(event, data){
+				console.log(data);
+				if(data.status == 1) {
+					console.log(data.data.data);
+					$scope.promotions.push(answer);
+					getPromotions();
+
+				} else {
+					console.log(data.data.message);
+
+				}
+			})
+		}, function() {
+			$scope.status = 'You cancelled the dialog.';
+		});
+	};
+	
+	function DialogController1($scope, $mdDialog, Upload, httpService, localPro) {
+		$scope.promotions = localPro;
+		console.log("bitch");
+		console.log($scope.promotions);
+
+		$scope.itemsOrder = "active";
+		$scope.reverse = true;
+		$scope.order = function(){
+			$scope.reverse = !$scope.reverse;
+		}
+		$scope.currentPageNumber = 1;
+		$scope.itemsPerPage = 10;
+		$scope.search;
+		$scope.getNumberOfPages = function() {
+			var count = $scope.accounts.length / $scope.itemsPerPage;
+			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			return count;
+		}
+
+		$scope.pageDown = function()
+		{
+			if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+		}
+
+		$scope.pageUp = function()
+		{
+			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+		}
+
+		
+		
+		//test end
+		$scope.hide = function() {
+			$mdDialog.hide();
+		};
+
+		$scope.cancel = function() {
+			$mdDialog.cancel();
+		};
+
+		$scope.answer = function(answer) {
+			$mdDialog.hide(answer);
+		};
+	}
+
 
 	$scope.updateAccount = function(){
 		var updateForm = {
 			accountId: $scope.init_form.accountId,
 			birthday: moment($scope.account.birthday).format("YYYY-MM-DDTHH:MM:SSZ"),
-			media: mediaId
+			mediaId: mediaId
 		}
 		console.log(updateForm);
 		httpService.httpPut($scope.url.account, updateForm, 'UPDATE_ACCOUNT');
@@ -646,6 +815,7 @@ angular.module('app.account.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.account = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -694,16 +864,21 @@ angular.module('app.account.ctrl', [])
 		}
 	});
 
+
+
+	//upload with dialog
 	var updateUrl = $scope.url.account;
 	$scope.customFullscreen = false;
 	$scope.uploadDialog = function(ev) {
 		$mdDialog.show({
-			locals:{updateUrl: updateUrl},
-			controller: DialogController,
-			templateUrl: 'templates/upload.tmpl.html',
-			parent: angular.element(document.body),
-			targetEvent: ev,
-			clickOutsideToClose:true,
+			locals:{updateUrl: updateUrl,
+				accountId: accountId,
+				getAccount: getAccount},
+				controller: DialogController,
+				templateUrl: 'templates/upload.tmpl.html',
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				clickOutsideToClose:true,
       fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
   })
 		.then(function(answer) {
@@ -713,7 +888,7 @@ angular.module('app.account.ctrl', [])
 		});
 	};
 	
-	function DialogController($scope, $mdDialog, Upload, httpService, updateUrl) {
+	function DialogController($scope, $mdDialog, Upload, httpService, updateUrl, accountId, getAccount) {
 		$scope.upload = function (dataUrl, name) {
 			var uplaodForm = {
 				"files": [{
@@ -740,7 +915,7 @@ angular.module('app.account.ctrl', [])
 		
 		$scope.updateMedia = function(){
 			var updateForm = {
-				media: $scope.media.mediaId
+				mediaId: $scope.media.mediaId
 			}
 			console.log(updateForm);
 			httpService.httpPut(updateUrl, updateForm, 'UPDATE_IMAGE');
@@ -749,6 +924,8 @@ angular.module('app.account.ctrl', [])
 			if(data.data.data.status == 1) {
 				console.log(data.data.data.data);
 				$scope.account = data.data.data.data;
+				$mdDialog.hide();
+				getAccount();
 			} else {
 				console.log(data.data.data.message);
 			}
@@ -807,27 +984,19 @@ angular.module('app.account.ctrl', [])
 	getPromotions();	
 	
 })
-.config(function($mdThemingProvider) {
-
-    // Configure a dark theme with primary foreground yellow
-
-    $mdThemingProvider.theme('docs-dark', 'default')
-    .primaryPalette('yellow')
-    .dark();
-
-})
 
 .controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout) {
 	console.log('this is AccountsCtrl');
-	$scope.$emit('BC', [{
-		name: "Account",
-		url: "#/accounts"
-	}]);
+	$scope.$emit('BC', {
+		name: "Accounts",
+		url: "accounts"
+	});
 	$scope.path = "#/accounts/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
+
 	$scope.itemsOrder = "active";
 	$scope.reverse = true;
 	$scope.order = function(){
@@ -846,7 +1015,7 @@ angular.module('app.account.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
-			$scope.emit("GETFINISHED")
+			$scope.$emit("GETFINISHED")
 		}
 	});
 
@@ -931,10 +1100,15 @@ angular.module('app.account.ctrl', [])
     $scope.currentPageNumber = 1;
     $scope.row = 4;
     $scope.itemsPerPage = 10;
-
+    $scope.nextPage = function(){
+    	$scope.currentPageNumber++;
+    }
+    $scope.prevPage = function(){
+    	$scope.currentPageNumber--;
+    }
     $scope.getNumberOfPages = function() {
     	var count = $scope.accounts.length / $scope.itemsPerPage;
-    	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+    	if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
     	return count;
     }
 
@@ -967,13 +1141,10 @@ angular.module('app.account.ctrl', [])
 		account: domain + "/service/accounts/"
 	};
 	console.log("this is NewAccountCtrl");
-	$scope.$emit('BC', [{
-		name: "Accounts",
-		url: "#/accounts"
-	},
-	{
-		name: "Create"
-	}])
+	$scope.$emit('BC', {
+		name: "Create Account",
+		url: "/new/account"
+	})
 	$scope.account;
 	$scope.createAccount = function(){
 		var createForm = {
@@ -994,30 +1165,21 @@ angular.module('app.account.ctrl', [])
 		}
 	})
 })
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
-})
 angular.module('app.analytics.ctrl', [])
 
 .controller('AnalyticsCtrl', function() {
 	console.log('this is AnalyticsCtrl')
+	$scope.$emit("GETFINISHED");
 })
 
 angular.module('app.bank.ctrl', [])
 
 .controller('BankCtrl', function($scope,$mdDialog,$location, $routeParams, httpService) {
 	console.log('this is BankCtrl')
-	$scope.$emit('BC', [{
-		name: "Banks",
-		url: "#/banks"
-	},
-	{
-		name: "Bank"
-	}])
+	$scope.$emit('BC', {
+		name: "Bank",
+		url: "banks/"+$routeParams.id
+	})
 	$scope.bank;
 	$scope.url = {
 		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
@@ -1085,17 +1247,17 @@ angular.module('app.bank.ctrl', [])
     }, function() {
     	$scope.status = 'Action canceled';
     });
-   
+    
 };
 
 })
 
 .controller('BanksCtrl', function($scope, $location, httpService) {
 	console.log('this is BanksCtrl');
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Banks",
-		url: "#/banks"
-	}])
+		url: "banks"
+	})
 	$scope.path = "#/banks/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -1116,16 +1278,33 @@ angular.module('app.bank.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		}
 	});
-})
-.controller("NewBankCtrl", function($scope, $mdDialog, httpService){
-	console.log("this is NewBankCtrl");
-	$scope.$emit('BC', [{
-		name: "Banks",
-		url: "#/banks"
-	},
+
+	$scope.currentPageNumber = 1;
+	$scope.itemsPerPage = 10;
+	$scope.search;
+	$scope.getNumberOfPages = function() {
+		var count = $scope.banks.length / $scope.itemsPerPage;
+		if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
+		return count;
+	}
+
+	$scope.pageDown = function()
 	{
-		name: "Create"
-	}])
+		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+	}
+
+	$scope.pageUp = function()
+	{
+		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+	}
+
+})
+.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService){
+	console.log("this is NewBankCtrl");
+	$scope.$emit('BC', {
+		name: "Create Banks",
+		url: "new/bank"
+	})
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
 	}
@@ -1134,8 +1313,10 @@ angular.module('app.bank.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 
 	});
@@ -1170,8 +1351,8 @@ angular.module('app.bank.ctrl', [])
 		$scope.itemsPerPage = 10;
 		$scope.search;
 		$scope.getNumberOfPages = function() {
-			var count = $scope.accounts.length / $scope.itemsPerPage;
-			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+			var count = $scope.banks.length / $scope.itemsPerPage;
+			if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
 			return count;
 		}
 
@@ -1204,9 +1385,10 @@ angular.module('app.bank.ctrl', [])
 		cash: 39.0,
 		deposit: 39.0
 	}
+	$scope.accountId = $routeParams.id;
 	$scope.createBank = function(){
 		var createForm = $scope.bank;
-		createForm.accountId = $scope.accountId;
+		createForm.accountId = parseInt($scope.accountId);
 		console.log(createForm);
 		httpService.httpPost("http://test.popscoot.com/popscoot/service/banks", createForm, 'CREATE_BANK');
 	}
@@ -1227,13 +1409,10 @@ angular.module('app.booking.ctrl', [])
 
 .controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
 	console.log('this is BookingCtrl')
-	$scope.$emit('BC', [{
-		name: "Bookings",
-		url: "#/bookings"
-	},
-	{
-		name: "Booking"
-	}])
+	$scope.$emit('BC', {
+		name: "Booking",
+		url: "bookings/"+$routeParams.id
+	})
 	$scope.booking = {};
 	$scope.url = {
 		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
@@ -1314,10 +1493,10 @@ getBooking();
 
 .controller('BookingsCtrl', function($scope, $location, httpService) {
 	console.log('this is BookingsCtrl');
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Bookings",
-		url: "#/bookings"
-	}])
+		url: "bookings"
+	})
 	$scope.path = "#/bookings/";
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -1348,15 +1527,20 @@ getBooking();
 	});
 })
 
-.controller("NewBookingCtrl", function($scope, $mdDialog, httpService, configuration){
+.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration){
 	console.log("this is NewBookingCtrl");
-	$scope.$emit('BC', [{
-		name: "Bookings",
-		url: "#/bookings"
-	},
-	{
-		name: "Create"
-	}])
+	$scope.$emit('BC', {
+		name: "Create Bookings",
+		url: "new/booking"
+	})
+	$scope.booking = {
+		startDate: moment().toDate(),
+		endDate: moment().toDate()
+	}
+	$scope.createBooking = function(){
+		httpService.httpPost
+	}
+
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
 	}
@@ -1365,8 +1549,10 @@ getBooking();
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 		
 	});
@@ -1387,7 +1573,8 @@ getBooking();
 	getScooters();
 	getAccounts();
 
-
+	$scope.booking.accountId = $routeParams.aid;
+	$scope.booking.scooterId = $routeParams.sid;
 
 	$scope.accDialog = function(ev) {
 		$mdDialog.show({
@@ -1400,7 +1587,7 @@ getBooking();
       fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
   })
 		.then(function(answer) {
-			$scope.accountId = answer.accountId;
+			$scope.booking.accountId = answer.accountId;
 		}, function() {
 			$scope.status = 'You cancelled the dialog.';
 		});
@@ -1432,8 +1619,6 @@ getBooking();
 		{
 			if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
 		}
-
-		console.log($scope.accounts);
 		
 		//test end
 		$scope.hide = function() {
@@ -1449,18 +1634,18 @@ getBooking();
 		};
 	}
 
-	$scope.scoDialog = function(ev) {
+	$scope.scoDialog = function(eve) {
 		$mdDialog.show({
 			locals: {localSco: $scope.scooters},
 			controller: DialogController2,
 			templateUrl: 'templates/scooterPicker.tmpl.html',
 			parent: angular.element(document.body),
-			targetEvent: ev,
+			targetEvent: eve,
 			clickOutsideToClose:true,
       fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
   })
 		.then(function(answer) {
-			$scope.scooterId = answer.scooterId;
+			$scope.booking.scooterId = answer.scooterId;
 		}, function() {
 			$scope.status = 'You cancelled the dialog.';
 		});
@@ -1509,6 +1694,23 @@ getBooking();
 			$mdDialog.hide(answer);
 		};
 	}
+
+
+	$scope.createBooking = function(){
+		var create = $scope.booking;
+		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
+		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
+		console.log(create);
+		httpService.httpPost("http://test.popscoot.com/popscoot/service/bookings", create, "CREATE_BOOKING");
+	}
+	$scope.$on("CREATE_BOOKING", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);	
+			window.location.href = "#bookings/" + $scope.booking.bookingId
+		} else {
+			console.log(data.data.data.message);
+		}
+	})
 })
 .filter('paginate', function(){
 	return function(array, pageNumber, itemsPerPage){
@@ -1521,8 +1723,9 @@ getBooking();
 
 angular.module('app.dashboard.ctrl', [])
 
-.controller('DashboardCtrl', function() {
-	console.log('this is DashboardCtrl')
+.controller('DashboardCtrl', function($scope, $sce) {
+	console.log('this is DashboardCtrl');
+	$scope.mapSource = $sce.trustAsResourceUrl("http://test.popscoot.com/popscoot/gps");
 })
 
 
@@ -1530,13 +1733,10 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService) {
 	console.log('this is EnquiryCtrl');
-	$scope.$emit('BC', [{
-		name: "Enquiries",
-		url: "#/enquiries"
-	},
-	{
-		name: "Enquiry"
-	}])
+	$scope.$emit('BC', {
+		name: "Enquiry",
+		url: "enquiries/"+$routeParams.id
+	})
 	$scope.enquiry;
 	$scope.url = {
 		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
@@ -1611,10 +1811,10 @@ angular.module('app.enquiry.ctrl', [])
 
 .controller('EnquiriesCtrl', function($scope, $location, httpService) {
 	console.log('this is EnquiriesCtrl')
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Enquiries",
-		url: "#/enquiries"
-	}])
+		url: "enquiries"
+	})
 	$scope.path = "#/enquiries/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
@@ -1670,13 +1870,10 @@ angular.module('app.help.ctrl', [])
 
 .controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
 	console.log('this is HelpCtrl');
-	$scope.$emit('BC', [{
-		name: "Helps",
-		url: "#/helps"
-	},
-	{
-		name: "Help"
-	}])
+	$scope.$emit('BC', {
+		name: "Help",
+		url: "helps/"+$routeParams.id
+	})
 	$scope.url = {
 		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
 	};
@@ -1696,14 +1893,70 @@ angular.module('app.help.ctrl', [])
 		}
 	});
 
+
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+
+	var mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		console.log(files);
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+
+
+
 	$scope.updateHelp = function(){
 		var updateForm = $scope.help;
+		updateForm.mediaId = mediaId;
 		httpService.httpPut($scope.url.help, updateForm, 'UPDATE_Help');
 	}
 	$scope.$on('UPDATE_Help', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.help = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -1753,17 +2006,30 @@ getHelp();
 
 .controller('HelpsCtrl', function($scope, $location, httpService) {
 	console.log('this is HelpsCtrl')
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Helps",
-		url: "#/helps"
-	}])
+		url: "helps"
+	});
 	$scope.path = "#/helps/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
 	$scope.url = "http://test.popscoot.com/popscoot/service/helps"
+
+	$scope.itemsOrder = "order";
+	$scope.reverse = true;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}	
+
+	$scope.arrangeB = false;
+	$scope.arrange = function(){
+		$scope.arrangeB = !$scope.arrangeB;
+	}
+
 	$scope.helps;
+
 
 	httpService.httpGet($scope.url, 'GET_HELPS');
 
@@ -1777,16 +2043,91 @@ getHelp();
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+
+	//drag and drop arrage
+	$scope.dragoverCallback = function(index, external, type, callback) {
+		$scope.logListEvent('dragged over', index, external, type);
+        // Invoke callback to origin for container types.
+        if (type == 'container' && !external) {
+        	console.log('Container being dragged contains ' + callback() + ' items');
+        }
+        return index < 10; // Disallow dropping in the third row.
+    };
+
+    $scope.dropCallback = function(index, item, external, type) {
+    	$scope.logListEvent('dropped at', index, external, type);
+
+    	/*var tempIndex = 0
+    	$scope.helps.forEach(function(help){
+    		if(item.helpId === help.helpId){
+    			$scope.toRemove = tempIndex;
+    		}
+    		tempIndex++;
+    	})
+    	$scope.helps.splice(tempIndex, 1);*/
+
+    	$scope.helps.splice(index, 0, item);
+        // Return false here to cancel drop. Return true if you insert the item yourself.
+        $scope.helpOrders = [];
+        $scope.helps.forEach(function(help){
+        	$scope.helpOrders.push(help.helpId);
+        })
+        var orders = {
+        	orders:  $scope.helpOrders
+        }
+        console.log("hihihihi");
+        console.log(orders);
+        httpService.httpPut("http://test.popscoot.com/popscoot/service/helps", orders, "UPDATE_ORDERS");
+        $scope.$on("UPDATE_ORDERS", function(eve, data){
+        	if(data.data.data.status == 1) {
+        		console.log(data.data.data.data);
+        		$scope.updatedHelps = data.data.data.data;
+        	} else {
+        		console.log(data.data.data.message);
+        	}
+        })
+
+
+    };
+
+    $scope.doneShifting = function(){
+    	$scope.arrangeB = !$scope.arrangeB;
+    	$scope.helps = $scope.updatedHelps;
+    }
+
+    $scope.logEvent = function(message) {
+    	console.log(message);
+    };
+
+    $scope.logListEvent = function(action, index, external, type) {
+    	var message = external ? 'External ' : '';
+    	message += type + ' element was ' + action + ' position ' + index;
+    	console.log(message);
+    };
+
+    // Initialize model
+    $scope.model = [[], []];
+    var id = 10;
+    angular.forEach(['all', 'move', 'copy', 'link', 'copyLink', 'copyMove'], function(effect, i) {
+    	var container = {items: [], effectAllowed: effect};
+    	for (var k = 0; k < 7; ++k) {
+    		container.items.push({label: effect + ' ' + id++, effectAllowed: effect});
+    	}
+    	$scope.model[i % $scope.model.length].push(container);
+    });
+
+    $scope.$watch('model', function(model) {
+    	$scope.modelAsJson = angular.toJson(model, true);
+    }, true);
+
 })
 .controller("NewHelpCtrl", function($scope, httpService){
 	console.log("this is NewHelpCtrl");
-	$scope.$emit('BC', [{
-		name: "Helps",
-		url: "#/helps"
-	},
-	{
-		name: "Create"
-	}])
+	$scope.$emit('BC', {
+		name: "Create Helps",
+		url: "new/help"
+	})
 	$scope.help;
 	$scope.createHelp = function(){
 		var createForm = $scope.help;
@@ -1813,6 +2154,11 @@ angular.module('app.payment.ctrl', [])
 		payment: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id,
 		transactions: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id+"/transactions"
 	};
+	$scope.$emit('BC', 
+	{
+		name: "Payment",
+		url: "payments/"+$routeParams.id
+	});
 	$scope.payment;
 	$scope.transactions;
 	function getPayment(){
@@ -1911,6 +2257,11 @@ getTransactions();
 
 	httpService.httpGet($scope.url, 'GET_PAYMENTS');
 
+	$scope.$emit('BC', 
+	{
+		name: "Payments",
+		url: "payments"
+	});
 	$scope.$on("GET_PAYMENTS", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
@@ -1927,13 +2278,20 @@ getTransactions();
 	function getAccounts() {
 		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
 	}
+	$scope.$emit('BC', 
+	{
+		name: "Create Payment",
+		url: "new/payment"
+	});
 
 	$scope.$on("GET_BACCOUNTS", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.accounts = data.data.data.data;
+			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
+			$scope.$emit("GETFINISHED");
 		}
 
 	});
@@ -2025,13 +2383,10 @@ angular.module('app.promotion.ctrl', [])
 
 .controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location) {
 	console.log('this is PromotionCtrl')
-	$scope.$emit('BC', [{
-		name: "Promotions",
-		url: "#/promotions"
-	},
-	{
-		name: "Promotion"
-	}])
+	$scope.$emit('BC', {
+		name: "Promotion",
+		url: "promotions"+$routeParams.id
+	})
 	$scope.accounts;
 	$scope.promotion;
 	$scope.url = {
@@ -2071,14 +2426,71 @@ angular.module('app.promotion.ctrl', [])
 	getPromotion();
 	getAccounts();
 
+
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+
+	var mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		console.log(files);
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+
+
+
 	$scope.updatePromotion = function(){
 		var updateForm = $scope.promotion;
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/", updateForm, 'UPDAT_PROMOTION');
+		updateForm.mediaId = mediaId;
+		console.log(updateForm);
+		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, updateForm, 'UPDAT_PROMOTION');
 	}
 	$scope.$on('UPDAT_PROMOTION', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -2122,33 +2534,33 @@ angular.module('app.promotion.ctrl', [])
     });
 };
 
-	$scope.currentPageNumber = 1;
-	$scope.row = 4;
-	$scope.itemsPerPage = 10;
+$scope.currentPageNumber = 1;
+$scope.row = 4;
+$scope.itemsPerPage = 10;
 
-	$scope.getNumberOfPages = function() {
-		var count = $scope.promotions.length / $scope.itemsPerPage;
-		if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-		return count;
-	}
+$scope.getNumberOfPages = function() {
+	var count = $scope.promotions.length / $scope.itemsPerPage;
+	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+	return count;
+}
 
-	$scope.pageDown = function()
-	{
-		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-	}
+$scope.pageDown = function()
+{
+	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+}
 
-	$scope.pageUp = function()
-	{
-		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-	}
+$scope.pageUp = function()
+{
+	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+}
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {
 	console.log('this is PromotionsCtrl');
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Promotions",
-		url: "#/promotions"
-	}])
+		url: "promotions"
+	})
 
 	$scope.path = "#/promotions/";
 	/*var path = $location.path();
@@ -2174,13 +2586,10 @@ angular.module('app.promotion.ctrl', [])
 
 .controller("NewPromotionCtrl", function($scope, httpService){
 	console.log("this is NewPromotionCtrl");
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Promotions",
-		url: "#/promotions"
-	},
-	{
-		name: "Create"
-	}])
+		url: "new/promotion"
+	})
 	$scope.promotion;
 	$scope.createPromotion = function(){
 		var createForm = $scope.promotion;
@@ -2209,13 +2618,10 @@ angular.module('app.scooter.ctrl', [])
 
 .controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
 	console.log('this is ScooterCtrl')
-	$scope.$emit('BC', [{
-		name: "Scooters",
-		url: "#/scooters"
-	},
-	{
-		name: "Scooter"
-	}]);
+	$scope.$emit('BC', {
+		name: "Scooter",
+		url: "scooters/"+$routeParams.id
+	});
 	$scope.scooter = {};
 	$scope.bookings = [];
 	$scope.url = {
@@ -2250,14 +2656,69 @@ angular.module('app.scooter.ctrl', [])
 		}
 	});
 
+	
+
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+	var mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		console.log(files);
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+
 	$scope.updateScooter = function(){
 		var updateForm = $scope.scooter;
+		updateForm.mediaId = mediaId;
+		console.log(updateForm);
 		httpService.httpPut($scope.url.scooter, updateForm, 'UPDATE_Scooter');
 	}
 	$scope.$on('UPDATE_Scooter', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.scooter = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -2308,11 +2769,15 @@ getBookings();
 
 .controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService) {
 	console.log('this is ScootersCtrl');
-	$scope.$emit('BC', [{
+
+	$scope.$emit('BC', {
 		name: "Scooters",
-		url: "#/scooters"
-	}]);
-	$scope.path = "#/scooters/";
+		url: "scooters"
+	});
+
+	$scope.scooters = [];
+
+	$scope.url = "http://test.popscoot.com/popscoot/service/scooters"
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -2323,9 +2788,7 @@ getBookings();
 	$scope.order = function(){
 		$scope.reverse = !$scope.reverse;
 	}
-	$scope.scooters = [];
 
-	$scope.url = "http://test.popscoot.com/popscoot/service/scooters"
 
 	httpService.httpGet($scope.url, 'GET_SCOOTERS');
 
@@ -2371,13 +2834,10 @@ getBookings();
 })
 .controller('NewScooterCtrl', function($scope, configuration, httpService){
 	console.log("this is NewScooterCtrl");
-	$scope.$emit('BC', [{
-		name: "Scooters",
-		url: "#/scooters"
-	},
-	{
-		name: "Create"
-	}]);
+	$scope.$emit('BC', {
+		name: "Create Scooters",
+		url: "new/scooter"
+	});
 	var domain = configuration.domain();
 	$scope.url = {
 		scooter: domain + "/service/scooters/"
@@ -2411,6 +2871,15 @@ getBookings();
 
 
 
+angular.module('app.tracking.ctrl', [])
+.controller('TrackingCtrl', function($scope, $sce){
+	console.log("this is traking control");
+	$scope.$emit("BC", {
+		name: "Tracking",
+		url: "tracking/"
+	})
+	
+})
 angular.module("app.accountPromo.ctrl", [])
 
 .controller("NewAccountPromoCtrl", function(){
@@ -2439,7 +2908,30 @@ angular.module('app.filters', [])
     return function (value) {
         return (!value) ? '' : value.replace(/ /g, '');
     };
-});
+})
+.filter('rd', function(){
+	return function(value, opt){
+		switch(opt){
+			case 0:
+				return moment(value).format("YYYY MMM DD");
+			case 1:
+				return moment(value).format("YYYY MMM DD hh:mm");
+			case 2:
+				return moment(value).format("hh:mm");
+			default:
+				return moment(value).format("YYYY MMM DD");
+		}
+		return 
+	}
+})
+.filter('paginate', function(){
+	return function(array, pageNumber, itemsPerPage){
+		var begin = ((pageNumber - 1) * itemsPerPage);
+		var end = begin + itemsPerPage;
+		return array.slice(begin, end);
+	};
+})
+
 
 
 	
@@ -2539,11 +3031,12 @@ angular.module('app.service', [])
 })
 .factory('toastService', function($rootScope, $http, $mdToast){
     return {
-        showSimpleToast: function(textContent, position, hideDelay, parent) {
+        showSimpleToast: function(textContent, position, hideDelay, theme) {
 
             $mdToast.show(
                 $mdToast.simple()
                 .textContent(textContent)
+                .theme(theme)
                 .position(position)
                 .hideDelay(hideDelay)
                 .parent(parent)
@@ -2644,19 +3137,19 @@ var DAO = (function() {
 	return app;
 })();
 var LANG_EN = {
-	dashboard: "dashboard",
-	splash: "splash",
-	account: "account",
-	analytics: "analytics",
-	bank: "bank",
-	booking: "booking",
-	enquiry: "enquiry",
-	help: "help",
-	payment: "payment",
-	promotion: "promotion",
-	scooter: "scooter",
-	finance: "finance",
-	miscellaneous: "miscellaneous"
+	dashboard: "DASHBOARD",
+	splash: "SPLASH",
+	account: "ACCOUNTS",
+	analytics: "ANALYTICS",
+	bank: "banks",
+	booking: "BOOKINGS",
+	enquiry: "ENQUIRIES",
+	help: "helps",
+	payment: "payments",
+	promotion: "promotions",
+	scooter: "SCOOTERS",
+	finance: "FINANCE",
+	miscellaneous: "MISCELLANEOUS"
 };
 
 var LANG_CH = {
@@ -2678,7 +3171,8 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 	console.log("welcome to popscoot Auth");
 })
 
-.config(function($routeProvider, $locationProvider) {
+.config(function($routeProvider, $locationProvider, $mdThemingProvider) {
+	$mdThemingProvider.theme("error-toast");
 	$locationProvider.hashPrefix("");
 
 	$routeProvider
@@ -2724,19 +3218,7 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 angular.module('app.changePassword.ctrl', [])
 .controller('ChangePasswordCtrl', function($scope, httpService){
 	console.log("ChangePasswordCtrl");
-	$scope.email;
-	$scope.requestSecret = function(){
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.email, "REQUEST_SECRET");
-	}
-	$scope.$on('REQUEST_SECRET', function(event, data){
-		if(data.data.data.status == 1) {
-			console.log(data.data.data.data);
-			$scope.success = true;
-		} else {
-			console.log(data.data.data.message);
-			$scope.display = data.data.data.message;
-		}
-	})
+	
 	$scope.updatePWForm;
 	$scope.updatePassword = function(){
 		httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
@@ -2762,6 +3244,7 @@ angular.module('app.forgetPassword.ctrl', [])
 	$scope.form = {
 		email: ""
 	}
+	$scope.success = false;
 	$scope.forgetPassword = function(){
 		var body = {
 			email: $scope.form.email
@@ -2775,10 +3258,10 @@ angular.module('app.forgetPassword.ctrl', [])
 		hoster = mail.substring(atPos + 1);
 		window.location.href = 'http://' + hoster;
 	}
-	var showActionToast = function(textContent, position, hideDelay, parent, email) {
+	var showActionToast = function(textContent, position, hideDelay, parent) {
 		var toast = $mdToast.simple()
-		.textContent('Activation email sent...')
-		.action('To Inbox')
+		.textContent('Email sent...')
+		.hideDelay('hideDelay')
 		.highlightAction(true)
       .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
       .position(position)
@@ -2788,29 +3271,55 @@ angular.module('app.forgetPassword.ctrl', [])
       	if ( response == 'ok' ) {
       		directInbox(email);
       	}else{
-      		window.location.href = $scope.path + "auth.html";
+      		$scope.success = true;
       	}
       });
-  }
-  $scope.$on("FORGETPASSWORD", function(event, data){
-  	console.log(data);
-  	if(data.data.data.status == 1) {
-  		/*if (data.data.data.data.type === "admin") {	*/			
-  			console.log(data.data.data.data);
-  			showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
+    }
+    $scope.$on("FORGETPASSWORD", function(event, data){
+     console.log(data);
+     if(data.data.data.status == 1) {
+      /*if (data.data.data.data.type === "admin") {	*/			
+       console.log(data.data.data.data);
+       showActionToast('Activation email sent', 'top right', 3000);
 
 			/*} else {
 				alert("not admin");
 			}*/
 		} else {
-			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+			$mdToast.show(
+        $mdToast.simple()
+        .textContent(data.data.data.message)
+        .hideDelay(30000)
+        .position("top right")
+        .parent("#authPage")
+        .theme('error-toast')
+        );
+
 		}
 	})
 
-	console.log("ForgetPasswordCtrl");
-})
+    $scope.updatePWForm;
+    $scope.updatePassword = function(){
+     console.log($scope.updatePWForm);
+     httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
+   }
+   $scope.$on('CHANGE_PASSOWRD', function(event, data){
+     if(data.data.data.status == 1) {
+      console.log(data.data.data.data);
+      $mdToast.showSimple("Update success").position("top right").hideDelay(500);
+      $timeout(function(){
+       window.location.href = "#/login"
+     }, 500);  		
+    } else {
+      console.log(data.data.data.message);
+      $scope.display = data.data.data.message;
+    }
+  })
+
+   console.log("ForgetPasswordCtrl");
+ })
 angular.module('app.login.ctrl', [])
-.controller('LoginCtrl', function($scope, httpService, $location, configuration, toastService){
+.controller('LoginCtrl', function($scope, httpService, $location, configuration, toastService, $mdToast){
 	$scope.authSecret;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	var domain = configuration.domain();
@@ -2843,11 +3352,18 @@ angular.module('app.login.ctrl', [])
 				alert("not admin");
 			}*/
 		} else {
-			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(30000)
+				.position("top right")
+				.parent("#authPage")
+				.theme('error-toast')
+				);
 		}
 	})
- 	
-  console.log("LoginCtrl");
+
+	console.log("LoginCtrl");
 })
 angular.module('app.register.ctrl', [])
 .controller('RegisterCtrl', function($scope, httpService, toastService, configuration, $location, $mdToast){
@@ -2879,37 +3395,41 @@ angular.module('app.register.ctrl', [])
 	}
 	var showActionToast = function(textContent, position, hideDelay, parent, email) {
 		var toast = $mdToast.simple()
-		.textContent('Activation email sent...')
-		.action('To Inbox')
-		.highlightAction(true)
-      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
-      .position(position)
-      .parent(parent);
+		.textContent('Activation email sent...')// Accent is used by default, this just demonstrates the usage.
+		.position(position)
+		.parent(parent);
 
-      $mdToast.show(toast).then(function(response) {
-      	if ( response == 'ok' ) {
-      		directInbox(email);
-      	}else{
-      		window.location.href = $scope.path + "auth.html";
-      	}
-      });
-  }
-  $scope.$on("REGISTER", function(event, data){
-  	console.log(data);
-  	if(data.data.data.status == 1) {
-  		/*if (data.data.data.data.type === "admin") {	*/			
-  			console.log(data.data.data.data);
-  			showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
+		$mdToast.show(toast).then(function(response) {
+			if ( response == 'ok' ) {
+				directInbox(email);
+			}else{
+				window.location.href = $scope.path + "auth.html";
+			}
+		});
+	}
+	$scope.$on("REGISTER", function(event, data){
+		console.log(data);
+		if(data.data.data.status == 1) {
+			/*if (data.data.data.data.type === "admin") {	*/			
+				console.log(data.data.data.data);
+				showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
 
 			/*} else {
 				alert("not admin");
 			}*/
 		} else {
-			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(30000)
+				.position("top right")
+				.parent("#authPage")
+				.theme('error-toast')
+				);
 		}
 	})
 
-  console.log("RegisterCtrl");
+	console.log("RegisterCtrl");
 })
 .directive("compareTo", function(){
 	return {

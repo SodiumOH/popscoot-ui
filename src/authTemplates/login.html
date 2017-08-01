@@ -1,12 +1,12 @@
 
-<div layout="row" layout-align="center center" style="background: url(https://www.google.com.sg/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiNiNaRg_7UAhVELY8KHYf8A8EQjRwIBw&url=http%3A%2F%2Fink361.com%2Fapp%2Fusers%2Fig-5550089033%2Fpopscoot%2Fphotos&psig=AFQjCNExnuf2b3NUmItX4I_xfl0tJGunuQ&ust=1499752381107618) repeat">
+<div layout="row" layout-align="center center" >
 
 	<div flex-sm="100" flex-xs="100" flex="nogrow" style="width: 400px">
 		<div ng-style="{'height': (browserHeight/6)+ 'px'}" hide-xs hide-sm>	
 		</div>
 		<md-card id='test'>
 			<md-card-title>
-				<md-card-title-text class="md-headline">
+				<md-card-title-text class="md-headline" layout-padding>
 					Login
 				</md-card-title-text>
 			</md-card-title>
@@ -26,12 +26,12 @@
 							<div ng-message="required">Please enter password</div>
 						</div>
 					</md-input-container>
-					<div layout-padding >
-						<div flex layout="row" layout-align="space-around center">
+					<div>
+						<div flex layout="row" layout-align="space-between center">
 							<md-button flex="50" type="submit" class="md-raised md-primary md-padding" ng-disabled="form1.$invalid">login</md-button>				
 							<md-button flex="50" ng-href="#/register" class="md-raised">register</md-button>
 						</div>
-						<div flex="100" layout="row" layout-align="center center">
+						<div flex="100" layout="row" layout-align="start center">
 							<a href="#/forgetPassword" layout-margin>Forget password?</a>
 						</div>
 					</form>

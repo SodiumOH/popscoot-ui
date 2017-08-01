@@ -2,13 +2,10 @@ angular.module('app.scooter.ctrl', [])
 
 .controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
 	console.log('this is ScooterCtrl')
-	$scope.$emit('BC', [{
-		name: "Scooters",
-		url: "#/scooters"
-	},
-	{
-		name: "Scooter"
-	}]);
+	$scope.$emit('BC', {
+		name: "Scooter",
+		url: "scooters/"+$routeParams.id
+	});
 	$scope.scooter = {};
 	$scope.bookings = [];
 	$scope.url = {
@@ -43,14 +40,69 @@ angular.module('app.scooter.ctrl', [])
 		}
 	});
 
+	
+
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+	var mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		console.log(files);
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+
 	$scope.updateScooter = function(){
 		var updateForm = $scope.scooter;
+		updateForm.mediaId = mediaId;
+		console.log(updateForm);
 		httpService.httpPut($scope.url.scooter, updateForm, 'UPDATE_Scooter');
 	}
 	$scope.$on('UPDATE_Scooter', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.scooter = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -101,11 +153,15 @@ getBookings();
 
 .controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService) {
 	console.log('this is ScootersCtrl');
-	$scope.$emit('BC', [{
+
+	$scope.$emit('BC', {
 		name: "Scooters",
-		url: "#/scooters"
-	}]);
-	$scope.path = "#/scooters/";
+		url: "scooters"
+	});
+
+	$scope.scooters = [];
+
+	$scope.url = "http://test.popscoot.com/popscoot/service/scooters"
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -116,9 +172,7 @@ getBookings();
 	$scope.order = function(){
 		$scope.reverse = !$scope.reverse;
 	}
-	$scope.scooters = [];
 
-	$scope.url = "http://test.popscoot.com/popscoot/service/scooters"
 
 	httpService.httpGet($scope.url, 'GET_SCOOTERS');
 
@@ -164,13 +218,10 @@ getBookings();
 })
 .controller('NewScooterCtrl', function($scope, configuration, httpService){
 	console.log("this is NewScooterCtrl");
-	$scope.$emit('BC', [{
-		name: "Scooters",
-		url: "#/scooters"
-	},
-	{
-		name: "Create"
-	}]);
+	$scope.$emit('BC', {
+		name: "Create Scooters",
+		url: "new/scooter"
+	});
 	var domain = configuration.domain();
 	$scope.url = {
 		scooter: domain + "/service/scooters/"

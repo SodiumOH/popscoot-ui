@@ -28,37 +28,41 @@ angular.module('app.register.ctrl', [])
 	}
 	var showActionToast = function(textContent, position, hideDelay, parent, email) {
 		var toast = $mdToast.simple()
-		.textContent('Activation email sent...')
-		.action('To Inbox')
-		.highlightAction(true)
-      .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
-      .position(position)
-      .parent(parent);
+		.textContent('Activation email sent...')// Accent is used by default, this just demonstrates the usage.
+		.position(position)
+		.parent(parent);
 
-      $mdToast.show(toast).then(function(response) {
-      	if ( response == 'ok' ) {
-      		directInbox(email);
-      	}else{
-      		window.location.href = $scope.path + "auth.html";
-      	}
-      });
-  }
-  $scope.$on("REGISTER", function(event, data){
-  	console.log(data);
-  	if(data.data.data.status == 1) {
-  		/*if (data.data.data.data.type === "admin") {	*/			
-  			console.log(data.data.data.data);
-  			showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
+		$mdToast.show(toast).then(function(response) {
+			if ( response == 'ok' ) {
+				directInbox(email);
+			}else{
+				window.location.href = $scope.path + "auth.html";
+			}
+		});
+	}
+	$scope.$on("REGISTER", function(event, data){
+		console.log(data);
+		if(data.data.data.status == 1) {
+			/*if (data.data.data.data.type === "admin") {	*/			
+				console.log(data.data.data.data);
+				showActionToast('Activation email sent', 'top right', 3000, "#test", $scope.form.email);
 
 			/*} else {
 				alert("not admin");
 			}*/
 		} else {
-			toastService.showSimpleToast(data.data.data.message, 'top right', 3000, "#test")
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(30000)
+				.position("top right")
+				.parent("#authPage")
+				.theme('error-toast')
+				);
 		}
 	})
 
-  console.log("RegisterCtrl");
+	console.log("RegisterCtrl");
 })
 .directive("compareTo", function(){
 	return {

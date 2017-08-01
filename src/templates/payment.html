@@ -54,7 +54,7 @@
 			</md-card>
 		</div>
 		<div flex>
-			<md-card>
+			<md-card style="min-height: 607.898px">
 				<div layout="row" layout-align="space-between center" layout-padding>
 					<div layout="row" layout-align="start center" layout-padding>
 						<span>Items Per Page</span>
@@ -91,7 +91,7 @@
 
 					</div>
 				</md-content>
-				<div layout="row" layout-align="space-around center">
+				<div ng-if="transactions.length !== 0" layout="row" layout-align="space-around center">
 					<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
 					<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
 				</div>

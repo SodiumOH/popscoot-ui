@@ -2,60 +2,67 @@
 	<h2>Create new Booking</h2>
 	<md-card>
 		<md-card-content>
-			<form name="updateAccountForm" ng-submit="createBooking()">
+			<form name="createBookingForm" ng-submit="createBooking()">
 
 				<div layout-align="center center">
 					<div layout="row">
 						<md-input-container flex class="md-block"> 
 							<label>Scooter</label>
+							<md-icon><i class="fa fa-bicycle"></i></md-icon>
 							<input ng-model="booking.scooterId">		
+						</md-input-container>
+						<md-button class="md-icon-button md-raised" ng-click="scoDialog($event)"><i class="fa fa-plus"></i></md-button>
+					</div>
+					<div layout="row">
+						<md-input-container flex class="md-block"> 
+							<label>Account</label>
+							<md-icon><i class="fa fa-user"></i></md-icon>
+							<input ng-model="booking.accountId">
+						</md-input-container>
+						<md-button class="md-icon-button md-raised" ng-click="accDialog($event)"><i class="fa fa-plus"></i></md-button>
+					</div>
+					<md-input-container class="md-block">
+						<label>Destination</label>
+						<md-icon><i class="fa fa-plane"></i></md-icon>
+						<input ng-model="booking.destinationLockId">
 					</md-input-container>
-					<md-button class="md-icon-button" ng-click="scoDialog($event)"><i class="fa fa-plus"></i></md-button>
-				</div>
-				<div layout="row">
-					<md-input-container flex class="md-block"> 
-						<label>Account</label>
-						<input ng-model="accountId">
+					<md-input-container class="md-block">
+						<label>Origin</label>
+						<md-icon><i class="fa fa-home"></i></md-icon>
+						<input ng-model="booking.outsetLockId">
 					</md-input-container>
-					<md-button class="md-icon-button" ng-click="accDialog($event)"><i class="fa fa-plus"></i></md-button>
+					<md-input-container class="md-block">
+						<label>Start</label>
+						<md-icon><i class="fa fa-play"></i></md-icon>
+						<input ng-model="booking.startDate" type="time">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>End</label>
+						<md-icon><i class="fa fa-stop"></i></md-icon>
+						<input ng-model="booking.endDate" type="time">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Price</label>
+						<md-icon><i class="fa fa-usd"></i></md-icon>
+						<input ng-model="booking.price" type="number" step="0.01">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Remarks</label>
+						<md-icon><i class="fa fa-info"></i></md-icon>
+						<input ng-model="booking.remarks">
+					</md-input-container>
 				</div>
-				<md-input-container class="md-block">
-					<label>Destination</label>
-					<input ng-model="booking.destinationLockId">
-				</md-input-container>
-				<md-input-container class="md-block">
-					<label>Origin</label>
-					<input ng-model="booking.outsetLockId">
-				</md-input-container>
-				<md-input-container class="md-block">
-					<label>Start</label>
-					<input ng-model="booking.startDate" type="datetime">
-				</md-input-container>
-				<md-input-container class="md-block">
-					<label>End</label>
-					<input ng-model="booking.endDate" type="datetime">
-				</md-input-container>
-				<md-input-container class="md-block">
-					<label>Price</label>
-					<input ng-model="booking.price" type="number" step="0.01">
-				</md-input-container>
-				<md-input-container class="md-block">
-					<label>Remarks</label>
-					<input ng-model="booking.remarks">
-				</md-input-container>
-			</div>
 
+				<div>
 
-			<div>
-
-				<div flex layout="row">					
-					<md-button class="md-primary md-raised" flex type="submit" ng-disabled="updateAccountForm.$invalid">Create</md-button>
+					<div flex layout="row">					
+						<md-button class="md-primary md-raised" flex type="submit" ng-disabled="createBookingForm.$invalid">Create</md-button>
+					</div>
 				</div>
-			</div>
-		</form>
-	</md-card-content>
+			</form>
+		</md-card-content>
 
-</md-card>
+	</md-card>
 </div>
 <div>
 

@@ -57,7 +57,10 @@ var LIBRARIES = [
 	'./node_modules/ng-file-upload/dist/*',
 	'./node_modules/ng-img-crop-full-extended/source/js/**/*.js',
 	'./node_modules/ng-img-crop-full-extended/source/js/*.js',
-	'./node_modules/ng-img-crop-full-extended/compile/minified/*.js'
+	'./node_modules/ng-img-crop-full-extended/compile/minified/*.js',
+	'./node_modules/angular-drag-and-drop-lists/*.js',
+	'./node_modules/iframe/*'
+
 ];
 
 gulp.task('build-lib', function() {
@@ -86,6 +89,7 @@ var JAVASCRIPTS = [
 	SRC + '/js/ctrl/payment.js',
 	SRC + '/js/ctrl/promotion.js',
 	SRC + '/js/ctrl/scooter.js',
+	SRC + '/js/ctrl/tracking.js',
 	SRC + '/js/ctrl/accountPromo.js',
 	SRC + '/js/filters.js',
 	SRC + '/js/services.js',
@@ -96,6 +100,7 @@ var JAVASCRIPTS = [
 	SRC + '/js/authCtrl/forgetPassword.js',
 	SRC + '/js/authCtrl/login.js',
 	SRC + '/js/authCtrl/register.js'
+
 ];
 
 gulp.task('build-js', function() {
@@ -121,7 +126,8 @@ var INJECTRES = [
 	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css',
 	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
 	DEST + '/lib/ng-file-upload/dist/ng-file-upload.js',
-	DEST + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js'
+	DEST + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js',
+	DEST + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js'
 ];
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {

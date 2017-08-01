@@ -1,7 +1,13 @@
 <div>
 	<div flex>
 		<md-card>
-		<div layout="row" layout-align="space-between center" layout-padding>
+			<div layout="row" layout-align="space-between center" layout-padding>
+				<div>
+					<span>Create New Booking</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+						<i class="fa fa-plus"></i>
+					</md-button>
+				</div>			
 				<div layout="row" layout-align="start center" layout-padding>
 					<span>Items Per Page</span>
 					<md-select ng-model="itemsPerPage" placeholder="Item per page">
@@ -17,12 +23,6 @@
 						<md-option value="active" ng-click="order()">Active</md-option>
 					</md-select>				
 				</div> 
-				<div>
-					<span>Create New Booking</span>
-					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
-						<i class="fa fa-plus-circle"></i>
-					</md-button>
-				</div>			
 			</div>
 			
 			<md-divider></md-divider>
@@ -33,14 +33,19 @@
 					<md-card id="bookingCard">
 						<md-card-title>
 							<md-card-title-text>
+
 								<span class="md-headline">Booking: {{item.bookingId}}</span>
-								<span class="sub-head">Start Time: {{ item.startDate }}</span>
-								<span class="sub-head">End Time: {{ item.endDate }}</span>
-								<span class="sub-head">Destination: {{ item.destinationName}}</span>								
-								<span class="sub-head">Booking By: {{ item.account.username}}</span>						
+								<table>
+									<tr><td class="ulli">Start Time: </td><td>{{ item.startDate|rd:1 }}</td></tr>
+									<tr><td class="ulli">End Time: </td><td>{{ item.endDate|rd:1 }}</td></tr>
+									<tr><td class="ulli">Destination: </td><td>{{ item.destinationName}}</td></tr>
+									<tr><td class="ulli">Booking By: </td><td><a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></td></tr>
+									<tr><td class="ulli">Scooter: </td><td><a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a></td></tr>
+								</table>
+													
 							</md-card-title-text>
 						</md-card-title>
-						<md-card-actions>							
+						<md-card-actions layout="row" layout-align="end center">							
 							<md-button class="md-raised" ng-href="{{path+item.bookingId}}">Details</md-button>	
 						</md-card-actions>
 					</md-card>

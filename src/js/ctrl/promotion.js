@@ -2,13 +2,10 @@ angular.module('app.promotion.ctrl', [])
 
 .controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location) {
 	console.log('this is PromotionCtrl')
-	$scope.$emit('BC', [{
-		name: "Promotions",
-		url: "#/promotions"
-	},
-	{
-		name: "Promotion"
-	}])
+	$scope.$emit('BC', {
+		name: "Promotion",
+		url: "promotions"+$routeParams.id
+	})
 	$scope.accounts;
 	$scope.promotion;
 	$scope.url = {
@@ -48,14 +45,71 @@ angular.module('app.promotion.ctrl', [])
 	getPromotion();
 	getAccounts();
 
+
+	$scope.$watch('files', function () {
+		$scope.upload($scope.files);
+	});
+	$scope.$watch('file', function () {
+		if ($scope.file != null) {
+			$scope.files = [$scope.file]; 
+		}
+	});
+
+	var mediaId;
+	$scope.uploadImage = false;
+	$scope.uploadPrompt = function(){
+		$scope.uploadImage = !$scope.uploadImage;
+	}
+	$scope.upload = function (files) {
+		console.log(files);
+		if (files && files.length) {
+			var fileReader = new FileReader();
+			fileReader.readAsDataURL(files[0]);
+			fileReader.onload = function (e) {
+				$scope.dataUrl = e.target.result;
+				var uploadForm = {
+					"files": [{
+						name: name,
+						type: "image/*",
+						size: files[0].size,
+						data: $scope.dataUrl
+					}],
+					"folder": "/popscoot"
+				}
+				console.log(uploadForm);
+				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				$scope.uploadStatus = "Uploading...";
+				$scope.$on("UPLOAD_IMAGE", function(event, data){
+					if(data.data.data.status == 1) {
+						console.log(data.data.data.data);
+						$scope.media = data.data.data.data[0].data;
+						$scope.uploadStatus = "Success";
+						mediaId = $scope.media.mediaId;
+					} else {
+						console.log(data.data.data.message);
+						$scope.uploadStatus = "Failed..."+data.data.data.message;
+
+					}
+				});
+			};
+			
+			
+		}
+	};
+
+
+
 	$scope.updatePromotion = function(){
 		var updateForm = $scope.promotion;
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/", updateForm, 'UPDAT_PROMOTION');
+		updateForm.mediaId = mediaId;
+		console.log(updateForm);
+		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, updateForm, 'UPDAT_PROMOTION');
 	}
 	$scope.$on('UPDAT_PROMOTION', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;
+			$scope.uploadImage = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -99,33 +153,33 @@ angular.module('app.promotion.ctrl', [])
     });
 };
 
-	$scope.currentPageNumber = 1;
-	$scope.row = 4;
-	$scope.itemsPerPage = 10;
+$scope.currentPageNumber = 1;
+$scope.row = 4;
+$scope.itemsPerPage = 10;
 
-	$scope.getNumberOfPages = function() {
-		var count = $scope.promotions.length / $scope.itemsPerPage;
-		if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-		return count;
-	}
+$scope.getNumberOfPages = function() {
+	var count = $scope.promotions.length / $scope.itemsPerPage;
+	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
+	return count;
+}
 
-	$scope.pageDown = function()
-	{
-		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-	}
+$scope.pageDown = function()
+{
+	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+}
 
-	$scope.pageUp = function()
-	{
-		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-	}
+$scope.pageUp = function()
+{
+	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+}
 })
 
 .controller('PromotionsCtrl', function($scope, $location, httpService) {
 	console.log('this is PromotionsCtrl');
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Promotions",
-		url: "#/promotions"
-	}])
+		url: "promotions"
+	})
 
 	$scope.path = "#/promotions/";
 	/*var path = $location.path();
@@ -151,13 +205,10 @@ angular.module('app.promotion.ctrl', [])
 
 .controller("NewPromotionCtrl", function($scope, httpService){
 	console.log("this is NewPromotionCtrl");
-	$scope.$emit('BC', [{
+	$scope.$emit('BC', {
 		name: "Promotions",
-		url: "#/promotions"
-	},
-	{
-		name: "Create"
-	}])
+		url: "new/promotion"
+	})
 	$scope.promotion;
 	$scope.createPromotion = function(){
 		var createForm = $scope.promotion;

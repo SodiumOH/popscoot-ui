@@ -2,6 +2,12 @@
 	<div flex>
 		<md-card>
 			<div layout="row" layout-align="space-between center" layout-padding>
+				<div>
+					<span>Create New Promotion</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/promotion">           
+						<i class="fa fa-plus"></i>
+					</md-button>
+				</div>		
 				<div layout="row" layout-align="start center" layout-padding>
 					<span>Items Per Page</span>
 					<md-select ng-model="itemsPerPage" placeholder="Item per page">
@@ -16,13 +22,7 @@
 						<md-option value="username" ng-click="order()">Username</md-option>
 						<md-option value="active" ng-click="order()">Active</md-option>
 					</md-select>				
-				</div> 
-				<div>
-					<span>Create New Promotion</span>
-					<md-button class="md-raised md-icon-button" ng-href="#/new/promotion">           
-						<i class="fa fa-plus-circle"></i>
-					</md-button>
-				</div>			
+				</div> 	
 			</div>
 			<md-divider></md-divider>
 			<md-content layout="row" layout-wrap>
@@ -32,11 +32,17 @@
 						<md-card-title>
 							<md-card-title-text>
 								<span class="md-headline">Name: {{ item.name }}</span>
-								<span class="md-subhead">Promotion ID: {{item.promotionId}}</span>
-								<span class="md-subhead">Description: {{ item.description }}</span>
-								<span class="md-subhead">Amount: {{item.amount}}</span>
-								<span class="md-subhead">Date: {{item.date}}</span>
+								<table>
+									<tr><td class="ulli">Promotion ID: </td><td>{{item.promotionId}}</td></tr>
+									<tr><td class="ulli">Description: </td><td>{{ item.description }}</td></tr>
+									<tr><td class="ulli">Amount: </td><td>{{item.amount}}</td></tr>
+									<tr><td class="ulli">Date: </td><td>{{item.date|rd:0}}</td></tr>
+								</table>
 							</md-card-title-text>
+							<md-card-title-media>
+								<div class="md-media-sm card-media" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+								</div>
+							</md-card-title-media>  
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center"> 
 							<md-button class="md-raised" ng-href="{{path+item.promotionId}}">Details</md-button>
