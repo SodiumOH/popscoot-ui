@@ -1,6 +1,6 @@
 angular.module('app.root.ctrl', [])
 
-.controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+.controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window, $translate) {
 	$scope.breadcrumbs = [];
 	$scope.$on('BC', function(evt, data){
 		$scope.breadcrumbs.push(data);
@@ -34,13 +34,21 @@ angular.module('app.root.ctrl', [])
 			}
 		});
 	}
-	$scope.setLanguage = function(language){
-		if (language) {
-			$scope.language = language;
-		} else {
-			$scope.language = LANG_EN;
-		}
+
+	$scope.changeLanguage = function(key){
+		$translate.use(key);
+		console.log("changeLanguage");
 	}
+
+
+	$scope.language = LANG_CH;
+	$scope.setCH = function(){		
+		$scope.language = LANG_CH;
+	}
+	$scope.setEN = function(){		
+		$scope.language = LANG_EN;
+	}
+
 	$scope.browserHeight = $window.innerHeight;
 	angular.element($window).on('resize', function () {
 		$scope.browserHeight = $window.innerHeight;
@@ -50,32 +58,32 @@ angular.module('app.root.ctrl', [])
 	var element = angular.element(document.querySelector('#id'));/*
 	$scope.profileHeight = element("#profileInfo").offsetHeight;*/
 	console.log($scope.profileHeight);
-	$scope.setLanguage();
+	/*$scope.setLanguage();*/
 	$scope.menu ={
 		main: [	
 		{
 			path: "dashboard",
-			name: $scope.language.dashboard,
+			name: "dashboard",
 			icon: "fa fa-tachometer"
 		}, {
 			path: "accounts",
-			name: $scope.language.account,
+			name: "accounts",
 			icon: "fa fa-users"
 		}, {
 			path: "scooters",
-			name: $scope.language.scooter,
+			name: "scooters",
 			icon: "fa fa-bicycle"
 		}, {
 			path: "bookings",
-			name: $scope.language.booking,
+			name: "bookings",
 			icon: "fa fa-book"
 		}, {
 			path: "enquiries",
-			name: $scope.language.enquiry,
+			name: "enquiries",
 			icon: "fa fa-question-circle"
 		}, {
 			path: "finance",
-			name: $scope.language.finance,
+			name: "finance",
 			colapsed: false,
 			icon: "fa fa-balance-scale",
 			icon2: {
@@ -84,19 +92,19 @@ angular.module('app.root.ctrl', [])
 			}
 		}, {
 			path: "banks",
-			name: $scope.language.bank,
+			name: "banks",
 			icon: "fa fa-credit-card",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},{
 			path: "payments",
-			name: $scope.language.payment,
+			name: "payments",
 			icon: "fa fa-money",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},{
 			path: "miscellaneous",
-			name: $scope.language.miscellaneous,
+			name: "miscellaneous",
 			colapsed: false,
 			icon: "fa fa-ellipsis-h",
 			icon2: {
@@ -105,19 +113,19 @@ angular.module('app.root.ctrl', [])
 			}
 		},{
 			path: "promotions",
-			name: $scope.language.promotion,
+			name: "promotions",
 			icon: "fa fa-gift",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},  {
 			path: "helps",
-			name: $scope.language.help,
+			name: "helps",
 			icon: "fa fa-info-circle",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},{
 			path: "analytics",
-			name: $scope.language.analytics,
+			name: "analytics",
 			icon: "fa fa-line-chart"
 		}],
 		logout: {

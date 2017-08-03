@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['dndLists', 'ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
 	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.tracking.ctrl', 'app.accountPromo.ctrl'
 	])
 
@@ -12,6 +12,213 @@ angular.module('POPSCOOT', ['dndLists', 'ngAvatar', 'ngRoute', 'ngMaterial', 'lf
 		}
 	}
 	isAuthenticated();
+
+})
+.config(function ($translateProvider) {
+	$translateProvider.fallbackLanguage('en');
+	$translateProvider.registerAvailableLanguageKeys(['en', 'ch'], {
+		'en_*': 'en',
+		'ch_*': 'ch'
+
+	})
+
+	$translateProvider.translations('en', {
+		dashboard: "DASHBOARD",
+		splash: "SPLASH",
+		accounts: "ACCOUNTS",
+		analytics: "ANALYTICS",
+		banks: "banks",
+		bookings: "BOOKINGS",
+		enquiries: "ENQUIRIES",
+		helps: "helps",
+		payments: "payments",
+		promotions: "promotions",
+		scooters: "SCOOTERS",
+		finance: "FINANCE",
+		miscellaneous: "MISCELLANEOUS",
+		Home: "Home",
+		//general functions:
+		itemsPerPage: "Items Per Page",
+		orderBy: "Order By",
+		search: "search",
+		//general edition
+		activated: "activated",
+		deactivated: "deactivated",
+		update: "update",
+		delete: "delete",	
+		pageUp: "prev",
+		pageDown: "next",
+		//general information
+		by: "by",	
+		date: "date",
+		//accounts
+		account: "account",
+		email: "email",
+		username: "username",
+		socialMedia: "social media",
+		facebookId: "FacebookID",
+		birthday: "birthday",
+		createAccount: "Create New Account",
+		basicInformation: "Basic Information",
+		details: "details",
+		pushTokens: "pushTokens",
+		//scooters
+		scooter: "scooter",
+		scooterId: "Scooter ID",
+		battery: "battery remaining",
+		integrateId: "Integrate ID",
+		name: "name",
+		model: "model",
+		tracking: "tracking",
+		createScooter: "Create New Scooter",
+		//booking
+		booking: "booking",
+		bookingId: "booking ID",
+		startTime: "start time",
+		endTime: "end time",
+		destination: "destination",
+		bookingBy : "booking by",
+		outsetlockId: "outsetlock ID",
+		destinationlockId : "destinationlock ID",
+		remarks : "remarks",
+		createBooking: "create new booking",
+		//enquiry
+		enquiry: "enquiry",
+		enquiryId: "enquiry ID",
+		comment: "comment",
+		//bank
+		bank: "bank",
+		bankId: "bank ID",
+		deposit: "deposit",
+		stamps: "stamps",
+		cash: "cash",
+		createBank: "create new bank",
+		//payment
+		payment: "payment",
+		paymentId: "payment ID",
+		method: "method",
+		credential1: "credential1",
+		credential2: "credential2",
+		credential3: "credential3",
+		transactions: "transactions",
+		transaction: "transaction",
+		createPayment: "create new payment",
+		//promotion
+		promotion: "promotion",
+		promotionId: "promotion ID",
+		description: "description",
+		amount: "amount",
+		createPromotion: "create new promotion",
+		promotionName: "promotion name",
+		//help
+		help: "help",
+		helpId: "help ID",
+		order: "order",
+		createHelp: "create new help",
+		content: "content",
+		title: "title"
+});
+	$translateProvider.translations('ch', {
+		dashboard: "控制台",
+		splash: "启动页",
+		accounts: "用户",
+		analytics: "统计信息",
+		banks: "账户",
+		bookings: "订单",
+		enquiries: "用户询问",
+		helps: "帮助",
+		payments: "支付",
+		promotions: "优惠",
+		scooters: "踏板车",
+		finance: "财务",
+		miscellaneous: "其他",
+		Home: "首页",
+		//基本功能:
+		itemsPerPage: "每页数量",
+		orderBy: "排序",
+		search: "检索",
+		//基本编辑：
+		activated: "已激活",
+		deactivated: "未激活",
+		update: "更新",
+		delete: "删除",	
+		pageUp: "上一页",
+		pageDown: "下一页",
+		//基本信息：
+		by: "属于",	
+		date: "日期",
+		//账户相关
+		account: "账户",
+		email: "电邮",
+		username: "用户名",
+		socialMedia: "社交网路",
+		facebookId: "脸书账号",
+		birthday: "生日",
+		shareLogs: "社交转发",
+		shareLog: "社交转发",
+		createAccount: "新增",		
+		basicInformation: "基本信息",
+		details: "详情",
+		pushTokens: "推送码",
+		//踏板车相关
+		scooter: "踏板车",
+		scooterId: "踏板车编码",
+		battery: "剩余电量",
+		integrateId: "集成编码",
+		name: "名字",
+		model: "型号",
+		tracking: "位置信息",
+		createScooter: "新增",
+		//预定相关
+		booking: "预定",
+		bookingId: "预定编码",
+		startTime: "开始时间",
+		endTime: "结束时间",
+		destination: "目的地",
+		bookingBy : "预定人",
+		outsetlockId: "起始锁",
+		destinationlockId : "终点锁",
+		remarks : "备注",
+		createBooking: "新增",
+		//问询相关
+		enquiry: "问询",
+		enquiryId: "问询编码",
+		comment: "评论",
+		//户头相关
+		bank: "户头",
+		bankId: "户头编码",
+		deposit: "定金",
+		stamps: "印章",
+		cash: "余额",
+		transactions: "转帐",
+		transaction: "转帐",
+		createBank: "新增",
+		//支付相关
+		payment: "支付",
+		paymentId: "支付编码",
+		method: "方式",
+		credential1: "支付信息1",
+		credential2: "支付信息2",
+		credential3: "支付信息3",
+		createPayment: "新增",
+		//促销活动相关
+		promotion: "促销活动",
+		promotionId: "活动编码",
+		description: "描述",
+		amount: "优惠额度",
+		createPromotion: "新增",
+		promotionName: "活动名称",
+		//帮助也页相关
+		help: "帮助页",
+		helpId: "帮助页编码",
+		order: "顺序",
+		createHelp: "新增",
+		content: "内容",
+		title: "标题"
+
+	});
+	$translateProvider.useSanitizeValueStrategy('escape');
+	$translateProvider.preferredLanguage('ch');
 
 })
 
@@ -216,7 +423,7 @@ angular.module('POPSCOOT', ['dndLists', 'ngAvatar', 'ngRoute', 'ngMaterial', 'lf
     });*/
 angular.module('app.root.ctrl', [])
 
-.controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window) {
+.controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window, $translate) {
 	$scope.breadcrumbs = [];
 	$scope.$on('BC', function(evt, data){
 		$scope.breadcrumbs.push(data);
@@ -250,13 +457,21 @@ angular.module('app.root.ctrl', [])
 			}
 		});
 	}
-	$scope.setLanguage = function(language){
-		if (language) {
-			$scope.language = language;
-		} else {
-			$scope.language = LANG_EN;
-		}
+
+	$scope.changeLanguage = function(key){
+		$translate.use(key);
+		console.log("changeLanguage");
 	}
+
+
+	$scope.language = LANG_CH;
+	$scope.setCH = function(){		
+		$scope.language = LANG_CH;
+	}
+	$scope.setEN = function(){		
+		$scope.language = LANG_EN;
+	}
+
 	$scope.browserHeight = $window.innerHeight;
 	angular.element($window).on('resize', function () {
 		$scope.browserHeight = $window.innerHeight;
@@ -266,32 +481,32 @@ angular.module('app.root.ctrl', [])
 	var element = angular.element(document.querySelector('#id'));/*
 	$scope.profileHeight = element("#profileInfo").offsetHeight;*/
 	console.log($scope.profileHeight);
-	$scope.setLanguage();
+	/*$scope.setLanguage();*/
 	$scope.menu ={
 		main: [	
 		{
 			path: "dashboard",
-			name: $scope.language.dashboard,
+			name: "dashboard",
 			icon: "fa fa-tachometer"
 		}, {
 			path: "accounts",
-			name: $scope.language.account,
+			name: "accounts",
 			icon: "fa fa-users"
 		}, {
 			path: "scooters",
-			name: $scope.language.scooter,
+			name: "scooters",
 			icon: "fa fa-bicycle"
 		}, {
 			path: "bookings",
-			name: $scope.language.booking,
+			name: "bookings",
 			icon: "fa fa-book"
 		}, {
 			path: "enquiries",
-			name: $scope.language.enquiry,
+			name: "enquiries",
 			icon: "fa fa-question-circle"
 		}, {
 			path: "finance",
-			name: $scope.language.finance,
+			name: "finance",
 			colapsed: false,
 			icon: "fa fa-balance-scale",
 			icon2: {
@@ -300,19 +515,19 @@ angular.module('app.root.ctrl', [])
 			}
 		}, {
 			path: "banks",
-			name: $scope.language.bank,
+			name: "banks",
 			icon: "fa fa-credit-card",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},{
 			path: "payments",
-			name: $scope.language.payment,
+			name: "payments",
 			icon: "fa fa-money",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},{
 			path: "miscellaneous",
-			name: $scope.language.miscellaneous,
+			name: "miscellaneous",
 			colapsed: false,
 			icon: "fa fa-ellipsis-h",
 			icon2: {
@@ -321,19 +536,19 @@ angular.module('app.root.ctrl', [])
 			}
 		},{
 			path: "promotions",
-			name: $scope.language.promotion,
+			name: "promotions",
 			icon: "fa fa-gift",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},  {
 			path: "helps",
-			name: $scope.language.help,
+			name: "helps",
 			icon: "fa fa-info-circle",
 			hide: true,
 			margin: {'margin-left':'25px'}
 		},{
 			path: "analytics",
-			name: $scope.language.analytics,
+			name: "analytics",
 			icon: "fa fa-line-chart"
 		}],
 		logout: {
@@ -485,14 +700,8 @@ angular.module('app.root.ctrl', [])
 
 angular.module('app.account.ctrl', [])
 
-.controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration) {
+.controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration, $mdToast) {
 	console.log('this is AccountCtrl');
-
-
-
-	var element = angular.element(document.querySelector('#cardAccount')); 
-	var height = element[0].offsetHeight;
-	$scope.minHeight = height;
 
 	$scope.search;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";	
@@ -683,6 +892,7 @@ angular.module('app.account.ctrl', [])
 	$scope.uploadPrompt = function(){
 		$scope.uploadImage = !$scope.uploadImage;
 	}
+	$scope.preview = false;
 	$scope.upload = function (files) {
 		if (files && files.length) {
 			var fileReader = new FileReader();
@@ -706,7 +916,15 @@ angular.module('app.account.ctrl', [])
 						console.log(data.data.data.data);
 						$scope.media = data.data.data.data[0].data;
 						$scope.uploadStatus = "Success";
+						$scope.preview = true;
 						mediaId = $scope.media.mediaId;
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent("Click on update button to update")
+							.hideDelay(3000)
+							.parent("#accountPage")
+							.position("top right")
+							);
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
@@ -816,6 +1034,13 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.account = data.data.data.data;
 			$scope.uploadImage = false;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Update Success")
+				.hideDelay(3000)
+				.parent("#accountPage")
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -841,9 +1066,9 @@ angular.module('app.account.ctrl', [])
 
 	$scope.getActive = function (acc){
 		if (acc.active) {
-			return 'ACTIVATED'
+			return 'activated'
 		} else {
-			return 'DEACTIVATED'
+			return 'deactivated'
 		}
 	}
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
@@ -1725,7 +1950,12 @@ angular.module('app.dashboard.ctrl', [])
 
 .controller('DashboardCtrl', function($scope, $sce) {
 	console.log('this is DashboardCtrl');
-	$scope.mapSource = $sce.trustAsResourceUrl("http://test.popscoot.com/popscoot/gps");
+	$scope.loadingIframe = true;
+	$scope.mapSource = $sce.trustAsResourceUrl("http://test.popscoot.com/gps/map");
+	window.uploadDone = function(){
+		console.log(666);
+		$scope.loadingIframe = false;
+	}
 })
 
 
@@ -2783,8 +3013,8 @@ getBookings();
 		$location.path(path);
 	}*/
 	
-	$scope.itemsOrder = "active";
-	$scope.reverse = true;
+	$scope.itemsOrder = "name";
+	$scope.reverse = false;
 	$scope.order = function(){
 		$scope.reverse = !$scope.reverse;
 	}
@@ -2872,14 +3102,20 @@ getBookings();
 
 
 angular.module('app.tracking.ctrl', [])
-.controller('TrackingCtrl', function($scope, $sce){
+.controller('TrackingCtrl', function($scope, $sce, $routeParams, $sce){
 	console.log("this is traking control");
 	$scope.$emit("BC", {
 		name: "Tracking",
 		url: "tracking/"
 	})
 	
+	console.log($scope.trackingId);
+	$scope.param = {
+		trackingSource: $sce.trustAsResourceUrl("http://test.popscoot.com/gps/pmds/" + $routeParams.id)
+	}
+	console.log($scope.trackingId);
 })
+	
 angular.module("app.accountPromo.ctrl", [])
 
 .controller("NewAccountPromoCtrl", function(){
@@ -3139,17 +3375,95 @@ var DAO = (function() {
 var LANG_EN = {
 	dashboard: "DASHBOARD",
 	splash: "SPLASH",
-	account: "ACCOUNTS",
+	accounts: "ACCOUNTS",
 	analytics: "ANALYTICS",
-	bank: "banks",
-	booking: "BOOKINGS",
-	enquiry: "ENQUIRIES",
-	help: "helps",
-	payment: "payments",
-	promotion: "promotions",
-	scooter: "SCOOTERS",
+	banks: "banks",
+	bookings: "BOOKINGS",
+	enquiries: "ENQUIRIES",
+	helps: "helps",
+	payments: "payments",
+	promotions: "promotions",
+	scooters: "SCOOTERS",
 	finance: "FINANCE",
-	miscellaneous: "MISCELLANEOUS"
+	miscellaneous: "MISCELLANEOUS",
+	//general functions:
+	itemsPerPage: "Items Per Page",
+	orderBy: "Order By",
+	search: "search",
+	//general edition
+	activated: "activated",
+	deactivated: "deactivated",
+	update: "update",
+	delete: "delete",	
+	pageUp: "prev",
+	pageDown: "next",
+	//general information
+	by: "by",	
+	date: "date",
+	//accounts
+	account: "account",
+	email: "email",
+	username: "username",
+	socialMedia: "social media",
+	facebookId: "FacebookID",
+	birthday: "birthday",
+	createAccount: "Create New Account",
+	//scooters
+	scooter: "scooter",
+	scooterId: "Scooter ID",
+	battery: "battery remaining",
+	integrateId: "Integrate ID",
+	name: "name",
+	model: "model",
+	tracking: "tracking",
+	createScooter: "Create New Scooter",
+	//booking
+	booking: "booking",
+	bookingId: "booking ID",
+	startTime: "start time",
+	endTime: "end time",
+	destination: "destination",
+	bookingBy : "booking by",
+	outsetlockId: "outsetlock ID",
+	destinationlockId : "destinationlock ID",
+	remarks : "remarks",
+	createBooking: "create new booking",
+	//enquiry
+	enquiry: "enquiry",
+	enquiryId: "enquiry ID",
+	comment: "comment",
+	//bank
+	bank: "bank",
+	bankId: "bank ID",
+	deposit: "deposit",
+	stamps: "stamps",
+	cash: "cash",
+	createBank: "create new bank",
+	//payment
+	payment: "payment",
+	paymentId: "payment ID",
+	method: "method",
+	credential1: "credential1",
+	credential2: "credential2",
+	credential3: "credential3",
+	createPayment: "create new payment",
+	//promotion
+	promotion: "promotion",
+	promotionId: "promotion ID",
+	description: "description",
+	amount: "amount",
+	createPromotion: "create new promotion",
+	promotionName: "promotion name",
+	//help
+	help: "help",
+	helpId: "help ID",
+	order: "order",
+	createHelp: "create new help",
+	content: "content",
+	title: "title"
+
+
+	//
 };
 
 var LANG_CH = {
@@ -3163,7 +3477,86 @@ var LANG_CH = {
 	help: "帮助",
 	payment: "支付",
 	promotion: "优惠",
-	scooter: "踏板车"
+	scooter: "踏板车",
+	finance: "财务",
+	miscellaneous: "其他",
+
+	//基本功能:
+	itemsPerPage: "每页数量",
+	orderBy: "排序",
+	search: "检索",
+	//基本编辑：
+	activated: "已激活",
+	deactivated: "未激活",
+	update: "更新",
+	delete: "删除",	
+	pageUp: "上一页",
+	pageDown: "下一页",
+	//基本信息：
+	by: "属于",	
+	date: "日期",
+	//账户相关
+	account: "账户",
+	email: "电邮",
+	username: "用户名",
+	socialMedia: "社交网路",
+	facebookId: "脸书账号",
+	birthday: "生日",
+	createAccount: "新增",
+	//踏板车相关
+	scooter: "踏板车",
+	scooterId: "踏板车编码",
+	battery: "剩余电量",
+	integrateId: "集成编码",
+	name: "名字",
+	model: "型号",
+	tracking: "位置信息",
+	createScooter: "新增",
+	//预定相关
+	booking: "预定",
+	bookingId: "预定编码",
+	startTime: "开始时间",
+	endTime: "结束时间",
+	destination: "目的地",
+	bookingBy : "预定人",
+	outsetlockId: "起始锁",
+	destinationlockId : "终点锁",
+	remarks : "备注",
+	createBooking: "新增",
+	//问询相关
+	enquiry: "问询",
+	enquiryId: "问询编码",
+	comment: "评论",
+	//户头相关
+	bank: "户头",
+	bankId: "户头编码",
+	deposit: "定金",
+	stamps: "印章",
+	cash: "余额",
+	createBank: "新增",
+	//支付相关
+	payment: "支付",
+	paymentId: "支付编码",
+	method: "方式",
+	credential1: "支付信息1",
+	credential2: "支付信息2",
+	credential3: "支付信息3",
+	createPayment: "新增",
+	//促销活动相关
+	promotion: "促销活动",
+	promotionId: "活动编码",
+	description: "描述",
+	amount: "优惠额度",
+	createPromotion: "新增",
+	promotionName: "活动名称",
+	//帮助也页相关
+	help: "帮助页",
+	helpId: "帮助页编码",
+	order: "顺序",
+	createHelp: "新增",
+	content: "内容",
+	title: "标题"
+
 };
 angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassword.ctrl', 'app.changePassword.ctrl', 'app.register.ctrl', 'app.login.ctrl'])
 

@@ -1,13 +1,7 @@
 angular.module('app.account.ctrl', [])
 
-.controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration) {
+.controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration, $mdToast) {
 	console.log('this is AccountCtrl');
-
-
-
-	var element = angular.element(document.querySelector('#cardAccount')); 
-	var height = element[0].offsetHeight;
-	$scope.minHeight = height;
 
 	$scope.search;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";	
@@ -198,6 +192,7 @@ angular.module('app.account.ctrl', [])
 	$scope.uploadPrompt = function(){
 		$scope.uploadImage = !$scope.uploadImage;
 	}
+	$scope.preview = false;
 	$scope.upload = function (files) {
 		if (files && files.length) {
 			var fileReader = new FileReader();
@@ -221,7 +216,15 @@ angular.module('app.account.ctrl', [])
 						console.log(data.data.data.data);
 						$scope.media = data.data.data.data[0].data;
 						$scope.uploadStatus = "Success";
+						$scope.preview = true;
 						mediaId = $scope.media.mediaId;
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent("Click on update button to update")
+							.hideDelay(3000)
+							.parent("#accountPage")
+							.position("top right")
+							);
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
@@ -331,6 +334,13 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.account = data.data.data.data;
 			$scope.uploadImage = false;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Update Success")
+				.hideDelay(3000)
+				.parent("#accountPage")
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -356,9 +366,9 @@ angular.module('app.account.ctrl', [])
 
 	$scope.getActive = function (acc){
 		if (acc.active) {
-			return 'ACTIVATED'
+			return 'activated'
 		} else {
-			return 'DEACTIVATED'
+			return 'deactivated'
 		}
 	}
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";

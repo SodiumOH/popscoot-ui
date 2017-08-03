@@ -34,7 +34,7 @@
 								<i class="{{item.icon}} fa-lg fa-fw" aria-hidden="true"></i>
 							</div>
 							<div layout="row" layout-align="space-between center">
-								<h4>{{ item.name}}</h4>
+								<h4>{{ item.name | translate}}</h4>
 								<i ng-if="item.icon2 && !item.colapsed" class="{{item.icon2.folded}} fa-lg fa-fw" aria-hidden="true" ></i>
 								<i ng-if="item.icon2 && item.colapsed" class="{{item.icon2.colapsed}} fa-lg fa-fw" aria-hidden="true" ></i>
 							</div>		
@@ -50,9 +50,11 @@
 							<i class="fa fa-bars fa-2x" aria-hidden="true" ></i>
 						</md-button>
 						<h2 flex md-truncate>
-							<md-button ng-click="goHome()">Home <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
-							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)">{{item.name}} <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
+							<md-button ng-click="goHome()">{{'Home' | translate}} <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
+							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)">{{item.name |text_fmt:0|translate}} <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
 						</h2>
+						<md-button class="md-raised" ng-click="changeLanguage('ch')">中文</md-button>
+						<md-button class="md-raised" ng-click="changeLanguage('en')">English</md-button>
 						<span>{{Laccount.email}}</span>
 						<md-menu md-offset="0 50">
 							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
@@ -106,6 +108,7 @@
 <script src="/app/lib/ng-file-upload/dist/ng-file-upload.js"></script>
 <script src="/app/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js"></script>
 <script src="/app/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+<script src="/app/lib/angular-translate/dist/angular-translate.min.js"></script>
 
 </body>
 </html>

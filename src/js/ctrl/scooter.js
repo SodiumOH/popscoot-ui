@@ -167,8 +167,8 @@ getBookings();
 		$location.path(path);
 	}*/
 	
-	$scope.itemsOrder = "active";
-	$scope.reverse = true;
+	$scope.itemsOrder = "name";
+	$scope.reverse = false;
 	$scope.order = function(){
 		$scope.reverse = !$scope.reverse;
 	}

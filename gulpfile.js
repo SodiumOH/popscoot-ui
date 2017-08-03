@@ -59,7 +59,8 @@ var LIBRARIES = [
 	'./node_modules/ng-img-crop-full-extended/source/js/*.js',
 	'./node_modules/ng-img-crop-full-extended/compile/minified/*.js',
 	'./node_modules/angular-drag-and-drop-lists/*.js',
-	'./node_modules/iframe/*'
+	'./node_modules/iframe/*',
+	'./node_modules/angular-translate/dist/*.js'
 
 ];
 
@@ -127,7 +128,8 @@ var INJECTRES = [
 	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
 	DEST + '/lib/ng-file-upload/dist/ng-file-upload.js',
 	DEST + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js',
-	DEST + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js'
+	DEST + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
+	DEST + '/lib/angular-translate/dist/angular-translate.min.js'
 ];
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {

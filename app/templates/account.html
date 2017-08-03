@@ -1,6 +1,6 @@
-<md-content layout-gt-sm="row" layout-padding>
+<md-content id="accountPage" layout-gt-sm="row" layout-padding>
 	<div flex flex-md="35" flex-gt-md="30">
-		<h2 class="title">Basic Information</h2>
+		<h2 class="title">{{'basicInformation'|translate}}</h2>
 		<md-card>
 			<md-card-title id="cardAccount">
 				<md-card-title-text>
@@ -12,6 +12,10 @@
 						<md-button class="md-icon-button" ng-click="uploadPrompt()"><i class="fa fa-camera" aria-hidden="true"></i></md-button>
 					</div>	
 
+					<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="drop-box md-media-lg card-media" 
+					ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+					accept="image/*" 
+					ngf-pattern="'image/*'"><div style="padding-top: 50px">Drop images here or click to upload, {{uploadStatus}}</div></div>
 					<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="drop-box md-media-lg card-media" 
 					ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
 					accept="image/*" 
@@ -28,30 +32,30 @@
 
 							<div layout-align="center center">
 								<md-input-container class="md-block"> 
-									<label>Email</label>
+									<label>{{'email' | translate}}</label>
 									<input ng-model="account.email" type="email" disabled>
 								</md-input-container>
 								<md-input-container class="md-block">
-									<label>FaceBook ID</label>
+									<label>{{'facebookId' | translate}}</label>
 									<input ng-model="account.facebookId" disabled>
 								</md-input-container>
 								<md-input-container class="md-block">
-									<label>Social Media</label>
+									<label>{{'socialMedia' | translate}}</label>
 									<input ng-model="account.socialMedia" disabled>
 								</md-input-container>
 								<div layout="row" layout-align="space-between center">									
 									<md-input-container flex="50" class="md-block">
-										<label>Enter Birthday</label>
+										<label>{{'birthday' | translate}}</label>
 										<md-datepicker ng-model="account.birthday"></md-datepicker>
 									</md-input-container>
-									<md-switch flex="40" ng-model="account.active" aria-label="Switch 1" ng-change="">{{getActive(account)}}</md-switch>
+									<md-switch flex="40" ng-model="account.active" aria-label="Switch 1" ng-change="">{{getActive(account)|translate}}</md-switch>
 								</div>
 							</div>
 							<div>
 								
 								<div flex layout="row">					
-									<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updateAccountForm.$invalid">Update</md-button>
-									<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
+									<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updateAccountForm.$invalid">{{'update'|translate}}</md-button>
+									<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
 								</div>
 							</div>
 						</form>
@@ -63,12 +67,12 @@
 		</md-card>
 	</div>
 	<div flex>
-		<h2 class="title">Usage</h2>
+		<h2 class="title">{{'details'|translate}}</h2>
 		<md-card>
 			<md-tabs md-dynamic-height md-border-bottom style="min-height: 607.898px">
 				<md-tab>
 					<md-tab-label>
-						<i class="fa fa-book"></i> Bookings
+						<i class="fa fa-book"></i> {{'booking'|translate}}
 					</md-tab-label>
 					<md-tab-body>
 						<div ng-if="bookings.length === 0" layout-padding layout-align="center start">
@@ -123,7 +127,7 @@
 				</md-tab>		
 				<md-tab>
 					<md-tab-label>
-						<i class="fa fa-money"></i> Banks
+						<i class="fa fa-money"></i> {{'bank'|translate}}
 					</md-tab-label>
 					<md-tab-body>
 						<div ng-if="banks.length === 0" layout-padding layout-align="center start">
@@ -146,7 +150,7 @@
 					</md-tab>		
 					<md-tab>
 						<md-tab-label>
-							<i class="fa fa-question-circle"></i> Enquiries
+							<i class="fa fa-question-circle"></i> {{'enquiry'|translate}}
 						</md-tab-label>
 						<md-tab-body>
 							<div ng-if="enquiries.length === 0" layout-padding layout-align="center start">
@@ -195,7 +199,7 @@
 					</md-tab>		
 					<md-tab>
 						<md-tab-label>
-							<i class="fa fa-credit-card"></i> Payments
+							<i class="fa fa-credit-card"></i> {{'payment'|translate}}
 						</md-tab-label>
 						<md-tab-body>
 							<div ng-if="payments.length === 0" layout-padding layout-align="center start">
@@ -249,7 +253,7 @@
 					</md-tab>		
 					<md-tab>
 						<md-tab-label>
-							<i class="fa fa-refresh"></i> Tansactions
+							<i class="fa fa-refresh"></i> {{'transaction'|translate}}
 						</md-tab-label>
 						<md-tab-body>
 							<div ng-if="transactions.length === 0" layout-padding layout-align="center start">
@@ -292,7 +296,7 @@
 					</md-tab>		
 					<md-tab>
 						<md-tab-label>
-							<i class="fa fa-facebook"></i> ShareLogs
+							<i class="fa fa-facebook"></i> {{'shareLog'|translate}}
 						</md-tab-label>
 						<md-tab-body>
 							<div ng-if="shareLogs.length === 0" layout-padding layout-align="center start">
@@ -319,7 +323,7 @@
 					</md-tab>
 					<md-tab>
 						<md-tab-label>
-							<i class="fa fa-bell"></i> PushTokens
+							<i class="fa fa-bell"></i> {{'pushTokens'|translate}}
 						</md-tab-label>
 						<md-tab-body>
 							<div ng-if="pushTokens.length === 0" layout-padding layout-align="center start">
@@ -349,7 +353,7 @@
 					</md-tab>		
 					<md-tab>
 						<md-tab-label>
-							<i class="fa fa-gift"></i> Promotions
+							<i class="fa fa-gift"></i> {{'promotion'|translate}}
 						</md-tab-label>
 						<md-tab-body>
 							<div ng-if="promotions.length === 0" layout-padding layout-align="center start">

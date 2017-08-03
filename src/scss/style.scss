@@ -1,6 +1,13 @@
 $red-1: #ff6666;
 $blue-1: #33ccff;
 
+
+.dashboard{
+    display: block;
+    width: 100%;
+    min-height: 500px;
+    border: none;
+}
 .my-container {
 	color: $blue-1;
 }
