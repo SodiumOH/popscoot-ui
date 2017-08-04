@@ -1,10 +1,10 @@
 angular.module('app.changePassword.ctrl', [])
-.controller('ChangePasswordCtrl', function($scope, httpService){
+.controller('ChangePasswordCtrl', function($scope, httpService, configuration){
 	console.log("ChangePasswordCtrl");
 	
 	$scope.updatePWForm;
 	$scope.updatePassword = function(){
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
+		httpService.httpPut(configuration.domain()+"/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
 	}
 	$scope.$on('CHANGE_PASSOWRD', function(event, data){
 		if(data.data.data.status == 1) {

@@ -14,103 +14,106 @@
 						<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="md-media-lg card-media drop-box" 
 						ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
 						accept="image/*" 
-						ngf-pattern="'image/*'" >Drop pdfs or images here or click to upload, {{uploadStatus}}</div>
-						<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> 
-					</md-card-title-media>
-				</md-card-title>
-				<md-card-content layout-padding>
-					<div>
-						<form name="updatescooterForm" ng-submit="updateScooter()">
+						ngf-pattern="'image/*'" >
+						<div style="padding-top: 50px"  ng-hide="preview">Drop images here or click to upload, {{uploadStatus}}</div>
+						<div ng-hide="!preview" class="md-media-lg card-media" style="background-image: url({{dataUrl}}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
+					</div>
+					<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> 
+				</md-card-title-media>
+			</md-card-title>
+			<md-card-content layout-padding>
+				<div>
+					<form name="updatescooterForm" ng-submit="updateScooter()">
 
-							<div layout-align="center center">
-								<md-input-container class="md-block"> 
-									<label>{{'integrateId'|translate}}</label>
-									<input ng-model="scooter.integrateId">
-								</md-input-container>
-								<md-input-container class="md-block"> 
-									<label>{{'name'|translate}}</label>
-									<input ng-model="scooter.name">
-								</md-input-container>
-								<md-input-container class="md-block">
-									<label>{{'model'|translate}}</label>
-									<input ng-model="scooter.model">
-								</md-input-container>
-								<md-input-container class="md-block">
-									<label>{{'battery'|translate}}</label>
-									<input ng-model="scooter.battery" type="number" step="0.01">
-								</md-input-container>
-							</div>
+						<div layout-align="center center">
+							<md-input-container class="md-block"> 
+								<label>{{'integrateId'|translate}}</label>
+								<input ng-model="scooter.integrateId">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>{{'name'|translate}}</label>
+								<input ng-model="scooter.name">
+							</md-input-container>
+							<md-input-container class="md-block">
+								<label>{{'model'|translate}}</label>
+								<input ng-model="scooter.model">
+							</md-input-container>
+							<md-input-container class="md-block">
+								<label>{{'battery'|translate}}</label>
+								<input ng-model="scooter.battery" type="number" step="0.01">
+							</md-input-container>
+						</div>
 
-							<div>
+						<div>
 							<div flex layout="row" layout-align="space-around center"> 
 								<md-switch flex="50" ng-model="scooter.active" aria-label="Switch 1" ng-change="">{{scooter.active?"activated":"deactivated" | translate}}</md-switch>
 								<md-button flex="30" class="md-raised" ng-href="#/tracking/{{scooter.gpsId}}">{{'tracking'|translate}}</md-button>
 							</div>
-								
-								<div flex layout="row">					
-									<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">{{'update'|translate}}</md-button>
-									<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
-								</div>
+							
+							<div flex layout="row">					
+								<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">{{'update'|translate}}</md-button>
+								<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
 							</div>
-						</form>
-					</div>
-				</md-card-content>
-			</md-card>
-		</div>
-		<div flex>
-			<md-card style="min-height: 607.898px">
-				<div layout="row" layout-align="space-between center" layout-padding>
-					<div layout="row" layout-align="start center" layout-padding>
-						<span>{{'itemsPerPage'|translate}}</span>
-						<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
-							<md-option value=10>10</md-option>
-							<md-option value=20>20</md-option>
-							<md-option value=30>30</md-option>
-						</md-select>
-						<span>{{'orderBy'|translate}}</span>
-						<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
-							<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
-							<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
-							<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
-						</md-select>				
-					</div> 
-					<div>
-						<span>{{'createBooking'|translate}}</span>
-						<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
-							<i class="fa fa-plus-circle"></i>
-						</md-button>
-					</div>			
+						</div>
+					</form>
 				</div>
-
-				<md-divider></md-divider>
-
-				<md-content layout="row" layout-wrap>
-					<H2 ng-if="bookings.length === 0">There are currently no bookings</H2>				
-					<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
-						<md-card id="bookingCard">
-							<md-card-title>
-								<md-card-title-text>
-									<span class="md-headline">{{'booking'|translate}}: {{item.bookingId}}</span>
-									<span class="sub-head">{{'startTime'|translate}}: {{ item.startDate }}</span>
-									<span class="sub-head">{{'endTime'|translate}}: {{ item.endDate }}</span>
-									<span class="sub-head">{{'destination'|translate}}: {{ item.destinationName}}</span>								
-									<span>
-										{{'by'|translate}}: <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{ item.account.username}}</a>		
-									</span>			
-								</md-card-title-text>
-							</md-card-title>
-							<md-card-actions layout="row" layout-align="end center">							
-								<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">{{'details'|translate}}</md-button>	
-							</md-card-actions>
-						</md-card>
-
-
-					</div>
-				</md-content>
-				
-			</div>
+			</md-card-content>
 		</md-card>
 	</div>
+	<div flex>
+		<md-card style="min-height: 607.898px">
+			<div layout="row" layout-align="space-between center" layout-padding>
+				<div layout="row" layout-align="start center" layout-padding>
+					<span>{{'itemsPerPage'|translate}}</span>
+					<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+						<md-option value=10>10</md-option>
+						<md-option value=20>20</md-option>
+						<md-option value=30>30</md-option>
+					</md-select>
+					<span>{{'orderBy'|translate}}</span>
+					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+						<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+						<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
+					</md-select>				
+				</div> 
+				<div>
+					<span>{{'createBooking'|translate}}</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+						<i class="fa fa-plus-circle"></i>
+					</md-button>
+				</div>			
+			</div>
+
+			<md-divider></md-divider>
+
+			<md-content layout="row" layout-wrap>
+				<H2 ng-if="bookings.length === 0">There are currently no bookings</H2>				
+				<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
+					<md-card id="bookingCard">
+						<md-card-title>
+							<md-card-title-text>
+								<span class="md-headline">{{'booking'|translate}}: {{item.bookingId}}</span>
+								<span class="sub-head">{{'startTime'|translate}}: {{ item.startDate }}</span>
+								<span class="sub-head">{{'endTime'|translate}}: {{ item.endDate }}</span>
+								<span class="sub-head">{{'destination'|translate}}: {{ item.destinationName}}</span>								
+								<span>
+									{{'by'|translate}}: <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{ item.account.username}}</a>		
+								</span>			
+							</md-card-title-text>
+						</md-card-title>
+						<md-card-actions layout="row" layout-align="end center">							
+							<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">{{'details'|translate}}</md-button>	
+						</md-card-actions>
+					</md-card>
+
+
+				</div>
+			</md-content>
+			
+		</div>
+	</md-card>
+</div>
 
 </md-content>
 

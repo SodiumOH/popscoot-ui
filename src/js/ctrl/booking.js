@@ -70,7 +70,8 @@ angular.module('app.booking.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.booking.bookingId) {
     		deleteBooking();    		
-    		window.location.href = $scope.path + "index.html#/bookings";
+    		$location.path('/bookings');
+    		/*window.location.href = $scope.path + "index.html#/bookings";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -84,19 +85,22 @@ getBooking();
 
 })
 
-.controller('BookingsCtrl', function($scope, $location, httpService) {
+.controller('BookingsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is BookingsCtrl');
 	$scope.$emit('BC', {
 		name: "Bookings",
 		url: "bookings"
 	})
 	$scope.path = "#/bookings/";
+
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
+
 	// }
-	$scope.url = "http://test.popscoot.com/popscoot/service"+$location.path();
-	console.log($scope.url);
+	$scope.url = {
+		bookings: configuration.domain()+"/service/bookings/"
+	}
 	$scope.bookings=[];
 	/*if ($location.path().split("/")[1] == "accounts") {
 		$scope.bookings = data.bookings;
@@ -106,7 +110,7 @@ getBooking();
 	
 
 
-	httpService.httpGet($scope.url, 'GET_BOOKINGS');
+	httpService.httpGet($scope.url.bookings, 'GET_BOOKINGS');
 
 	$scope.$on("GET_BOOKINGS", function(event, data){
 		if(data.data.data.status == 1) {
@@ -149,7 +153,7 @@ getBooking();
     //pagination end
 })
 
-.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration){
+.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
 	console.log("this is NewBookingCtrl");
 	$scope.$emit('BC', {
 		name: "Create Bookings",
@@ -159,12 +163,20 @@ getBooking();
 		startDate: moment().toDate(),
 		endDate: moment().toDate()
 	}
+
+	$scope.url = {
+		accounts: configuration.domain()+"/service/accounts/",
+		scooters: configuration.domain()+"/service/scooters/",
+		bookings: configuration.domain()+"/service/bookings/"
+	}
+
+
 	$scope.createBooking = function(){
 		httpService.httpPost
 	}
 
 	function getAccounts() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
+		httpService.httpGet($scop.url.accounts, 'GET_TACCOUNTS');
 	}
 
 	$scope.$on("GET_TACCOUNTS", function(event, data){
@@ -179,7 +191,7 @@ getBooking();
 		
 	});
 	function getScooters() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/scooters", 'GET_TSCOOTERS');
+		httpService.httpGet($scop.url.scooters, 'GET_TSCOOTERS');
 	}
 
 	$scope.$on("GET_TSCOOTERS", function(event, data){
@@ -273,7 +285,7 @@ getBooking();
 		});
 	};
 	
-	function DialogController2($scope, $mdDialog, Upload, httpService, localSco) {
+	function DialogController2($scope, $mdDialog, Upload, httpService, localSco, $location) {
 		$scope.scooters = localSco;
 		console.log($scope.scooters);
 
@@ -323,12 +335,13 @@ getBooking();
 		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
 		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
 		console.log(create);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/bookings", create, "CREATE_BOOKING");
+		httpService.httpPost($scope.url.bookings, create, "CREATE_BOOKING");
 	}
 	$scope.$on("CREATE_BOOKING", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);	
-			window.location.href = "#bookings/" + $scope.booking.bookingId
+			$location.path('/bookings/'+$scope.booking.bookingId);
+			/*window.location.href = "#bookings/" + $scope.booking.bookingId*/
 		} else {
 			console.log(data.data.data.message);
 		}

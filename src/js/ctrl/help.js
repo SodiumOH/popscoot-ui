@@ -1,13 +1,14 @@
 angular.module('app.help.ctrl', [])
 
-.controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
+.controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
 	console.log('this is HelpCtrl');
 	$scope.$emit('BC', {
 		name: "Help",
 		url: "helps/"+$routeParams.id
 	})
 	$scope.url = {
-		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
+		help: configuration.domain() + "/service/helps/"+ $routeParams.id,
+		upload: configuration.domain() + "service/file/upload/"
 	};
 	$scope.help;
 	function getHelp(){
@@ -57,7 +58,7 @@ angular.module('app.help.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost($scope.url.upload, uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -122,7 +123,8 @@ angular.module('app.help.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.help.helpId) {
     		deleteHelp();    		
-    		window.location.href = $scope.path + "index.html#/helps";
+    		$location.path("/helps");
+    		/*window.location.href = $scope.path + "index.html#/helps";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -136,7 +138,7 @@ angular.module('app.help.ctrl', [])
 getHelp();
 })
 
-.controller('HelpsCtrl', function($scope, $location, httpService) {
+.controller('HelpsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is HelpsCtrl')
 	$scope.$emit('BC', {
 		name: "Helps",
@@ -147,7 +149,8 @@ getHelp();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.url = "http://test.popscoot.com/popscoot/service/helps"
+
+	$scope.url = configuration.domain() + "/service/helps";
 
 	$scope.itemsOrder = "order";
 	$scope.reverse = true;
@@ -210,7 +213,7 @@ getHelp();
         }
         console.log("hihihihi");
         console.log(orders);
-        httpService.httpPut("http://test.popscoot.com/popscoot/service/helps", orders, "UPDATE_ORDERS");
+        httpService.httpPut($scope.url, orders, "UPDATE_ORDERS");
         $scope.$on("UPDATE_ORDERS", function(eve, data){
         	if(data.data.data.status == 1) {
         		console.log(data.data.data.data);
@@ -282,7 +285,7 @@ getHelp();
     //pagination end
 
 })
-.controller("NewHelpCtrl", function($scope, httpService){
+.controller("NewHelpCtrl", function($scope, httpService, configuration, $location){
 	console.log("this is NewHelpCtrl");
 	$scope.$emit('BC', {
 		name: "Create Helps",
@@ -292,13 +295,14 @@ getHelp();
 	$scope.createHelp = function(){
 		var createForm = $scope.help;
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/helps", createForm, 'CREATE_HELP');
+		httpService.httpPost((configuration.domain + "/service/helps"), createForm, 'CREATE_HELP');
 	}
 	$scope.$on("CREATE_HELP", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.help = data.data.data.data;		
-			window.location.href = "#helps/" + $scope.help.helpId;
+			$location.path("/helps/"+$scope.help.helpId);
+			/*window.location.href = "#helps/" + $scope.help.helpId;*/
 		} else {
 			console.log(data.data.data.message);
 		}

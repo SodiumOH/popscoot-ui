@@ -1,14 +1,15 @@
 angular.module('app.bank.ctrl', [])
 
-.controller('BankCtrl', function($scope,$mdDialog,$location, $routeParams, httpService) {
+.controller('BankCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
 	console.log('this is BankCtrl')
+	var domain = configuration.domain();
 	$scope.$emit('BC', {
 		name: "Bank",
 		url: "banks/"+$routeParams.id
 	})
 	$scope.bank;
 	$scope.url = {
-		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
+		bank: domain+"/service/banks/"+$routeParams.id
 	}
 	function getBank (){
 		httpService.httpGet($scope.url.bank, "GET_BANK");		
@@ -64,7 +65,8 @@ angular.module('app.bank.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.bank.bankId) {
     		deleteBank();    		
-    		window.location.href = $scope.path + "index.html#/banks";
+    		$location.path("/banks");
+    		/*window.location.href = $scope.path + "index.html#/banks";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -78,7 +80,7 @@ angular.module('app.bank.ctrl', [])
 
 })
 
-.controller('BanksCtrl', function($scope, $location, httpService) {
+.controller('BanksCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is BanksCtrl');
 	$scope.$emit('BC', {
 		name: "Banks",
@@ -89,7 +91,8 @@ angular.module('app.bank.ctrl', [])
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-	$scope.url = "http://test.popscoot.com/popscoot/service/banks"
+	var domain = configuration.domain();
+	$scope.url = domain + "/service/banks";
 	$scope.banks;
 
 	httpService.httpGet($scope.url, 'GET_BANKS');
@@ -134,14 +137,19 @@ angular.module('app.bank.ctrl', [])
     //pagination end
 
 })
-.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService){
+.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
 	console.log("this is NewBankCtrl");
 	$scope.$emit('BC', {
 		name: "Create Banks",
 		url: "new/bank"
 	})
+	var domain = configuration.domain();
+	$scope.url = {
+		get: domain + "/service/accounts/",
+		create: domain + "/service/banks"
+	};
 	function getAccounts() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
+		httpService.httpGet($scope.url.get, 'GET_BACCOUNTS');
 	}
 
 	$scope.$on("GET_BACCOUNTS", function(event, data){
@@ -225,13 +233,14 @@ angular.module('app.bank.ctrl', [])
 		var createForm = $scope.bank;
 		createForm.accountId = parseInt($scope.accountId);
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/banks", createForm, 'CREATE_BANK');
+		httpService.httpPost($scope.url.create, createForm, 'CREATE_BANK');
 	}
 	$scope.$on("CREATE_BANK", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;		
-			window.location.href = "#banks/" + $scope.bank.bankId;
+			$location.path("/banks/"+$scope.bank.bankId);
+			/*window.location.href = "#banks/" + $scope.bank.bankId;*/
 		} else {
 			console.log(data.data.data.message);
 		}

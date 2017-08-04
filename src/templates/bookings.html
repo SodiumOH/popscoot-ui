@@ -41,7 +41,7 @@
 									<tr><td class="ulli">{{'by'|translate}}: </td><td><a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></td></tr>
 									<tr><td class="ulli">{{'scooter'|translate}}: </td><td><a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a></td></tr>
 								</table>
-													
+								
 							</md-card-title-text>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center">							
@@ -52,8 +52,9 @@
 				</div>
 			</md-content>
 			<div layout="row" layout-align="space-around center">
-				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
-				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+				<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
+				
+				<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
 			</div>
 		</div>
 	</md-card>

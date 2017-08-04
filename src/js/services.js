@@ -79,6 +79,9 @@ angular.module('app.service', [])
     return {
         domain: function() {
             return "http://test.popscoot.com/popscoot/";
+        },
+        iframe: function(){
+            return "http://test.popscoot.com/gps/";
         }
     }
 })

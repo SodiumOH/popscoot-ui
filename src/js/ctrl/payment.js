@@ -1,10 +1,10 @@
 angular.module('app.payment.ctrl', [])
 
-.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
+.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
 	console.log('this is PaymentCtrl');
 	$scope.url = {
-		payment: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id,
-		transactions: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id+"/transactions"
+		payment: configuration.domain()+"/service/payments/"+$routeParams.id,
+		transactions: configuration.domain()+"/service/payments/"+$routeParams.id+"/transactions"
 	};
 	$scope.$emit('BC', 
 	{
@@ -68,7 +68,8 @@ angular.module('app.payment.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.payment.paymentId) {
     		deletepayment();    		
-    		window.location.href = $scope.path + "index.html#/payments";
+    		$location.path('/payments');
+    		/*window.location.href = $scope.path + "index.html#/payments";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -97,14 +98,14 @@ getPayment();
 getTransactions();
 })
 
-.controller('PaymentsCtrl', function($scope, $location, httpService) {
+.controller('PaymentsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is PaymentsCtrl');
 	$scope.path = "#/payments/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.url = "http://test.popscoot.com/popscoot/service/payments"
+	$scope.url = configuration.domain()+"/service/payments";
 	$scope.payments;
 
 	httpService.httpGet($scope.url, 'GET_PAYMENTS');
@@ -153,10 +154,10 @@ getTransactions();
      }
     //pagination end
 })
-.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog){
+.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog, configuration, $location){
 	console.log("this is NewPaymentCtrl");
 	function getAccounts() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
+		httpService.httpGet((configuration.domain()+"/service/accounts"), 'GET_BACCOUNTS');
 	}
 	$scope.$emit('BC', 
 	{
@@ -244,13 +245,14 @@ getTransactions();
 		var createForm = $scope.payment;
 		createForm.accountId = $scope.accountId;
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/payments", createForm, 'CREATE_PAYMENT');
+		httpService.httpPost((configuration.domain()+"/service/payments"), createForm, 'CREATE_PAYMENT');
 	}
 	$scope.$on("CREATE_PAYMENT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.payment = data.data.data.data;		
-			window.location.href = "#payments/" + $scope.payment.paymentId;
+			$scope.payment = data.data.data.data;
+			$location.path("/payments/"+$scope.payment.paymentId);		
+			/*window.location.href = "#payments/" + $scope.payment.paymentId;*/
 		} else {
 			console.log(data.data.data.message);
 		}

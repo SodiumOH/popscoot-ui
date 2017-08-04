@@ -1,6 +1,6 @@
 angular.module('app.enquiry.ctrl', [])
 
-.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService) {
+.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService, configuration) {
 	console.log('this is EnquiryCtrl');
 	$scope.$emit('BC', {
 		name: "Enquiry",
@@ -8,7 +8,7 @@ angular.module('app.enquiry.ctrl', [])
 	})
 	$scope.enquiry;
 	$scope.url = {
-		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
+		enquiry: configuration.domain() + "/service/enquiries/"+$routeParams.id
 	}
 	//console.log($scope.url);
 	function getEnquiry(){
@@ -64,8 +64,9 @@ angular.module('app.enquiry.ctrl', [])
     $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.enquiry.enquiryId) {
-    		deleteEnquiry();    		
-    		window.location.href = $scope.path + "index.html#/enquiries";
+    		deleteEnquiry();    
+    		$location.path('/enquiries');		
+    		/*window.location.href = $scope.path + "index.html#/enquiries";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -78,7 +79,7 @@ angular.module('app.enquiry.ctrl', [])
 	getEnquiry();
 })
 
-.controller('EnquiriesCtrl', function($scope, $location, httpService) {
+.controller('EnquiriesCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is EnquiriesCtrl')
 	$scope.$emit('BC', {
 		name: "Enquiries",
@@ -120,7 +121,7 @@ angular.module('app.enquiry.ctrl', [])
     //pagination end
 
     $scope.enquiries = [];
-    $scope.url = "http://test.popscoot.com/popscoot/service/enquiries"
+    $scope.url = configuration.domain() + "/service/enquiries"
 
     httpService.httpGet($scope.url, 'GET_ENQUIRIES');
 

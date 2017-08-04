@@ -43,8 +43,9 @@
 			</div>
 
 			<div layout="row" layout-align="space-around center">
-				<md-button class="md-raised" ng-click="pageDown()">{{'pageUp'|translate}}</md-button>
-				<md-button class="md-raised" ng-click="pageUp()">{{'pageDown'|translate}}</md-button>
+				<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
+				
+				<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
 			</div>
 		</md-card>
 

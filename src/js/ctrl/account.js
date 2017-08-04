@@ -23,7 +23,9 @@ angular.module('app.account.ctrl', [])
 		shareLogs: domain + "/service/accounts/" + accountId + "/shareLogs",
 		pushTokens: domain + "/service/accounts/" + accountId + "/pushTokens",
 		transactions: domain + "/service/accounts/" + accountId + "/transactions",
-		payments: domain + "/service/accounts/" + accountId + "/payments"
+		payments: domain + "/service/accounts/" + accountId + "/payments",
+		upload: domain+"/service/file/upload",
+		applyPromotion: domain+"/api/promotion/apply"
 	};
 
 	//hovers
@@ -107,7 +109,6 @@ angular.module('app.account.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
-			redirect();
 		}
 	});
 
@@ -209,7 +210,7 @@ angular.module('app.account.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost($scope.url.upload, uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -222,12 +223,18 @@ angular.module('app.account.ctrl', [])
 							$mdToast.simple()
 							.textContent("Click on update button to update")
 							.hideDelay(3000)
-							.parent("#accountPage")
 							.position("top right")
 							);
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent(message)
+							.hideDelay(3000)
+							.position("top right")
+							.theme('error-toast')
+							);
 
 					}
 				});
@@ -256,16 +263,29 @@ angular.module('app.account.ctrl', [])
 				promotionId: answer.promotionId
 			}
 			console.log(updateForm);
-			httpService.httpPost("http://test.popscoot.com/popscoot/api/promotion/apply", updateForm ,'APPLY_PROMOTION');
+			httpService.httpPost($scope.url.applyPromotion, updateForm ,'APPLY_PROMOTION');
 			$scope.$on("APPLY_PROMOTION", function(event, data){
 				console.log(data);
 				if(data.status == 1) {
 					console.log(data.data.data);
 					$scope.promotions.push(answer);
 					getPromotions();
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 
 				} else {
 					console.log(data.data.message);
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent(message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 
 				}
 			})
@@ -289,8 +309,8 @@ angular.module('app.account.ctrl', [])
 		$scope.search;
 		$scope.getNumberOfPages = function() {
 			var count = $scope.accounts.length / $scope.itemsPerPage;
-			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-			return count;
+			if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
+			return Math.floor(count);
 		}
 
 		$scope.pageDown = function()
@@ -334,15 +354,22 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.account = data.data.data.data;
 			$scope.uploadImage = false;
+			$scope.preview = false;
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent("Update Success")
+				.textContent("Success")
 				.hideDelay(3000)
-				.parent("#accountPage")
 				.position("top right")
 				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("message")
+				.hideDelay(3000)
+				.position("top right")
+				.theme("error-toast")
+				);
 		}
 	})
 
@@ -372,10 +399,7 @@ angular.module('app.account.ctrl', [])
 		}
 	}
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-	function redirect(){
-		window.location.href = $scope.path + "index.html#/accounts";
-	}
-
+	
 	//deletion related
 	deleteAccount = function(){
 		httpService.httpDelete($scope.url.account, 'DELETE_ACCOUNT');
@@ -384,7 +408,8 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("DELETE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			window.location.href = $scope.path + "index.html#/accounts";
+			$location.path("/accounts");
+	/*		window.location.href = $scope.path + "index.html#/accounts";*/
 			$mdToast.show(
 				$mdToast.simple()
 				.textContent("Success")
@@ -393,6 +418,13 @@ angular.module('app.account.ctrl', [])
 				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -401,80 +433,7 @@ angular.module('app.account.ctrl', [])
 	//upload with dialog
 	var updateUrl = $scope.url.account;
 	$scope.customFullscreen = false;
-	$scope.uploadDialog = function(ev) {
-		$mdDialog.show({
-			locals:{updateUrl: updateUrl,
-				accountId: accountId,
-				getAccount: getAccount},
-				controller: DialogController,
-				templateUrl: 'templates/upload.tmpl.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-  })
-		.then(function(answer) {
-			$scope.status = $scope.media;
-		}, function() {
-			$scope.status = 'You cancelled the dialog.';
-		});
-	};
 	
-	function DialogController($scope, $mdDialog, Upload, httpService, updateUrl, accountId, getAccount) {
-		$scope.upload = function (dataUrl, name) {
-			var uplaodForm = {
-				"files": [{
-					name: name,
-					type: "image/png",
-					size: 2048,
-					data: dataUrl
-				}],
-				"folder": "/popscoot"
-			}
-			httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uplaodForm, 'UPLOAD_IMAGE');
-			$scope.uploadStatus = "Uploading...";
-			$scope.$on("UPLOAD_IMAGE", function(event, data){
-				if(data.data.data.status == 1) {
-					console.log(data.data.data.data);
-					$scope.media = data.data.data.data[0].data;
-					$scope.uploadStatus = "Success";
-				} else {
-					console.log(data.data.data.message);
-					$scope.uploadStatus = "Failed..."+data.data.data.message;
-				}
-			});
-		}
-		
-		$scope.updateMedia = function(){
-			var updateForm = {
-				mediaId: $scope.media.mediaId
-			}
-			console.log(updateForm);
-			httpService.httpPut(updateUrl, updateForm, 'UPDATE_IMAGE');
-		}
-		$scope.$on('UPDATE_IMAGE', function(event, data){
-			if(data.data.data.status == 1) {
-				console.log(data.data.data.data);
-				$scope.account = data.data.data.data;
-				$mdDialog.hide();
-				getAccount();
-			} else {
-				console.log(data.data.data.message);
-			}
-		})
-		//test end
-		$scope.hide = function() {
-			$mdDialog.hide();
-		};
-
-		$scope.cancel = function() {
-			$mdDialog.cancel();
-		};
-
-		$scope.answer = function(answer) {
-			$mdDialog.hide(answer);
-		};
-	}
 	$scope.showPrompt = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.prompt()
@@ -516,7 +475,7 @@ angular.module('app.account.ctrl', [])
 	
 })
 
-.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout) {
+.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout, configuration) {
 	console.log('this is AccountsCtrl');
 	$scope.$emit('BC', {
 		name: "Accounts",
@@ -531,7 +490,12 @@ angular.module('app.account.ctrl', [])
 	
 	$scope.accounts = [];
 
-	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
+	var domain = configuration.domain();
+	$scope.url = {
+		accounts: domain + "/service/accounts"
+	};
+
+	$scope.url = $scope.url.accounts;
 
 	httpService.httpGet($scope.url, 'GET_ACCOUNTS');
 
@@ -665,7 +629,7 @@ angular.module('app.account.ctrl', [])
     }
 })
 
-.controller("NewAccountCtrl", function($scope, httpService, configuration){
+.controller("NewAccountCtrl", function($scope, httpService, configuration, $location, $mdToast){
 
 	var domain = configuration.domain();
 	$scope.url = {
@@ -673,7 +637,7 @@ angular.module('app.account.ctrl', [])
 	};
 	console.log("this is NewAccountCtrl");
 	$scope.$emit('BC', {
-		name: "Create Account",
+		name: "create",
 		url: "/new/account"
 	})
 	$scope.account;
@@ -689,10 +653,24 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("CREATE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.account = data.data.data.data;		
-			window.location.href = "#accounts/" + $scope.account.accountId
+			$scope.account = data.data.data.data;
+			$location.path("/accounts/" + $scope.account.accountId);	
+			/*window.location.href = "#accounts/" + $scope.account.accountId*/
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	})
 })

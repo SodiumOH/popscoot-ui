@@ -52,6 +52,7 @@ angular.module('app.scooter.ctrl', [])
 	});
 	var mediaId;
 	$scope.uploadImage = false;
+	$scope.preview = false;
 	$scope.uploadPrompt = function(){
 		$scope.uploadImage = !$scope.uploadImage;
 	}
@@ -80,6 +81,7 @@ angular.module('app.scooter.ctrl', [])
 						$scope.media = data.data.data.data[0].data;
 						$scope.uploadStatus = "Success";
 						mediaId = $scope.media.mediaId;
+						$scope.preview = true;
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
@@ -103,6 +105,7 @@ angular.module('app.scooter.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.scooter = data.data.data.data;
 			$scope.uploadImage = false;
+			$scope.preview = false;
 		} else {
 			console.log(data.data.data.message);
 		}

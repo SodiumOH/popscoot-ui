@@ -1,5 +1,5 @@
 angular.module('app.tracking.ctrl', [])
-.controller('TrackingCtrl', function($scope, $sce, $routeParams, $sce){
+.controller('TrackingCtrl', function($scope, $sce, $routeParams, $sce, configuration){
 	console.log("this is traking control");
 	$scope.$emit("BC", {
 		name: "Tracking",
@@ -8,7 +8,7 @@ angular.module('app.tracking.ctrl', [])
 	
 	console.log($scope.trackingId);
 	$scope.param = {
-		trackingSource: $sce.trustAsResourceUrl("http://test.popscoot.com/gps/pmds/" + $routeParams.id)
+		trackingSource: $sce.trustAsResourceUrl(configuration.iframe()+"/pmds/" + $routeParams.id)
 	}
 	console.log($scope.trackingId);
 })

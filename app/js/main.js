@@ -72,10 +72,18 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		socialMedia: "social media",
 		facebookId: "FacebookID",
 		birthday: "birthday",
+		shareLogs: "shareLogs",
+		shareLog: "shareLog",
+		shareLogId: "shareLogID",
+		gateway: "gateway",
 		createAccount: "Create New Account",
 		basicInformation: "Basic Information",
 		details: "details",
 		pushTokens: "pushTokens",
+		pushTokenId: "pushTokenId",
+		token: "token",
+		device: "device",
+		status: "status",
 		//scooters
 		scooter: "scooter",
 		scooterId: "Scooter ID",
@@ -118,6 +126,9 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		transactions: "transactions",
 		transaction: "transaction",
 		createPayment: "create new payment",
+		//transaction:
+		transactionId: "transactionId",
+		tamount: "amount",
 		//promotion
 		promotion: "promotion",
 		promotionId: "promotion ID",
@@ -185,10 +196,16 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		birthday: "生日",
 		shareLogs: "社交转发",
 		shareLog: "社交转发",
+		shareLogId: "转发编码",
+		gateway: "平台",
 		createAccount: "新增",		
 		basicInformation: "基本信息",
 		details: "详情",
 		pushTokens: "推送码",
+		pushTokenId: "推送码编号",
+		token: "码",
+		device: "设备",
+		status: "状态",
 		//踏板车相关
 		scooter: "踏板车",
 		scooterId: "踏板车编码",
@@ -231,6 +248,9 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		credential2: "支付信息2",
 		credential3: "支付信息3",
 		createPayment: "新增",
+		//转帐相关:
+		transactionId: "转帐编码",
+		tamount: "额度",
 		//促销活动相关
 		promotion: "促销活动",
 		promotionId: "活动编码",
@@ -755,7 +775,9 @@ angular.module('app.account.ctrl', [])
 		shareLogs: domain + "/service/accounts/" + accountId + "/shareLogs",
 		pushTokens: domain + "/service/accounts/" + accountId + "/pushTokens",
 		transactions: domain + "/service/accounts/" + accountId + "/transactions",
-		payments: domain + "/service/accounts/" + accountId + "/payments"
+		payments: domain + "/service/accounts/" + accountId + "/payments",
+		upload: domain+"/service/file/upload",
+		applyPromotion: domain+"/api/promotion/apply"
 	};
 
 	//hovers
@@ -839,7 +861,6 @@ angular.module('app.account.ctrl', [])
 			$scope.$emit("GETFINISHED");
 		} else {
 			console.log(data.data.data.message);
-			redirect();
 		}
 	});
 
@@ -941,7 +962,7 @@ angular.module('app.account.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost($scope.url.upload, uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -954,12 +975,18 @@ angular.module('app.account.ctrl', [])
 							$mdToast.simple()
 							.textContent("Click on update button to update")
 							.hideDelay(3000)
-							.parent("#accountPage")
 							.position("top right")
 							);
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent(message)
+							.hideDelay(3000)
+							.position("top right")
+							.theme('error-toast')
+							);
 
 					}
 				});
@@ -988,16 +1015,29 @@ angular.module('app.account.ctrl', [])
 				promotionId: answer.promotionId
 			}
 			console.log(updateForm);
-			httpService.httpPost("http://test.popscoot.com/popscoot/api/promotion/apply", updateForm ,'APPLY_PROMOTION');
+			httpService.httpPost($scope.url.applyPromotion, updateForm ,'APPLY_PROMOTION');
 			$scope.$on("APPLY_PROMOTION", function(event, data){
 				console.log(data);
 				if(data.status == 1) {
 					console.log(data.data.data);
 					$scope.promotions.push(answer);
 					getPromotions();
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 
 				} else {
 					console.log(data.data.message);
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent(message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 
 				}
 			})
@@ -1021,8 +1061,8 @@ angular.module('app.account.ctrl', [])
 		$scope.search;
 		$scope.getNumberOfPages = function() {
 			var count = $scope.accounts.length / $scope.itemsPerPage;
-			if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-			return count;
+			if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
+			return Math.floor(count);
 		}
 
 		$scope.pageDown = function()
@@ -1066,15 +1106,22 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.account = data.data.data.data;
 			$scope.uploadImage = false;
+			$scope.preview = false;
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent("Update Success")
+				.textContent("Success")
 				.hideDelay(3000)
-				.parent("#accountPage")
 				.position("top right")
 				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("message")
+				.hideDelay(3000)
+				.position("top right")
+				.theme("error-toast")
+				);
 		}
 	})
 
@@ -1104,10 +1151,7 @@ angular.module('app.account.ctrl', [])
 		}
 	}
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-	function redirect(){
-		window.location.href = $scope.path + "index.html#/accounts";
-	}
-
+	
 	//deletion related
 	deleteAccount = function(){
 		httpService.httpDelete($scope.url.account, 'DELETE_ACCOUNT');
@@ -1116,7 +1160,8 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("DELETE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			window.location.href = $scope.path + "index.html#/accounts";
+			$location.path("/accounts");
+	/*		window.location.href = $scope.path + "index.html#/accounts";*/
 			$mdToast.show(
 				$mdToast.simple()
 				.textContent("Success")
@@ -1125,6 +1170,13 @@ angular.module('app.account.ctrl', [])
 				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -1133,80 +1185,7 @@ angular.module('app.account.ctrl', [])
 	//upload with dialog
 	var updateUrl = $scope.url.account;
 	$scope.customFullscreen = false;
-	$scope.uploadDialog = function(ev) {
-		$mdDialog.show({
-			locals:{updateUrl: updateUrl,
-				accountId: accountId,
-				getAccount: getAccount},
-				controller: DialogController,
-				templateUrl: 'templates/upload.tmpl.html',
-				parent: angular.element(document.body),
-				targetEvent: ev,
-				clickOutsideToClose:true,
-      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-  })
-		.then(function(answer) {
-			$scope.status = $scope.media;
-		}, function() {
-			$scope.status = 'You cancelled the dialog.';
-		});
-	};
 	
-	function DialogController($scope, $mdDialog, Upload, httpService, updateUrl, accountId, getAccount) {
-		$scope.upload = function (dataUrl, name) {
-			var uplaodForm = {
-				"files": [{
-					name: name,
-					type: "image/png",
-					size: 2048,
-					data: dataUrl
-				}],
-				"folder": "/popscoot"
-			}
-			httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uplaodForm, 'UPLOAD_IMAGE');
-			$scope.uploadStatus = "Uploading...";
-			$scope.$on("UPLOAD_IMAGE", function(event, data){
-				if(data.data.data.status == 1) {
-					console.log(data.data.data.data);
-					$scope.media = data.data.data.data[0].data;
-					$scope.uploadStatus = "Success";
-				} else {
-					console.log(data.data.data.message);
-					$scope.uploadStatus = "Failed..."+data.data.data.message;
-				}
-			});
-		}
-		
-		$scope.updateMedia = function(){
-			var updateForm = {
-				mediaId: $scope.media.mediaId
-			}
-			console.log(updateForm);
-			httpService.httpPut(updateUrl, updateForm, 'UPDATE_IMAGE');
-		}
-		$scope.$on('UPDATE_IMAGE', function(event, data){
-			if(data.data.data.status == 1) {
-				console.log(data.data.data.data);
-				$scope.account = data.data.data.data;
-				$mdDialog.hide();
-				getAccount();
-			} else {
-				console.log(data.data.data.message);
-			}
-		})
-		//test end
-		$scope.hide = function() {
-			$mdDialog.hide();
-		};
-
-		$scope.cancel = function() {
-			$mdDialog.cancel();
-		};
-
-		$scope.answer = function(answer) {
-			$mdDialog.hide(answer);
-		};
-	}
 	$scope.showPrompt = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.prompt()
@@ -1248,7 +1227,7 @@ angular.module('app.account.ctrl', [])
 	
 })
 
-.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout) {
+.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout, configuration) {
 	console.log('this is AccountsCtrl');
 	$scope.$emit('BC', {
 		name: "Accounts",
@@ -1263,7 +1242,12 @@ angular.module('app.account.ctrl', [])
 	
 	$scope.accounts = [];
 
-	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
+	var domain = configuration.domain();
+	$scope.url = {
+		accounts: domain + "/service/accounts"
+	};
+
+	$scope.url = $scope.url.accounts;
 
 	httpService.httpGet($scope.url, 'GET_ACCOUNTS');
 
@@ -1397,7 +1381,7 @@ angular.module('app.account.ctrl', [])
     }
 })
 
-.controller("NewAccountCtrl", function($scope, httpService, configuration){
+.controller("NewAccountCtrl", function($scope, httpService, configuration, $location, $mdToast){
 
 	var domain = configuration.domain();
 	$scope.url = {
@@ -1405,7 +1389,7 @@ angular.module('app.account.ctrl', [])
 	};
 	console.log("this is NewAccountCtrl");
 	$scope.$emit('BC', {
-		name: "Create Account",
+		name: "create",
 		url: "/new/account"
 	})
 	$scope.account;
@@ -1421,10 +1405,24 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("CREATE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.account = data.data.data.data;		
-			window.location.href = "#accounts/" + $scope.account.accountId
+			$scope.account = data.data.data.data;
+			$location.path("/accounts/" + $scope.account.accountId);	
+			/*window.location.href = "#accounts/" + $scope.account.accountId*/
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	})
 })
@@ -1437,15 +1435,16 @@ angular.module('app.analytics.ctrl', [])
 
 angular.module('app.bank.ctrl', [])
 
-.controller('BankCtrl', function($scope,$mdDialog,$location, $routeParams, httpService) {
+.controller('BankCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
 	console.log('this is BankCtrl')
+	var domain = configuration.domain();
 	$scope.$emit('BC', {
 		name: "Bank",
 		url: "banks/"+$routeParams.id
 	})
 	$scope.bank;
 	$scope.url = {
-		bank: "http://test.popscoot.com/popscoot/service/banks/"+$routeParams.id
+		bank: domain+"/service/banks/"+$routeParams.id
 	}
 	function getBank (){
 		httpService.httpGet($scope.url.bank, "GET_BANK");		
@@ -1501,7 +1500,8 @@ angular.module('app.bank.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.bank.bankId) {
     		deleteBank();    		
-    		window.location.href = $scope.path + "index.html#/banks";
+    		$location.path("/banks");
+    		/*window.location.href = $scope.path + "index.html#/banks";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -1515,7 +1515,7 @@ angular.module('app.bank.ctrl', [])
 
 })
 
-.controller('BanksCtrl', function($scope, $location, httpService) {
+.controller('BanksCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is BanksCtrl');
 	$scope.$emit('BC', {
 		name: "Banks",
@@ -1526,7 +1526,8 @@ angular.module('app.bank.ctrl', [])
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
 	// }
-	$scope.url = "http://test.popscoot.com/popscoot/service/banks"
+	var domain = configuration.domain();
+	$scope.url = domain + "/service/banks";
 	$scope.banks;
 
 	httpService.httpGet($scope.url, 'GET_BANKS');
@@ -1571,14 +1572,19 @@ angular.module('app.bank.ctrl', [])
     //pagination end
 
 })
-.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService){
+.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
 	console.log("this is NewBankCtrl");
 	$scope.$emit('BC', {
 		name: "Create Banks",
 		url: "new/bank"
 	})
+	var domain = configuration.domain();
+	$scope.url = {
+		get: domain + "/service/accounts/",
+		create: domain + "/service/banks"
+	};
 	function getAccounts() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
+		httpService.httpGet($scope.url.get, 'GET_BACCOUNTS');
 	}
 
 	$scope.$on("GET_BACCOUNTS", function(event, data){
@@ -1662,13 +1668,14 @@ angular.module('app.bank.ctrl', [])
 		var createForm = $scope.bank;
 		createForm.accountId = parseInt($scope.accountId);
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/banks", createForm, 'CREATE_BANK');
+		httpService.httpPost($scope.url.create, createForm, 'CREATE_BANK');
 	}
 	$scope.$on("CREATE_BANK", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;		
-			window.location.href = "#banks/" + $scope.bank.bankId;
+			$location.path("/banks/"+$scope.bank.bankId);
+			/*window.location.href = "#banks/" + $scope.bank.bankId;*/
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -1749,7 +1756,8 @@ angular.module('app.booking.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.booking.bookingId) {
     		deleteBooking();    		
-    		window.location.href = $scope.path + "index.html#/bookings";
+    		$location.path('/bookings');
+    		/*window.location.href = $scope.path + "index.html#/bookings";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -1763,19 +1771,22 @@ getBooking();
 
 })
 
-.controller('BookingsCtrl', function($scope, $location, httpService) {
+.controller('BookingsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is BookingsCtrl');
 	$scope.$emit('BC', {
 		name: "Bookings",
 		url: "bookings"
 	})
 	$scope.path = "#/bookings/";
+
 	// var path = $location.path();
 	// $scope.goPage = function(path){
 	// 	$location.path(path);
+
 	// }
-	$scope.url = "http://test.popscoot.com/popscoot/service"+$location.path();
-	console.log($scope.url);
+	$scope.url = {
+		bookings: configuration.domain()+"/service/bookings/"
+	}
 	$scope.bookings=[];
 	/*if ($location.path().split("/")[1] == "accounts") {
 		$scope.bookings = data.bookings;
@@ -1785,7 +1796,7 @@ getBooking();
 	
 
 
-	httpService.httpGet($scope.url, 'GET_BOOKINGS');
+	httpService.httpGet($scope.url.bookings, 'GET_BOOKINGS');
 
 	$scope.$on("GET_BOOKINGS", function(event, data){
 		if(data.data.data.status == 1) {
@@ -1828,7 +1839,7 @@ getBooking();
     //pagination end
 })
 
-.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration){
+.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
 	console.log("this is NewBookingCtrl");
 	$scope.$emit('BC', {
 		name: "Create Bookings",
@@ -1838,12 +1849,20 @@ getBooking();
 		startDate: moment().toDate(),
 		endDate: moment().toDate()
 	}
+
+	$scope.url = {
+		accounts: configuration.domain()+"/service/accounts/",
+		scooters: configuration.domain()+"/service/scooters/",
+		bookings: configuration.domain()+"/service/bookings/"
+	}
+
+
 	$scope.createBooking = function(){
 		httpService.httpPost
 	}
 
 	function getAccounts() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_TACCOUNTS');
+		httpService.httpGet($scop.url.accounts, 'GET_TACCOUNTS');
 	}
 
 	$scope.$on("GET_TACCOUNTS", function(event, data){
@@ -1858,7 +1877,7 @@ getBooking();
 		
 	});
 	function getScooters() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/scooters", 'GET_TSCOOTERS');
+		httpService.httpGet($scop.url.scooters, 'GET_TSCOOTERS');
 	}
 
 	$scope.$on("GET_TSCOOTERS", function(event, data){
@@ -1952,7 +1971,7 @@ getBooking();
 		});
 	};
 	
-	function DialogController2($scope, $mdDialog, Upload, httpService, localSco) {
+	function DialogController2($scope, $mdDialog, Upload, httpService, localSco, $location) {
 		$scope.scooters = localSco;
 		console.log($scope.scooters);
 
@@ -2002,12 +2021,13 @@ getBooking();
 		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
 		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
 		console.log(create);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/bookings", create, "CREATE_BOOKING");
+		httpService.httpPost($scope.url.bookings, create, "CREATE_BOOKING");
 	}
 	$scope.$on("CREATE_BOOKING", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);	
-			window.location.href = "#bookings/" + $scope.booking.bookingId
+			$location.path('/bookings/'+$scope.booking.bookingId);
+			/*window.location.href = "#bookings/" + $scope.booking.bookingId*/
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -2015,10 +2035,10 @@ getBooking();
 })
 angular.module('app.dashboard.ctrl', [])
 
-.controller('DashboardCtrl', function($scope, $sce) {
+.controller('DashboardCtrl', function($scope, $sce, configuration) {
 	console.log('this is DashboardCtrl');
 	$scope.loadingIframe = true;
-	$scope.mapSource = $sce.trustAsResourceUrl("http://test.popscoot.com/gps/map");
+	$scope.mapSource = $sce.trustAsResourceUrl(configuration.iframe()+"/map");
 	window.uploadDone = function(){
 		console.log(666);
 		$scope.loadingIframe = false;
@@ -2028,7 +2048,7 @@ angular.module('app.dashboard.ctrl', [])
 
 angular.module('app.enquiry.ctrl', [])
 
-.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService) {
+.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService, configuration) {
 	console.log('this is EnquiryCtrl');
 	$scope.$emit('BC', {
 		name: "Enquiry",
@@ -2036,7 +2056,7 @@ angular.module('app.enquiry.ctrl', [])
 	})
 	$scope.enquiry;
 	$scope.url = {
-		enquiry: "http://test.popscoot.com/popscoot/service/enquiries/"+$routeParams.id
+		enquiry: configuration.domain() + "/service/enquiries/"+$routeParams.id
 	}
 	//console.log($scope.url);
 	function getEnquiry(){
@@ -2092,8 +2112,9 @@ angular.module('app.enquiry.ctrl', [])
     $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.enquiry.enquiryId) {
-    		deleteEnquiry();    		
-    		window.location.href = $scope.path + "index.html#/enquiries";
+    		deleteEnquiry();    
+    		$location.path('/enquiries');		
+    		/*window.location.href = $scope.path + "index.html#/enquiries";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -2106,7 +2127,7 @@ angular.module('app.enquiry.ctrl', [])
 	getEnquiry();
 })
 
-.controller('EnquiriesCtrl', function($scope, $location, httpService) {
+.controller('EnquiriesCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is EnquiriesCtrl')
 	$scope.$emit('BC', {
 		name: "Enquiries",
@@ -2148,7 +2169,7 @@ angular.module('app.enquiry.ctrl', [])
     //pagination end
 
     $scope.enquiries = [];
-    $scope.url = "http://test.popscoot.com/popscoot/service/enquiries"
+    $scope.url = configuration.domain() + "/service/enquiries"
 
     httpService.httpGet($scope.url, 'GET_ENQUIRIES');
 
@@ -2165,14 +2186,15 @@ angular.module('app.enquiry.ctrl', [])
 })
 angular.module('app.help.ctrl', [])
 
-.controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
+.controller('HelpCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
 	console.log('this is HelpCtrl');
 	$scope.$emit('BC', {
 		name: "Help",
 		url: "helps/"+$routeParams.id
 	})
 	$scope.url = {
-		help: "http://test.popscoot.com/popscoot/service/helps/"+ $routeParams.id
+		help: configuration.domain() + "/service/helps/"+ $routeParams.id,
+		upload: configuration.domain() + "service/file/upload/"
 	};
 	$scope.help;
 	function getHelp(){
@@ -2222,7 +2244,7 @@ angular.module('app.help.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost($scope.url.upload, uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -2287,7 +2309,8 @@ angular.module('app.help.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.help.helpId) {
     		deleteHelp();    		
-    		window.location.href = $scope.path + "index.html#/helps";
+    		$location.path("/helps");
+    		/*window.location.href = $scope.path + "index.html#/helps";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -2301,7 +2324,7 @@ angular.module('app.help.ctrl', [])
 getHelp();
 })
 
-.controller('HelpsCtrl', function($scope, $location, httpService) {
+.controller('HelpsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is HelpsCtrl')
 	$scope.$emit('BC', {
 		name: "Helps",
@@ -2312,7 +2335,8 @@ getHelp();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.url = "http://test.popscoot.com/popscoot/service/helps"
+
+	$scope.url = configuration.domain() + "/service/helps";
 
 	$scope.itemsOrder = "order";
 	$scope.reverse = true;
@@ -2375,7 +2399,7 @@ getHelp();
         }
         console.log("hihihihi");
         console.log(orders);
-        httpService.httpPut("http://test.popscoot.com/popscoot/service/helps", orders, "UPDATE_ORDERS");
+        httpService.httpPut($scope.url, orders, "UPDATE_ORDERS");
         $scope.$on("UPDATE_ORDERS", function(eve, data){
         	if(data.data.data.status == 1) {
         		console.log(data.data.data.data);
@@ -2447,7 +2471,7 @@ getHelp();
     //pagination end
 
 })
-.controller("NewHelpCtrl", function($scope, httpService){
+.controller("NewHelpCtrl", function($scope, httpService, configuration, $location){
 	console.log("this is NewHelpCtrl");
 	$scope.$emit('BC', {
 		name: "Create Helps",
@@ -2457,13 +2481,14 @@ getHelp();
 	$scope.createHelp = function(){
 		var createForm = $scope.help;
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/helps", createForm, 'CREATE_HELP');
+		httpService.httpPost((configuration.domain + "/service/helps"), createForm, 'CREATE_HELP');
 	}
 	$scope.$on("CREATE_HELP", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.help = data.data.data.data;		
-			window.location.href = "#helps/" + $scope.help.helpId;
+			$location.path("/helps/"+$scope.help.helpId);
+			/*window.location.href = "#helps/" + $scope.help.helpId;*/
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -2473,11 +2498,11 @@ getHelp();
 
 angular.module('app.payment.ctrl', [])
 
-.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService) {
+.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
 	console.log('this is PaymentCtrl');
 	$scope.url = {
-		payment: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id,
-		transactions: "http://test.popscoot.com/popscoot/service/payments/"+$routeParams.id+"/transactions"
+		payment: configuration.domain()+"/service/payments/"+$routeParams.id,
+		transactions: configuration.domain()+"/service/payments/"+$routeParams.id+"/transactions"
 	};
 	$scope.$emit('BC', 
 	{
@@ -2541,7 +2566,8 @@ angular.module('app.payment.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.payment.paymentId) {
     		deletepayment();    		
-    		window.location.href = $scope.path + "index.html#/payments";
+    		$location.path('/payments');
+    		/*window.location.href = $scope.path + "index.html#/payments";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -2570,14 +2596,14 @@ getPayment();
 getTransactions();
 })
 
-.controller('PaymentsCtrl', function($scope, $location, httpService) {
+.controller('PaymentsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is PaymentsCtrl');
 	$scope.path = "#/payments/";
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.url = "http://test.popscoot.com/popscoot/service/payments"
+	$scope.url = configuration.domain()+"/service/payments";
 	$scope.payments;
 
 	httpService.httpGet($scope.url, 'GET_PAYMENTS');
@@ -2626,10 +2652,10 @@ getTransactions();
      }
     //pagination end
 })
-.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog){
+.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog, configuration, $location){
 	console.log("this is NewPaymentCtrl");
 	function getAccounts() {
-		httpService.httpGet("http://test.popscoot.com/popscoot/service/accounts", 'GET_BACCOUNTS');
+		httpService.httpGet((configuration.domain()+"/service/accounts"), 'GET_BACCOUNTS');
 	}
 	$scope.$emit('BC', 
 	{
@@ -2717,13 +2743,14 @@ getTransactions();
 		var createForm = $scope.payment;
 		createForm.accountId = $scope.accountId;
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/payments", createForm, 'CREATE_PAYMENT');
+		httpService.httpPost((configuration.domain()+"/service/payments"), createForm, 'CREATE_PAYMENT');
 	}
 	$scope.$on("CREATE_PAYMENT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.payment = data.data.data.data;		
-			window.location.href = "#payments/" + $scope.payment.paymentId;
+			$scope.payment = data.data.data.data;
+			$location.path("/payments/"+$scope.payment.paymentId);		
+			/*window.location.href = "#payments/" + $scope.payment.paymentId;*/
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -2734,7 +2761,7 @@ getTransactions();
 
 angular.module('app.promotion.ctrl', [])
 
-.controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location) {
+.controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location, configuration) {
 	console.log('this is PromotionCtrl')
 	$scope.$emit('BC', {
 		name: "Promotion",
@@ -2743,8 +2770,8 @@ angular.module('app.promotion.ctrl', [])
 	$scope.accounts;
 	$scope.promotion;
 	$scope.url = {
-		promotion: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id,
-		accounts: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id+"/accounts"
+		promotion: configuration.domain()+"/service/promotions/"+$routeParams.id,
+		accounts: configuration.domain()+"/service/promotions/"+$routeParams.id+"/accounts"
 	}
 
 	//console.log($scope.url);
@@ -2791,6 +2818,7 @@ angular.module('app.promotion.ctrl', [])
 
 	var mediaId;
 	$scope.uploadImage = false;
+	$scope.preview = false;
 	$scope.uploadPrompt = function(){
 		$scope.uploadImage = !$scope.uploadImage;
 	}
@@ -2811,7 +2839,7 @@ angular.module('app.promotion.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost((configuration.domain()+"/file/upload/"), uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -2819,6 +2847,7 @@ angular.module('app.promotion.ctrl', [])
 						$scope.media = data.data.data.data[0].data;
 						$scope.uploadStatus = "Success";
 						mediaId = $scope.media.mediaId;
+						$scope.preview = true;
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
@@ -2837,20 +2866,21 @@ angular.module('app.promotion.ctrl', [])
 		var updateForm = $scope.promotion;
 		updateForm.mediaId = mediaId;
 		console.log(updateForm);
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, updateForm, 'UPDAT_PROMOTION');
+		httpService.httpPut($scope.url.promotion, updateForm, 'UPDAT_PROMOTION');
 	}
 	$scope.$on('UPDAT_PROMOTION', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;
 			$scope.uploadImage = false;
+			$scope.preview = false;
 		} else {
 			console.log(data.data.data.message);
 		}
 	})
 
 	var deletePromotion = function(){
-		httpService.httpDelete("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, 'DELETE_PROMOTION');
+		httpService.httpDelete($scope.url.promotion, 'DELETE_PROMOTION');
 	}
 
 	$scope.$on("DELETE_PROMOTION", function(event, data){
@@ -2876,7 +2906,8 @@ angular.module('app.promotion.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.promotion.promotionId) {
     		deletePromotion();    		
-    		window.location.href = $scope.path + "index.html#/promotions";
+    		$location.path('/promotions');
+    		/*window.location.href = $scope.path + "index.html#/promotions";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -2908,7 +2939,7 @@ $scope.pageUp = function()
 }
 })
 
-.controller('PromotionsCtrl', function($scope, $location, httpService) {
+.controller('PromotionsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is PromotionsCtrl');
 	$scope.$emit('BC', {
 		name: "Promotions",
@@ -2920,7 +2951,7 @@ $scope.pageUp = function()
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.url = "http://test.popscoot.com/popscoot/service/promotions"
+	$scope.url = configuration.domain()+"/service/promotions";
 
 	httpService.httpGet($scope.url, 'GET_PROMOTIONS');
 	$scope.promotions;
@@ -2964,7 +2995,7 @@ $scope.pageUp = function()
     //pagination end
 })
 
-.controller("NewPromotionCtrl", function($scope, httpService){
+.controller("NewPromotionCtrl", function($scope, httpService, configuration, $location){
 	console.log("this is NewPromotionCtrl");
 	$scope.$emit('BC', {
 		name: "Promotions",
@@ -2974,26 +3005,19 @@ $scope.pageUp = function()
 	$scope.createPromotion = function(){
 		var createForm = $scope.promotion;
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/promotions", createForm, 'CREATE_PROMOTION');
+		httpService.httpPost(configuration.domain()+"/service/promotions", createForm, 'CREATE_PROMOTION');
 	}
 	$scope.$on("CREATE_PROMOTION", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;		
-			window.location.href = "#promotions/" + $scope.promotion.promotionId;
+			$location.path('/promotions/'+$scope.promotion.promotionId);
+			/*window.location.href = "#promotions/" + $scope.promotion.promotionId;*/
 		} else {
 			console.log(data.data.data.message);
 		}
 	})
 })
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
-})
-
 angular.module('app.scooter.ctrl', [])
 
 .controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
@@ -3048,6 +3072,7 @@ angular.module('app.scooter.ctrl', [])
 	});
 	var mediaId;
 	$scope.uploadImage = false;
+	$scope.preview = false;
 	$scope.uploadPrompt = function(){
 		$scope.uploadImage = !$scope.uploadImage;
 	}
@@ -3076,6 +3101,7 @@ angular.module('app.scooter.ctrl', [])
 						$scope.media = data.data.data.data[0].data;
 						$scope.uploadStatus = "Success";
 						mediaId = $scope.media.mediaId;
+						$scope.preview = true;
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
@@ -3099,6 +3125,7 @@ angular.module('app.scooter.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.scooter = data.data.data.data;
 			$scope.uploadImage = false;
+			$scope.preview = false;
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -3245,7 +3272,7 @@ getBookings();
 
 
 angular.module('app.tracking.ctrl', [])
-.controller('TrackingCtrl', function($scope, $sce, $routeParams, $sce){
+.controller('TrackingCtrl', function($scope, $sce, $routeParams, $sce, configuration){
 	console.log("this is traking control");
 	$scope.$emit("BC", {
 		name: "Tracking",
@@ -3254,7 +3281,7 @@ angular.module('app.tracking.ctrl', [])
 	
 	console.log($scope.trackingId);
 	$scope.param = {
-		trackingSource: $sce.trustAsResourceUrl("http://test.popscoot.com/gps/pmds/" + $routeParams.id)
+		trackingSource: $sce.trustAsResourceUrl(configuration.iframe()+"/pmds/" + $routeParams.id)
 	}
 	console.log($scope.trackingId);
 })
@@ -3399,6 +3426,9 @@ angular.module('app.service', [])
     return {
         domain: function() {
             return "http://test.popscoot.com/popscoot/";
+        },
+        iframe: function(){
+            return "http://test.popscoot.com/gps/";
         }
     }
 })
@@ -3736,6 +3766,7 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 .controller("AuthCtrl", function($rootScope, $window){
 	console.log("Auth Ctrl");
 	$rootScope.browserHeight = $window.innerHeight;
+
 })
 /*.controller('LoginCtrl', function($scope, httpService, configuration){
 	var loginForm = {
@@ -3752,12 +3783,12 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 
 */
 angular.module('app.changePassword.ctrl', [])
-.controller('ChangePasswordCtrl', function($scope, httpService){
+.controller('ChangePasswordCtrl', function($scope, httpService, configuration){
 	console.log("ChangePasswordCtrl");
 	
 	$scope.updatePWForm;
 	$scope.updatePassword = function(){
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
+		httpService.httpPut(configuration.domain()+"/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
 	}
 	$scope.$on('CHANGE_PASSOWRD', function(event, data){
 		if(data.data.data.status == 1) {

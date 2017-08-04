@@ -48,7 +48,7 @@
              </md-card-title-media>
            </md-card-title>
            <md-card-actions layout="row" layout-align="end center"> 
-            <md-switch ng-model="account.active" aria-label="Switch 1" ng-change>{{account.active?"activated":"deactivated"|translate}}</md-switch>
+            <md-switch ng-model="account.active" aria-label="Switch 1">{{account.active?"activated":"deactivated"|translate}}</md-switch>
             <md-button class="md-raised" ng-href="{{path+account.accountId}}">{{'details'|translate}}</md-button>
           </md-card-actions>
         </md-card>
@@ -56,9 +56,9 @@
 
     </div>  
     <div layout="row" layout-align="space-around center">
-      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'prev'|translate}}</md-button>
+      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
       
-      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'next'|translate}}</md-button>
+      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
     </div>
   </div>
 </md-card>

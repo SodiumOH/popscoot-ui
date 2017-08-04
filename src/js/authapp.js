@@ -33,6 +33,7 @@ angular.module('auth', ['ngRoute', 'ngMaterial', 'app.service', 'app.forgetPassw
 .controller("AuthCtrl", function($rootScope, $window){
 	console.log("Auth Ctrl");
 	$rootScope.browserHeight = $window.innerHeight;
+
 })
 /*.controller('LoginCtrl', function($scope, httpService, configuration){
 	var loginForm = {

@@ -1,6 +1,6 @@
 angular.module('app.promotion.ctrl', [])
 
-.controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location) {
+.controller('PromotionCtrl', function($scope, $routeParams, httpService, $mdDialog, $location, configuration) {
 	console.log('this is PromotionCtrl')
 	$scope.$emit('BC', {
 		name: "Promotion",
@@ -9,8 +9,8 @@ angular.module('app.promotion.ctrl', [])
 	$scope.accounts;
 	$scope.promotion;
 	$scope.url = {
-		promotion: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id,
-		accounts: "http://test.popscoot.com/popscoot/service/promotions/"+$routeParams.id+"/accounts"
+		promotion: configuration.domain()+"/service/promotions/"+$routeParams.id,
+		accounts: configuration.domain()+"/service/promotions/"+$routeParams.id+"/accounts"
 	}
 
 	//console.log($scope.url);
@@ -57,6 +57,7 @@ angular.module('app.promotion.ctrl', [])
 
 	var mediaId;
 	$scope.uploadImage = false;
+	$scope.preview = false;
 	$scope.uploadPrompt = function(){
 		$scope.uploadImage = !$scope.uploadImage;
 	}
@@ -77,7 +78,7 @@ angular.module('app.promotion.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost((configuration.domain()+"/file/upload/"), uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -85,6 +86,7 @@ angular.module('app.promotion.ctrl', [])
 						$scope.media = data.data.data.data[0].data;
 						$scope.uploadStatus = "Success";
 						mediaId = $scope.media.mediaId;
+						$scope.preview = true;
 					} else {
 						console.log(data.data.data.message);
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
@@ -103,20 +105,21 @@ angular.module('app.promotion.ctrl', [])
 		var updateForm = $scope.promotion;
 		updateForm.mediaId = mediaId;
 		console.log(updateForm);
-		httpService.httpPut("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, updateForm, 'UPDAT_PROMOTION');
+		httpService.httpPut($scope.url.promotion, updateForm, 'UPDAT_PROMOTION');
 	}
 	$scope.$on('UPDAT_PROMOTION', function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;
 			$scope.uploadImage = false;
+			$scope.preview = false;
 		} else {
 			console.log(data.data.data.message);
 		}
 	})
 
 	var deletePromotion = function(){
-		httpService.httpDelete("http://test.popscoot.com/popscoot/service/promotions/"+$scope.promotion.promotionId, 'DELETE_PROMOTION');
+		httpService.httpDelete($scope.url.promotion, 'DELETE_PROMOTION');
 	}
 
 	$scope.$on("DELETE_PROMOTION", function(event, data){
@@ -142,7 +145,8 @@ angular.module('app.promotion.ctrl', [])
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.promotion.promotionId) {
     		deletePromotion();    		
-    		window.location.href = $scope.path + "index.html#/promotions";
+    		$location.path('/promotions');
+    		/*window.location.href = $scope.path + "index.html#/promotions";*/
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -174,7 +178,7 @@ $scope.pageUp = function()
 }
 })
 
-.controller('PromotionsCtrl', function($scope, $location, httpService) {
+.controller('PromotionsCtrl', function($scope, $location, httpService, configuration) {
 	console.log('this is PromotionsCtrl');
 	$scope.$emit('BC', {
 		name: "Promotions",
@@ -186,7 +190,7 @@ $scope.pageUp = function()
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.url = "http://test.popscoot.com/popscoot/service/promotions"
+	$scope.url = configuration.domain()+"/service/promotions";
 
 	httpService.httpGet($scope.url, 'GET_PROMOTIONS');
 	$scope.promotions;
@@ -230,7 +234,7 @@ $scope.pageUp = function()
     //pagination end
 })
 
-.controller("NewPromotionCtrl", function($scope, httpService){
+.controller("NewPromotionCtrl", function($scope, httpService, configuration, $location){
 	console.log("this is NewPromotionCtrl");
 	$scope.$emit('BC', {
 		name: "Promotions",
@@ -240,22 +244,16 @@ $scope.pageUp = function()
 	$scope.createPromotion = function(){
 		var createForm = $scope.promotion;
 		console.log(createForm);
-		httpService.httpPost("http://test.popscoot.com/popscoot/service/promotions", createForm, 'CREATE_PROMOTION');
+		httpService.httpPost(configuration.domain()+"/service/promotions", createForm, 'CREATE_PROMOTION');
 	}
 	$scope.$on("CREATE_PROMOTION", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.promotion = data.data.data.data;		
-			window.location.href = "#promotions/" + $scope.promotion.promotionId;
+			$location.path('/promotions/'+$scope.promotion.promotionId);
+			/*window.location.href = "#promotions/" + $scope.promotion.promotionId;*/
 		} else {
 			console.log(data.data.data.message);
 		}
 	})
-})
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
 })
