@@ -458,7 +458,9 @@ angular.module('app.root.ctrl', [])
 	$scope.$on('BC', function(evt, data){
 		$scope.breadcrumbs.push(data);
 		console.log($scope.breadcrumbs);
+		$scope.BCLength = $scope.breadcrumbs.length-1;
 	});
+
 	$scope.goHome = function(){
 		window.location.href =  $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/" +"index.html";
 		$scope.breadcrumbs = [];
@@ -1114,8 +1116,8 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("DELETE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-    		window.location.href = $scope.path + "index.html#/accounts";
-    		$mdToast.show(
+			window.location.href = $scope.path + "index.html#/accounts";
+			$mdToast.show(
 				$mdToast.simple()
 				.textContent("Success")
 				.hideDelay(3000)
@@ -1258,11 +1260,7 @@ angular.module('app.account.ctrl', [])
 	// 	$location.path(path);
 	// }
 
-	$scope.itemsOrder = "active";
-	$scope.reverse = true;
-	$scope.order = function(){
-		$scope.reverse = !$scope.reverse;
-	}
+	
 	$scope.accounts = [];
 
 	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
@@ -1349,7 +1347,7 @@ angular.module('app.account.ctrl', [])
     
 
 
-    //pagination start
+   /*
     $scope.itemsPerRow;
     if ($mdMedia('gt-md')) {
     	$scope.itemsPerRow = 3;
@@ -1358,25 +1356,34 @@ angular.module('app.account.ctrl', [])
     } else {
     	$scope.itemsPerRow = 1;
     }
-    $scope.currentPageNumber = 1;
-    $scope.row = 4;
-    $scope.itemsPerPage = 10;
+    $scope.row = 4;*/
 
-    $scope.getNumberOfPages = function() {
-    	var count = $scope.accounts.length / $scope.itemsPerPage;
-    	if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
-    	return Math.floor(count);
+    //orderBy start
+    $scope.itemsOrder = "active";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
     }
 
-    $scope.pageDown = function()
-    {
-    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-    }
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
 
-    $scope.pageUp = function()
-    {
-    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-    }
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.accounts.length / $scope.itemsPerPage;
+     	if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
     //pagination end
 
     
@@ -1535,24 +1542,33 @@ angular.module('app.bank.ctrl', [])
 		}
 	});
 
-	$scope.currentPageNumber = 1;
-	$scope.itemsPerPage = 10;
-	$scope.search;
-	$scope.getNumberOfPages = function() {
-		var count = $scope.banks.length / $scope.itemsPerPage;
-		if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
-		return count;
-	}
+	//orderBy start
+    $scope.itemsOrder = "date";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
 
-	$scope.pageDown = function()
-	{
-		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-	}
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
 
-	$scope.pageUp = function()
-	{
-		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-	}
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.banks.length / $scope.itemsPerPage;
+     	if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 
 })
 .controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService){
@@ -1781,6 +1797,35 @@ getBooking();
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+
+	//orderBy start
+    $scope.itemsOrder = "latest";
+    $scope.reverse = false;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.bookings.length / $scope.itemsPerPage;
+     	if(($scope.bookings.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 })
 
 .controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration){
@@ -1968,15 +2013,6 @@ getBooking();
 		}
 	})
 })
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
-})
-
-
 angular.module('app.dashboard.ctrl', [])
 
 .controller('DashboardCtrl', function($scope, $sce) {
@@ -2081,7 +2117,7 @@ angular.module('app.enquiry.ctrl', [])
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.itemsOrder = "accountId";
+	$scope.itemsOrder = "date";
 	$scope.reverse = true;
 
 	$scope.order = function(){
@@ -2096,8 +2132,8 @@ angular.module('app.enquiry.ctrl', [])
 
 	$scope.getNumberOfPages = function() {
 		var count = $scope.enquiries.length / $scope.itemsPerPage;
-		if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-		return count;
+		if(($scope.enquiries.length % $scope.itemsPerPage) > 0) count++;
+		return Math.floor(count);
 	}
 
 	$scope.pageDown = function()
@@ -2382,6 +2418,34 @@ getHelp();
     	$scope.modelAsJson = angular.toJson(model, true);
     }, true);
 
+    //orderBy start
+    $scope.itemsOrder = "order";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.helps.length / $scope.itemsPerPage;
+     	if(($scope.helps.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
+
 })
 .controller("NewHelpCtrl", function($scope, httpService){
 	console.log("this is NewHelpCtrl");
@@ -2533,6 +2597,34 @@ getTransactions();
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+	//orderBy start
+    $scope.itemsOrder = "date";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.payments.length / $scope.itemsPerPage;
+     	if(($scope.payments.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 })
 .controller('NewPaymentCtrl', function($scope, httpService, $mdDialog){
 	console.log("this is NewPaymentCtrl");
@@ -2843,6 +2935,33 @@ $scope.pageUp = function()
 			$scope.$emit("GETFINISHED");
 		}
 	});
+	//orderBy start
+    $scope.itemsOrder = "date";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.promotions.length / $scope.itemsPerPage;
+     	if(($scope.promotions.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 })
 
 .controller("NewPromotionCtrl", function($scope, httpService){
@@ -3063,34 +3182,27 @@ getBookings();
 			$scope.$emit("GETFINISHED");
 		}
 	});
-	    //pagination start
-	    $scope.itemsPerRow;
-	    if ($mdMedia('gt-md')) {
-	    	$scope.itemsPerRow = 3;
-	    } else if ($mdMedia('gt-xs')) {
-	    	$scope.itemsPerRow = 2;
-	    } else {
-	    	$scope.itemsPerRow = 1;
-	    }
-	    $scope.currentPageNumber = 1;
-	    $scope.row = 4;
-	    $scope.itemsPerPage = 10;
+	    
 
-	    $scope.getNumberOfPages = function() {
-	    	var count = $scope.scooters.length / $scope.itemsPerPage;
-	    	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-	    	return count;
-	    }
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
 
-	    $scope.pageDown = function()
-	    {
-	    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-	    }
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.scooters.length / $scope.itemsPerPage;
+     	if(($scope.scooters.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
 
-	    $scope.pageUp = function()
-	    {
-	    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-	    }
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
     //pagination end
 })
 .controller('NewScooterCtrl', function($scope, configuration, httpService){

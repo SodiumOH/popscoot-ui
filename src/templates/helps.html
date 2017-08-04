@@ -36,7 +36,7 @@
 				class="itemlist"
 				layout="row"
 				layout-wrap>
-				<li ng-repeat="item in helps"
+				<li ng-repeat="item in helps|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage"
 				dnd-draggable="item"
 				dnd-type="'item'"
 				dnd-effect-allowed="move"

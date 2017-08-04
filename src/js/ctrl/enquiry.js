@@ -89,7 +89,7 @@ angular.module('app.enquiry.ctrl', [])
 	$scope.goPage = function(path){
 		$location.path(path);
 	}*/
-	$scope.itemsOrder = "accountId";
+	$scope.itemsOrder = "date";
 	$scope.reverse = true;
 
 	$scope.order = function(){
@@ -104,8 +104,8 @@ angular.module('app.enquiry.ctrl', [])
 
 	$scope.getNumberOfPages = function() {
 		var count = $scope.enquiries.length / $scope.itemsPerPage;
-		if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-		return count;
+		if(($scope.enquiries.length % $scope.itemsPerPage) > 0) count++;
+		return Math.floor(count);
 	}
 
 	$scope.pageDown = function()

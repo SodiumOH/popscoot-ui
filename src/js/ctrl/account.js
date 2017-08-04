@@ -384,8 +384,8 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("DELETE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-    		window.location.href = $scope.path + "index.html#/accounts";
-    		$mdToast.show(
+			window.location.href = $scope.path + "index.html#/accounts";
+			$mdToast.show(
 				$mdToast.simple()
 				.textContent("Success")
 				.hideDelay(3000)
@@ -528,11 +528,7 @@ angular.module('app.account.ctrl', [])
 	// 	$location.path(path);
 	// }
 
-	$scope.itemsOrder = "active";
-	$scope.reverse = true;
-	$scope.order = function(){
-		$scope.reverse = !$scope.reverse;
-	}
+	
 	$scope.accounts = [];
 
 	$scope.url = "http://test.popscoot.com/popscoot/service/accounts"
@@ -619,7 +615,7 @@ angular.module('app.account.ctrl', [])
     
 
 
-    //pagination start
+   /*
     $scope.itemsPerRow;
     if ($mdMedia('gt-md')) {
     	$scope.itemsPerRow = 3;
@@ -628,25 +624,34 @@ angular.module('app.account.ctrl', [])
     } else {
     	$scope.itemsPerRow = 1;
     }
-    $scope.currentPageNumber = 1;
-    $scope.row = 4;
-    $scope.itemsPerPage = 10;
+    $scope.row = 4;*/
 
-    $scope.getNumberOfPages = function() {
-    	var count = $scope.accounts.length / $scope.itemsPerPage;
-    	if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
-    	return Math.floor(count);
+    //orderBy start
+    $scope.itemsOrder = "active";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
     }
 
-    $scope.pageDown = function()
-    {
-    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-    }
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
 
-    $scope.pageUp = function()
-    {
-    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-    }
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.accounts.length / $scope.itemsPerPage;
+     	if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
     //pagination end
 
     

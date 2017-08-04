@@ -186,34 +186,27 @@ getBookings();
 			$scope.$emit("GETFINISHED");
 		}
 	});
-	    //pagination start
-	    $scope.itemsPerRow;
-	    if ($mdMedia('gt-md')) {
-	    	$scope.itemsPerRow = 3;
-	    } else if ($mdMedia('gt-xs')) {
-	    	$scope.itemsPerRow = 2;
-	    } else {
-	    	$scope.itemsPerRow = 1;
-	    }
-	    $scope.currentPageNumber = 1;
-	    $scope.row = 4;
-	    $scope.itemsPerPage = 10;
+	    
 
-	    $scope.getNumberOfPages = function() {
-	    	var count = $scope.scooters.length / $scope.itemsPerPage;
-	    	if(($scope.people.length % $scope.itemsPerPage) > 0) count++;
-	    	return count;
-	    }
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
 
-	    $scope.pageDown = function()
-	    {
-	    	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-	    }
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.scooters.length / $scope.itemsPerPage;
+     	if(($scope.scooters.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
 
-	    $scope.pageUp = function()
-	    {
-	    	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-	    }
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
     //pagination end
 })
 .controller('NewScooterCtrl', function($scope, configuration, httpService){

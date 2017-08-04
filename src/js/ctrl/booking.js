@@ -118,6 +118,35 @@ getBooking();
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+
+	//orderBy start
+    $scope.itemsOrder = "latest";
+    $scope.reverse = false;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.bookings.length / $scope.itemsPerPage;
+     	if(($scope.bookings.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 })
 
 .controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration){
@@ -305,11 +334,3 @@ getBooking();
 		}
 	})
 })
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
-})
-

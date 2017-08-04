@@ -4,28 +4,28 @@
       <md-card id="accountsPage">
        <div layout="row" layout-align="space-between center" layout-padding>
         <div>
-          <span>Create New Account</span>
+          <span>{{'create'|translate}}</span>
           <md-button class="md-raised md-icon-button" ng-href="#/new/account">           
             <i class="fa fa-plus"></i>
           </md-button>
         </div>      
         <div layout="row" layout-align="start center" layout-padding>
-          <span>Items Per Page</span>
-          <md-select ng-model="itemsPerPage" placeholder="Item per page">
+          <span>{{'itemsPerPage'|translate}}</span>
+          <md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
             <md-option value=10>10</md-option>
             <md-option value=20>20</md-option>
             <md-option value=30>30</md-option>
           </md-select>
-          <span>Order by</span>
-          <md-select ng-model="itemsOrder" placeholder="Item per page">
-            <md-option value="date" ng-click="order()">Latest</md-option>
-            <md-option value="username" ng-click="order()">Username</md-option>
-            <md-option value="active" ng-click="order()">Active</md-option>
+          <span>{{'orderBy'|translate}}</span>
+          <md-select ng-model="itemsOrder" placeholder="{{'create'|translate}}">
+            <md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+            <md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+            <md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
           </md-select>        
         </div> 
         <div>
           <md-input-container>
-            <label>Search...</label>
+            <label>{{'search'|translate}}</label>
             <input ng-model="search"></md-input-container>
           </md-input-container>    
         </div>
@@ -34,13 +34,13 @@
 
       <div ng-if="itemsPerPage!='all'" flex>
         <div flex layout="row" layout-wrap>
-        <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="account in accounts|filter: search|paginate:currentPageNumber:itemsPerPage|orderBy:itemsOrder:reverse">
+        <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="account in accounts|filter: search|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
             <md-card>
              <md-card-title>
               <md-card-title-text>
                <span class="md-headline">{{account.username}}</span>
-               <span class="md-subhead">{{account.email}}</span>
-               <span class="md-subhead">Date joined: {{account.date|rd:0}}</span>
+               <span class="md-subhead">{{'email'|translate}}: {{account.email}}</span>
+               <span class="md-subhead">{{'date'|translate}}: {{account.date|rd:0}}</span>
              </md-card-title-text>
              <md-card-title-media>
                <div class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
@@ -48,17 +48,17 @@
              </md-card-title-media>
            </md-card-title>
            <md-card-actions layout="row" layout-align="end center"> 
-            <md-switch ng-model="account.active" aria-label="Switch 1" ng-change>{{account.active?"activate":"deactivated"}}</md-switch>
-            <md-button class="md-raised" ng-href="{{path+account.accountId}}">Details</md-button>
+            <md-switch ng-model="account.active" aria-label="Switch 1" ng-change>{{account.active?"activated":"deactivated"|translate}}</md-switch>
+            <md-button class="md-raised" ng-href="{{path+account.accountId}}">{{'details'|translate}}</md-button>
           </md-card-actions>
         </md-card>
       </div>
 
     </div>  
     <div layout="row" layout-align="space-around center">
-      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">Prev</md-button>
+      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'prev'|translate}}</md-button>
       
-      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">Next</md-button>
+      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'next'|translate}}</md-button>
     </div>
   </div>
 </md-card>

@@ -25,7 +25,7 @@
 			<md-divider></md-divider>
 			<md-content layout="row" layout-wrap>
 				<H2 ng-if="banks.length === 0">{{'noBanks'|translate}}</H2>
-				<div ng-repeat="item in banks|paginate:currentPageNumber:itemsPerPage|orderBy:itemsOrder:reverse" flex="100" flex-gt-xs="50" flex-gt-md="33">
+				<div ng-repeat="item in banks|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
 					<md-card id="bookingCard">
 						<md-card-title>
 							<md-card-title-text>

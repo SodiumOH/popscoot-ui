@@ -105,24 +105,33 @@ angular.module('app.bank.ctrl', [])
 		}
 	});
 
-	$scope.currentPageNumber = 1;
-	$scope.itemsPerPage = 10;
-	$scope.search;
-	$scope.getNumberOfPages = function() {
-		var count = $scope.banks.length / $scope.itemsPerPage;
-		if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
-		return count;
-	}
+	//orderBy start
+    $scope.itemsOrder = "date";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
 
-	$scope.pageDown = function()
-	{
-		if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
-	}
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
 
-	$scope.pageUp = function()
-	{
-		if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
-	}
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.banks.length / $scope.itemsPerPage;
+     	if(($scope.banks.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 
 })
 .controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService){

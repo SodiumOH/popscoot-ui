@@ -124,6 +124,34 @@ getTransactions();
 			$scope.$emit("GETFINISHED");
 		}
 	});
+
+	//orderBy start
+    $scope.itemsOrder = "date";
+    $scope.reverse = true;
+    $scope.order = function(){
+    	$scope.reverse = !$scope.reverse;
+    }
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.payments.length / $scope.itemsPerPage;
+     	if(($scope.payments.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 })
 .controller('NewPaymentCtrl', function($scope, httpService, $mdDialog){
 	console.log("this is NewPaymentCtrl");

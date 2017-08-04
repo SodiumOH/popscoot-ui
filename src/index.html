@@ -45,10 +45,22 @@
 						</md-button>
 						<h2 flex md-truncate>
 							<md-button ng-click="goHome()">{{'Home' | translate}} <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
-							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)">{{item.name |text_fmt:0|translate}} <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
+							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)">{{item.name |text_fmt:0|translate}}<i ng-hide="$index == BCLength" class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
 						</h2>
-						<md-button class="md-raised" ng-click="changeLanguage('ch')">中文</md-button>
-						<md-button class="md-raised" ng-click="changeLanguage('en')">English</md-button>
+						<md-menu md-offset="0 50">
+							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
+								<i class="fa fa-cog fa-2x" aria-hidden="true"></i>
+							</md-button>
+							<md-menu-content width="4">
+								<md-menu-item>
+									<md-button ng-click="changeLanguage('ch')">中文</md-button>									
+								</md-menu-item>
+								<md-menu-divider></md-menu-divider>
+								<md-menu-item layout-align="end end">
+									<md-button ng-click="changeLanguage('en')">English</md-button>									
+								</md-menu-item>
+							</md-menu-content>
+						</md-menu>
 						<span>{{Laccount.email}}</span>
 						<md-menu md-offset="0 50">
 							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">

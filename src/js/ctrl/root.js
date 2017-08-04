@@ -5,7 +5,9 @@ angular.module('app.root.ctrl', [])
 	$scope.$on('BC', function(evt, data){
 		$scope.breadcrumbs.push(data);
 		console.log($scope.breadcrumbs);
+		$scope.BCLength = $scope.breadcrumbs.length-1;
 	});
+
 	$scope.goHome = function(){
 		window.location.href =  $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/" +"index.html";
 		$scope.breadcrumbs = [];
