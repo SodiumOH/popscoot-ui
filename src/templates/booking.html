@@ -2,8 +2,8 @@
 	<md-card>
 		<md-card-title>
 			<md-card-title-text>
-				<span class="md-headline">Booking: {{booking.bookingId}}</span>
-				<span class="md-subhead">Date: {{booking.date}}</span>
+				<span class="md-headline">{{'booking'|translate}}: {{booking.bookingId}}</span>
+				<span class="md-subhead">{{'date'|translate}}: {{booking.date|rd:0}}</span>
 			</md-card-title-text>
 		</md-card-title>
 		<md-content layout-padding>
@@ -12,48 +12,48 @@
 
 					<div layout-align="center center">
 						<md-input-container class="md-block"> 
-							<label>Outsetlock ID</label>
+							<label>{{'outsetLockId'|translate}}</label>
 							<input ng-model="booking.outsetLockId">
 						</md-input-container>
 						<md-input-container class="md-block"">
-							<label>Destinationlock ID</label>
+							<label>{{'destinationLockId'|translate}}</label>
 							<input ng-model="booking.destinationLockId">
 						</md-input-container>
 						<md-input-container class="md-block">
-							<label>Start</label>
+							<label>{{'startTime'|translate}}</label>
 							<input type="datetime" ng-model="booking.startDate">
 						</md-input-container>
 						<md-input-container class="md-block">
-							<label>End</label>
+							<label>{{'endTime'|translate}}</label>
 							<input type="datetime" ng-model="booking.endDate"></md-datepicker>
 						</md-input-container>				
 						<md-input-container class="md-block"> 
-							<label>Price</label>
+							<label>{{'price'|translate}}</label>
 							<input ng-model="booking.price" type="">
 						</md-input-container>
 						<md-input-container class="md-block">
-							<label>Remarks</label>
+							<label>{{'remarks'|translate}}</label>
 							<input ng-model="booking.remark"></md-datepicker>
 						</md-input-container>		
 					</div>
 
 					<div layout-gt-xs="row" layout-padding>
 						<div>			
-							<span>Account: </span>
+							<span>{{'username'|translate}}: </span>
 
 							<md-button class="md-raised" ng-href="#/accounts/{{booking.account.accountId}}">{{booking.account.username}}</md-button>
 
 						</div>
 						<div>			
-							<span>Scooter: </span>
+							<span>{{'integrateId'|translate}}: </span>
 							<md-button class="md-raised" ng-href="#/scooters/{{booking.scooter.scooterId}}">{{booking.scooter.integrateId}}</md-button>
 						</div>
 
 					</div>
 
 					<div flex layout="row">					
-						<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">Update</md-button>
-						<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">delete</md-button>
+						<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">{{'update'|translate}}</md-button>
+						<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
 					</div>
 
 				</form>

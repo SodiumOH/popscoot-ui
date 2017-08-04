@@ -2,9 +2,9 @@
 	<md-card>
 		<md-card-title>
 			<md-card-title-text>
-				<span class="md-headline" md-truncate>Comment: {{enquiry.comment}}</span>
-				<span class="md-subhead">Date: {{enquiry.date}}</span>
-				<span class="md-subhead">Enquiry ID: {{enquiry.enquiryId}}</span>
+				<span class="md-headline" md-truncate>{{'comment'| translate}}: {{enquiry.comment}}</span>
+				<span class="md-subhead">{{'date'| translate}}: {{enquiry.date}}</span>
+				<span class="md-subhead">{{'enquiryId'| translate}}: {{enquiry.enquiryId}}</span>
 			</md-card-title-text>
 		</md-card-title>
 		<md-content layout-padding>
@@ -14,21 +14,21 @@
 
 					<div layout-align="center center">
 						<md-input-container class="md-block"> 
-							<label>Comment</label>
+							<label>{{'comment'| translate}}</label>
 							<input ng-model="enquiry.comment">
 						</md-input-container>
 					</div>
 
 					<div layout-gt-xs="row" layout-padding>
 						<div>			
-							<span>By: </span>
+							<span>{{'by'| translate}}: </span>
 							<md-button class="md-raised" ng-href="#/accounts/{{enquiry.account.accountId}}">{{enquiry.account.username}}</md-button>
 
 						</div>
 					</div>
 
 					<div flex layout="row" layout-align="center center">
-						<md-button class="md-warn md-raised" flex="80" ng-click="showPrompt($event)">delete</md-button>
+						<md-button class="md-warn md-raised" flex="80" ng-click="showPrompt($event)">{{'delete'| translate}}</md-button>
 					</div>
 
 				</form>

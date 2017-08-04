@@ -384,6 +384,13 @@ angular.module('app.account.ctrl', [])
 	$scope.$on("DELETE_ACCOUNT", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+    		window.location.href = $scope.path + "index.html#/accounts";
+    		$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
 		}
@@ -481,8 +488,7 @@ angular.module('app.account.ctrl', [])
 
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.account.username) {
-    		deleteAccount();    		
-    		window.location.href = $scope.path + "index.html#/accounts";
+    		deleteAccount();  
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -625,16 +631,11 @@ angular.module('app.account.ctrl', [])
     $scope.currentPageNumber = 1;
     $scope.row = 4;
     $scope.itemsPerPage = 10;
-    $scope.nextPage = function(){
-    	$scope.currentPageNumber++;
-    }
-    $scope.prevPage = function(){
-    	$scope.currentPageNumber--;
-    }
+
     $scope.getNumberOfPages = function() {
     	var count = $scope.accounts.length / $scope.itemsPerPage;
     	if(($scope.accounts.length % $scope.itemsPerPage) > 0) count++;
-    	return count;
+    	return Math.floor(count);
     }
 
     $scope.pageDown = function()

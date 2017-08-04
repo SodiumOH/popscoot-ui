@@ -3,55 +3,52 @@
 		<md-card>
 			<div layout="row" layout-align="space-between center" layout-padding>
 				<div>
-					<span>Create New Payment</span>
+					<span>{{'create'|translate}}</span>
 					<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
 						<i class="fa fa-plus"></i>
 					</md-button>
 				</div>			
 				<div layout="row" layout-align="start center" layout-padding>
-					<span>Items Per Page</span>
-					<md-select ng-model="itemsPerPage" placeholder="Item per page">
+					<span>{{'itemsPerPage'|translate}}</span>
+					<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
 						<md-option value=10>10</md-option>
 						<md-option value=20>20</md-option>
 						<md-option value=30>30</md-option>
-						<md-option value="all">all</md-option>
 					</md-select>
-					<span>Order by</span>
-					<md-select ng-model="itemsOrder" placeholder="Item per page">
-						<md-option value="date" ng-click="order()">Latest</md-option>
-						<md-option value="username" ng-click="order()">Username</md-option>
-						<md-option value="active" ng-click="order()">Active</md-option>
+					<span>{{'orderBy'|translate}}</span>
+					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
 					</md-select>				
 				</div> 
 			</div>
 			<md-divider></md-divider>
 
 			<md-content layout="row" layout-wrap>
-				<H2 ng-if="banks.length === 0">There are currently no payments</H2>
+				<H2 ng-if="banks.length === 0">{{'noPayments'|translate}}</H2>
 				<div ng-repeat="item in payments" flex="100" flex-gt-xs="50" flex-gt-md="33">
 					<md-card id="bookingCard">
 						<md-card-title>
 							<md-card-title-text>
-								<span class="md-headline">Payment ID: {{item.paymentId}}</span>
+								<span class="md-headline">{{'paymentId'|translate}}: {{item.paymentId}}</span>
 								<table>
-									<tr><td class="ulli">Method: </td><td>{{ item.method }}</td></tr>
-									<tr><td class="ulli">Credential1: </td><td>{{ item.credential1}}</td></tr>
-									<tr><td class="ulli">Credential2: </td><td>{{item.credential2}}</td></tr>
-									<tr><td class="ulli">Credential3: </td><td>{{item.credential3}}</td></tr>
-									<tr><td class="ulli">Date: </td><td>{{item.date|rd:1}}</td></tr>
+									<tr><td class="ulli">{{'method'|translate}}: </td><td>{{ item.method }}</td></tr>
+									<tr><td class="ulli">{{'credential1'|translate}}: </td><td>{{ item.credential1}}</td></tr>
+									<tr><td class="ulli">{{'credential2'|translate}}: </td><td>{{item.credential2}}</td></tr>
+									<tr><td class="ulli">{{'credential3'|translate}}: </td><td>{{item.credential3}}</td></tr>
+									<tr><td class="ulli">{{'date'|translate}}: </td><td>{{item.date|rd:1}}</td></tr>
 								</table>				
 							</md-card-title-text>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center">							
-							<md-button class="md-raised" ng-href="{{path+item.paymentId}}">Details</md-button>	
+							<md-button class="md-raised" ng-href="{{path+item.paymentId}}">{{'details'|translate}}</md-button>	
 						</md-card-actions>
 					</md-card>
 
 				</div>
 			</md-content>
 			<div layout="row" layout-align="space-around center">
-				<md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
-				<md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+				<md-button class="md-raised" ng-click="currentPageNumber--">{{'pageUp'|translate}}</md-button>
+				<md-button class="md-raised" ng-click="currentPageNumber++">{{'pageDown'|translate}}</md-button>
 			</div>
 			
 		</md-card>

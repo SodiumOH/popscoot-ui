@@ -3,24 +3,23 @@
 		<md-card>
 			<div layout="row" layout-align="space-between center" layout-padding>
 				<div ng-if="!arrangeB">
-					<span>Create New Help</span>
+					<span>{{'create'|translate}}</span>
 					<md-button class="md-raised md-icon-button" ng-href="#/new/help">           
 						<i class="fa fa-plus" aria-hidden="true"></i>
 					</md-button>
 				</div>		
 				
 				<div layout="row" layout-align="start center" layout-padding>
-					<span>Items Per Page</span>
-					<md-select ng-model="itemsPerPage" placeholder="Item per page">
+					<span>{{'itemsPerPage'|translate}}</span>
+					<md-select ng-model="itemsPerPage" placeholder="{{'create'|translate}}">
 						<md-option value=10>10</md-option>
 						<md-option value=20>20</md-option>
 						<md-option value=30>30</md-option>
-						<md-option value="all">all</md-option>
 					</md-select>
-					<span>Order by</span>
-					<md-select ng-model="itemsOrder" placeholder="Item per page">
-						<md-option value="helpId" ng-click="order()">ID</md-option>
-						<md-option value="order" ng-click="order()">Order</md-option>
+					<span>{{'orderBy'|translate}}</span>
+					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="helpId" ng-click="order()">{{'helpId'|translate}}</md-option>
+						<md-option value="order" ng-click="order()">{{'order'|translate}}</md-option>
 					</md-select>				
 				</div> 	
 			</div>
@@ -48,12 +47,12 @@
 				<md-card flex>
 					<md-card-title layout-align="space-between center">
 						<md-card-title-text style="max-width: 330px">
-							<span class="md-headline">Title: {{ item.title }}</span>
+							<span class="md-headline">{{'title'|translate}}: {{ item.title }}</span>
 							<table>
-								<tr><td class="ulli">Help ID: </td><td>{{item.helpId}}</td></tr>
-								<tr><td class="ulli">Order: </td><td>{{ item.order }}</td></tr>
-								<tr><td class="ulli">Content: </td><td md-truncate style="max-width: 150px">{{item.content}}</td></tr>
-								<tr><td class="ulli">Date: </td><td>{{item.date|rd:0}}</td></tr>
+								<tr><td class="ulli">{{'helpId'|translate}}: </td><td>{{item.helpId}}</td></tr>
+								<tr><td class="ulli">{{'order'|translate}}: </td><td>{{ item.order }}</td></tr>
+								<tr><td class="ulli">{{'content'|translate}}: </td><td md-truncate style="max-width: 150px">{{item.content}}</td></tr>
+								<tr><td class="ulli">{{'date'|translate}}: </td><td>{{item.date|rd:0}}</td></tr>
 							</table>
 						</md-card-title-text>
 						<md-card-title-media>
@@ -62,7 +61,7 @@
 						</md-card-title-media>
 					</md-card-title>
 					<md-card-actions layout="row" layout-align="end center"> 
-						<md-button class="md-raised" ng-href="{{path+item.helpId}}">Details</md-button>
+						<md-button class="md-raised" ng-href="{{path+item.helpId}}">{{'details'|translate}}</md-button>
 					</md-card-actions>
 				</md-card>
 			</li>

@@ -37,10 +37,14 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		finance: "FINANCE",
 		miscellaneous: "MISCELLANEOUS",
 		Home: "Home",
+		//order
+		latest: "Latest",
+		active: "Active",
 		//general functions:
 		itemsPerPage: "Items Per Page",
 		orderBy: "Order By",
-		search: "search",
+		search: "Search",
+		create: "Create New",
 		//general edition
 		activated: "activated",
 		deactivated: "deactivated",
@@ -51,6 +55,16 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		//general information
 		by: "by",	
 		date: "date",
+		//not exist...
+		noAccounts: "There are no accounts yet",
+		noBookings: "There are no bookings yet",
+		noBanks: "There are no banks yet",
+		noEnquiries: "There are no enquiries yet",
+		noPayments: "There are no payments yet",
+		noTransactions: "There are no transactions yet",
+		noShareLogs: "There are no shareLogs yet",
+		noPushTokens: "There are no push tokens yet",
+		noPromotions: "There are no promotions yet",
 		//accounts
 		account: "account",
 		email: "email",
@@ -81,6 +95,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		outsetlockId: "outsetlock ID",
 		destinationlockId : "destinationlock ID",
 		remarks : "remarks",
+		price: "price",
 		createBooking: "create new booking",
 		//enquiry
 		enquiry: "enquiry",
@@ -133,10 +148,14 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		finance: "财务",
 		miscellaneous: "其他",
 		Home: "首页",
+		//排序
+		latest: "最新",
+		active: "激活",
 		//基本功能:
 		itemsPerPage: "每页数量",
 		orderBy: "排序",
 		search: "检索",
+		create: "新增",
 		//基本编辑：
 		activated: "已激活",
 		deactivated: "未激活",
@@ -147,6 +166,16 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		//基本信息：
 		by: "属于",	
 		date: "日期",
+		//不存在
+		noAccounts: "没有用户",
+		noBookings: "没有预定",
+		noBanks: "没有户头",
+		noEnquiries: "没有问询",
+		noPayments: "没有支付",
+		noTransactions: "没有转账",
+		noShareLogs: "没有社交转发",
+		noPushTokens: "没有推送码",
+		noPromotions: "没有促销活动",
 		//账户相关
 		account: "账户",
 		email: "电邮",
@@ -179,6 +208,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		outsetlockId: "起始锁",
 		destinationlockId : "终点锁",
 		remarks : "备注",
+		price: "价格",
 		createBooking: "新增",
 		//问询相关
 		enquiry: "问询",

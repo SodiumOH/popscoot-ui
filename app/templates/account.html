@@ -76,23 +76,23 @@
 					</md-tab-label>
 					<md-tab-body>
 						<div ng-if="bookings.length === 0" layout-padding layout-align="center start">
-							<H2>There are currently no bookings</H2>
-							<md-button class="md-raised" ng-href="#/new/booking/acc{{account.accountId}}">Create Booking</md-button>
+							<H2>{{'noBookings'|translate}}</H2>
+							<md-button class="md-raised" ng-href="#/new/booking/acc{{account.accountId}}">{{'create'|translate}}</md-button>
 						</div>
 						
 						<md-card ng-if="bookings.length !== 0">
 							<div layout="row" layout-align="space-between center" layout-padding>
 								<div layout="row" layout-align="start center" layout-padding>
 									
-									<span>Order by</span>
+									<span>{{'orderBy'|translate}}</span>
 									<md-select ng-model="itemsOrder" placeholder="Item per page">
-										<md-option value="date" ng-click="order()">Latest</md-option>
-										<md-option value="username" ng-click="order()">Username</md-option>
-										<md-option value="active" ng-click="order()">Active</md-option>
+										<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+										<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+										<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
 									</md-select>				
 								</div> 
 								<div>
-									<span>Create New Booking</span>
+									<span{{'create'|translate}}</span>
 									<md-button class="md-raised md-icon-button" ng-href="#/new/booking/acc{{account.accountId}}">           
 										<i class="fa fa-plus-circle"></i>
 									</md-button>
@@ -106,12 +106,12 @@
 									<md-card id="bookingCard">
 										<md-card-title>
 											<md-card-title-text>
-												<span class="md-headline">Booking: {{item.bookingId}}</span>
-												<span class="sub-head">Start Time: {{ item.startDate|rd:1 }}</span>
-												<span class="sub-head">End Time: {{ item.endDate|rd:1 }}</span>
-												<span class="sub-head">Destination: {{ item.destinationName}}</span>
+												<span class="md-headline">{{'booking'|translate}}: {{item.bookingId}}</span>
+												<span class="sub-head">{{'startTime'|translate}}: {{ item.startDate|rd:1 }}</span>
+												<span class="sub-head">{{'endTime'|translate}}: {{ item.endDate|rd:1 }}</span>
+												<span class="sub-head">{{'destination'|translate}}: {{ item.destinationName}}</span>
 												<span>
-													Scooter: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
+													{{'scooter'|translate}}: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
 												</span>						
 											</md-card-title-text>
 										</md-card-title>

@@ -1,7 +1,7 @@
-  <md-content>	
+  <md-content >	
 
     <div flex>
-      <md-card>
+      <md-card id="accountsPage">
        <div layout="row" layout-align="space-between center" layout-padding>
         <div>
           <span>Create New Account</span>
@@ -56,9 +56,9 @@
 
     </div>  
     <div layout="row" layout-align="space-around center">
-      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="prevPage();">Prev</md-button>
+      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">Prev</md-button>
       
-      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="nextPage();">Next</md-button>
+      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">Next</md-button>
     </div>
   </div>
 </md-card>

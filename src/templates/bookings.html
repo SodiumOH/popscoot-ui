@@ -3,24 +3,23 @@
 		<md-card>
 			<div layout="row" layout-align="space-between center" layout-padding>
 				<div>
-					<span>Create New Booking</span>
+					<span>{{'create'|translate}}</span>
 					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
 						<i class="fa fa-plus"></i>
 					</md-button>
 				</div>			
 				<div layout="row" layout-align="start center" layout-padding>
-					<span>Items Per Page</span>
-					<md-select ng-model="itemsPerPage" placeholder="Item per page">
+					<span>{{'itemsPerPage'|translate}}</span>
+					<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
 						<md-option value=10>10</md-option>
 						<md-option value=20>20</md-option>
 						<md-option value=30>30</md-option>
-						<md-option value="all">all</md-option>
 					</md-select>
-					<span>Order by</span>
-					<md-select ng-model="itemsOrder" placeholder="Item per page">
-						<md-option value="date" ng-click="order()">Latest</md-option>
-						<md-option value="username" ng-click="order()">Username</md-option>
-						<md-option value="active" ng-click="order()">Active</md-option>
+					<span>{{'orderBy'|translate}}</span>
+					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+						<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+						<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
 					</md-select>				
 				</div> 
 			</div>
@@ -28,25 +27,25 @@
 			<md-divider></md-divider>
 			
 			<md-content layout="row" layout-wrap>
-				<H2 ng-if="bookings.length === 0">There are currently no bookings</H2>				
+				<H2 ng-if="bookings.length === 0">{{'noBookings'|translate}}</H2>				
 				<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
 					<md-card id="bookingCard">
 						<md-card-title>
 							<md-card-title-text>
 
-								<span class="md-headline">Booking: {{item.bookingId}}</span>
+								<span class="md-headline">{{'booking'|translate}}: {{item.bookingId}}</span>
 								<table>
-									<tr><td class="ulli">Start Time: </td><td>{{ item.startDate|rd:1 }}</td></tr>
-									<tr><td class="ulli">End Time: </td><td>{{ item.endDate|rd:1 }}</td></tr>
-									<tr><td class="ulli">Destination: </td><td>{{ item.destinationName}}</td></tr>
-									<tr><td class="ulli">Booking By: </td><td><a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></td></tr>
-									<tr><td class="ulli">Scooter: </td><td><a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a></td></tr>
+									<tr><td class="ulli">{{'startTime'|translate}}: </td><td>{{ item.startDate|rd:1 }}</td></tr>
+									<tr><td class="ulli">{{'endTime'|translate}}: </td><td>{{ item.endDate|rd:1 }}</td></tr>
+									<tr><td class="ulli">{{'destination'|translate}}: </td><td>{{ item.destinationName}}</td></tr>
+									<tr><td class="ulli">{{'by'|translate}}: </td><td><a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></td></tr>
+									<tr><td class="ulli">{{'scooter'|translate}}: </td><td><a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a></td></tr>
 								</table>
 													
 							</md-card-title-text>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center">							
-							<md-button class="md-raised" ng-href="{{path+item.bookingId}}">Details</md-button>	
+							<md-button class="md-raised" ng-href="{{path+item.bookingId}}">{{'details'|translate}}</md-button>	
 						</md-card-actions>
 					</md-card>
 

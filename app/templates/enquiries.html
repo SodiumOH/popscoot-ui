@@ -1,22 +1,20 @@
 	<div flex>
 		<md-card>
 			<div layout="row" layout-align="start center" layout-padding>
-				<span>Items Per Page</span>
-				<md-select ng-model="itemsPerPage" placeholder="Item per page">
+				<span>{{'itemsPerPage'|translate}}</span>
+				<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
 					<md-option value=10>10</md-option>
 					<md-option value=20>20</md-option>
 					<md-option value=30>30</md-option>
-					<md-option value="all">all</md-option>
 				</md-select>
-				<span>Order by</span>
-				<md-select ng-model="itemsOrder" placeholder="Item per page">
-					<md-option value="date" ng-click="order()">Latest</md-option>
-					<md-option value="scooterId" ng-click="order()">Scooter</md-option>
-					<md-option value="accountId" ng-click="order()">Account</md-option>
+				<span>{{'orderBy'|translate}}</span>
+				<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+					<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+					<md-option value="accountId" ng-click="order()">{{'username'|translate}}</md-option>
 				</md-select>
 			</div> 
 			<md-divider></md-divider>
-			<H2 ng-if="enquiries.length === 0">There are currently no enquiries</H2>	
+			<H2 ng-if="enquiries.length === 0">{{'noEnquiries'|translate}}</H2>	
 			<div ng-if="enquiries.length !== 0" layout="row" layout-wrap>
 				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in enquiries|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
 					<md-card>
@@ -25,9 +23,9 @@
 
 								<span class="md-headline" md-truncate style="max-width: 330px">{{item.comment}}</span>
 								<table>
-									<tr><td class="ulli">EnquiryID: </td><td>{{item.enquiryId}}</td></tr>
-									<tr><td class="ulli">Date: </td><td>{{item.date|rd:0}}</td></tr>								
-									<tr><td class="ulli">By: </td><td><a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></td></tr>							
+									<tr><td class="ulli">{{'enquiryId'|translate}}: </td><td>{{item.enquiryId}}</td></tr>
+									<tr><td class="ulli">{{'date'|translate}}: </td><td>{{item.date|rd:0}}</td></tr>								
+									<tr><td class="ulli">{{'by'|translate}}: </td><td><a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></td></tr>							
 								</table>
 								
 							</md-card-title-text>
@@ -38,15 +36,15 @@
 							</md-card-title-media>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center"> 
-							<md-button class="md-raised" ng-href="{{path+item.enquiryId}}">Details</md-button>
+							<md-button class="md-raised" ng-href="{{path+item.enquiryId}}">{{'details'|translate}}</md-button>
 						</md-card-actions>
 					</md-card>
 				</div>
 			</div>
 
 			<div layout="row" layout-align="space-around center">
-				<md-button class="md-raised" ng-click="pageDown()">Prev</md-button>
-				<md-button class="md-raised" ng-click="pageUp()">Next</md-button>
+				<md-button class="md-raised" ng-click="pageDown()">{{'pageUp'|translate}}</md-button>
+				<md-button class="md-raised" ng-click="pageUp()">{{'pageDown'|translate}}</md-button>
 			</div>
 		</md-card>
 
