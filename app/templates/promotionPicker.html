@@ -1,0 +1,71 @@
+<md-dialog aria-label="">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Selet Promotion</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content md-padding>
+
+      <md-content>  
+
+        <div flex>
+          <md-card>
+            <div layout="row" layout-align="space-between center" layout-padding>            
+              <div layout="row" layout-align="start center" layout-padding>
+                <span>Items Per Page</span>
+                <md-select ng-model="itemsPerPage" placeholder="Item per page">
+                  <md-option value=10>10</md-option>
+                  <md-option value=20>20</md-option>
+                  <md-option value=30>30</md-option>
+                  <md-option value="all">all</md-option>
+                </md-select>
+                <span>Order by</span>
+                <md-select ng-model="itemsOrder" placeholder="Item per page">
+                  <md-option value="date" ng-click="order()">Latest</md-option>
+                  <md-option value="username" ng-click="order()">Username</md-option>
+                  <md-option value="active" ng-click="order()">Active</md-option>
+                </md-select>        
+              </div>  
+            </div>
+            <md-divider></md-divider>
+            <md-content layout="row" layout-wrap>
+              <H2 ng-if="promotions.length === 0">There are currently no promotions</H2>
+              <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in promotions">
+                <md-card>
+                  <md-card-title>
+                    <md-card-title-text>
+                      <span class="md-headline">Name: {{ item.name }}</span>
+                      <span class="md-subhead">Promotion ID: {{item.promotionId}}</span>
+                      <span class="md-subhead">Description: {{ item.description }}</span>
+                      <span class="md-subhead">Amount: {{item.amount}}</span>
+                      <span class="md-subhead">Date: {{item.date}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                      <div class="md-media-sm card-media" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+                      </div>
+                    </md-card-title-media>  
+                  </md-card-title>
+                  <md-card-actions layout="row" layout-align="end center"> 
+                    <md-button class="md-raised" ng-href="{{path+item.promotionId}}">Details</md-button>
+                  </md-card-actions>
+                </md-card>
+              </div>
+            </md-content>
+            <div layout="row" layout-align="space-around center">
+              <md-button class="md-raised" ng-click="currentPageNumber--">Prev</md-button>
+              <md-button class="md-raised" ng-click="currentPageNumber++">Next</md-button>
+            </div>
+
+          </md-card>
+
+        </div>
+      </md-content>
+    </md-dialog-content>
+  </form>
+</md-dialog>
