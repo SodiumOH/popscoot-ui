@@ -1,6 +1,6 @@
 angular.module('app.enquiry.ctrl', [])
 
-.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService, configuration) {
+.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is EnquiryCtrl');
 	$scope.$emit('BC', {
 		name: "Enquiry",
@@ -22,6 +22,13 @@ angular.module('app.enquiry.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 	$scope.updateEnquiry = function(){
@@ -44,9 +51,21 @@ angular.module('app.enquiry.ctrl', [])
 	$scope.$on("DELETE_Enquiry", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			console.log("uhmmmmm");
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -76,10 +95,10 @@ angular.module('app.enquiry.ctrl', [])
     	$scope.status = 'Action canceled';
     });
 };
-	getEnquiry();
+getEnquiry();
 })
 
-.controller('EnquiriesCtrl', function($scope, $location, httpService, configuration) {
+.controller('EnquiriesCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is EnquiriesCtrl')
 	$scope.$emit('BC', {
 		name: "Enquiries",
@@ -133,6 +152,13 @@ angular.module('app.enquiry.ctrl', [])
     	} else {
     		console.log(data.data.data.message);
     		$scope.$emit("GETFINISHED");
+    		$mdToast.show(
+    			$mdToast.simple()
+    			.textContent(data.data.data.message)
+    			.hideDelay(3000)
+    			.position("top right")
+    			.theme('error-toast')
+    			);
     	}
     });
 })

@@ -8,6 +8,10 @@ angular.module('app.forgetPassword.ctrl', [])
 	$scope.form = {
 		email: ""
 	}
+  $scope.updatePWForm = {
+        password: "",
+        secret: ""
+    };
 	$scope.success = false;
 	$scope.forgetPassword = function(){
 		var body = {
@@ -17,11 +21,7 @@ angular.module('app.forgetPassword.ctrl', [])
 		
 	}
 
-	var directInbox = function(mail){
-		atPos = mail.indexOf("@"),
-		hoster = mail.substring(atPos + 1);
-		window.location.href = 'http://' + hoster;
-	}
+
 	var showActionToast = function(textContent, position, hideDelay, parent) {
 		var toast = $mdToast.simple()
 		.textContent('Email sent...')
@@ -62,12 +62,12 @@ angular.module('app.forgetPassword.ctrl', [])
 		}
 	})
 
-    $scope.updatePWForm;
+
     $scope.updatePassword = function(){
      console.log($scope.updatePWForm);
-     httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
+     httpService.httpPut(configuration.domain()+"/service/auth", $scope.updatePWForm, "UPDATE_PASSWORD");
    }
-   $scope.$on('CHANGE_PASSOWRD', function(event, data){
+   $scope.$on('UPDATE_PASSWORD', function(event, data){
      if(data.data.data.status == 1) {
       console.log(data.data.data.data);
       $mdToast.showSimple("Update success").position("top right").hideDelay(500);

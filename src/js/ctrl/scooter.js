@@ -1,6 +1,6 @@
 angular.module('app.scooter.ctrl', [])
 
-.controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
+.controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is ScooterCtrl')
 	$scope.$emit('BC', {
 		name: "Scooter",
@@ -23,6 +23,13 @@ angular.module('app.scooter.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 	function getBookings (){
@@ -37,6 +44,13 @@ angular.module('app.scooter.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -73,7 +87,7 @@ angular.module('app.scooter.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost(configuration.domain()+"/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -106,8 +120,21 @@ angular.module('app.scooter.ctrl', [])
 			$scope.scooter = data.data.data.data;
 			$scope.uploadImage = false;
 			$scope.preview = false;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -118,8 +145,22 @@ angular.module('app.scooter.ctrl', [])
 	$scope.$on("DELETE_scooter", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$location.path("/scooters/");
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -137,8 +178,8 @@ angular.module('app.scooter.ctrl', [])
     $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.scooter.integrateId) {
-    		deletescooter();    		
-    		window.location.href = $scope.path + "index.html#/scooters";
+    		deletescooter();   
+    		$location.path('/scooters')
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -154,7 +195,7 @@ getBookings();
 })
 
 
-.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService) {
+.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService, $mdToast) {
 	console.log('this is ScootersCtrl');
 
 	$scope.$emit('BC', {
@@ -187,9 +228,16 @@ getBookings();
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
-	    
+
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -212,7 +260,7 @@ getBookings();
      }
     //pagination end
 })
-.controller('NewScooterCtrl', function($scope, configuration, httpService){
+.controller('NewScooterCtrl', function($scope, configuration, httpService, $location, $mdToast){
 	console.log("this is NewScooterCtrl");
 	$scope.$emit('BC', {
 		name: "Create Scooters",
@@ -226,27 +274,33 @@ getBookings();
 	$scope.scooter;
 	$scope.createScooter = function(){
 		var createForm = $scope.scooter;
+		createForm.mediaId = 0;
 		console.log(createForm);
 		httpService.httpPost($scope.url.scooter, createForm, 'CREATE_Scooter');
 	}
 	$scope.$on("CREATE_Scooter", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.scooter = data.data.data.data;		
-			window.location.href = "#scooters/" + $scope.scooter.scooterId
+			$scope.scooter = data.data.data.data;	
+			$location.path("/scooters/" + $scope.scooter.scooterId);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 })
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
-})
-
 
 
 

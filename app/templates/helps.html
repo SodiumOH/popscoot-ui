@@ -24,6 +24,7 @@
 				</div> 	
 			</div>
 			<md-divider></md-divider>
+			<H2 ng-if="helps.length === 0">{{'noHelps'|translate}}</H2>
 			<div class="container-element box box-blue">
 				<ul dnd-list="container.items"
 				dnd-allowed-types="['item']"

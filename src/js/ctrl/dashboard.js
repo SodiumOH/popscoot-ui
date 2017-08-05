@@ -5,8 +5,8 @@ angular.module('app.dashboard.ctrl', [])
 	$scope.loadingIframe = true;
 	$scope.mapSource = $sce.trustAsResourceUrl(configuration.iframe()+"/map");
 	window.uploadDone = function(){
-		console.log(666);
 		$scope.loadingIframe = false;
+		console.log($scope.loadingIframe);
 	}
 })
 

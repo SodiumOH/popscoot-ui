@@ -34,70 +34,27 @@ md-toast.md-error-toast-theme {
 .ulli{
     width: 150px;
 }
-
-/***************************** Dropzone Styling *****************************/
-
-/**
- * The dnd-list should always have a min-height,
- * otherwise you can't drop to it once it's empty
- */
-.advancedDemo .dropzone ul[dnd-list] {
-    min-height: 42px;
-    margin: 0px;
-    padding-left: 0px;
+.large {
+    font-size : 12px;
+}
+.medium{
+    font-size : 11px;
+}
+.small{
+    font-size : 10px;
+}
+.width-dot{
+    max-width: 100%;
+}
+.acc-title {
+    margin-left: 7px;
+    margin-right: 7px;
 }
 
-.advancedDemo .dropzone li {
-    display: block;
+md-toolbar.md-default-theme.md-hue-2:not(.md-menu-toolbar), md-toolbar.md-hue-2:not(.md-menu-toolbar).popscoot {
+    background-color: rgb(212, 85, 188);
 }
 
-/**
- * Reduce opacity of elements during the drag operation. This allows the user
- * to see where he is dropping his element, even if the element is huge. The
- * .dndDragging class is automatically set during the drag operation.
- */
-.advancedDemo .dropzone .dndDragging {
-    opacity: 0.7;
-}
-
-/**
- * The dndDraggingSource class will be applied to the source element of a drag
- * operation.
- */
-.advancedDemo .dropzone .dndDraggingSource {
-    opacity: 0.5;
-}
-
-/**
- * An element with .dndPlaceholder class will be added as child of the dnd-list
- * while the user is dragging over it.
- */
-.advancedDemo .dropzone .dndPlaceholder {
-    background-color: #ddd !important;
-    display: block;
-    min-height: 42px;
-}
-
-/***************************** Element type specific styles *****************************/
-
-.advancedDemo .dropzone .itemlist {
-    min-height: 120px !important;
-}
-
-.advancedDemo .dropzone .itemlist > li {
-    background-color: #337ab7;
-    border: none;
-    border-radius: .25em;
-    color: #fff;
-    float: left;
-    font-weight: 700;
-    height: 50px;
-    margin: 5px;
-    padding: 3px;
-    text-align: center;
-    width: 80px;
-}
-
-.advancedDemo .dropzone .container-element {
-    margin: 10px;
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar).popscoot {
+    background-color: #e388d2;
 }

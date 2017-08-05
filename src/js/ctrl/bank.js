@@ -1,6 +1,6 @@
 angular.module('app.bank.ctrl', [])
 
-.controller('BankCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
+.controller('BankCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is BankCtrl')
 	var domain = configuration.domain();
 	$scope.$emit('BC', {
@@ -22,6 +22,13 @@ angular.module('app.bank.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 	getBank();
@@ -33,8 +40,21 @@ angular.module('app.bank.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -45,8 +65,21 @@ angular.module('app.bank.ctrl', [])
 	$scope.$on("DELETE_Bank", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -80,7 +113,7 @@ angular.module('app.bank.ctrl', [])
 
 })
 
-.controller('BanksCtrl', function($scope, $location, httpService, configuration) {
+.controller('BanksCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is BanksCtrl');
 	$scope.$emit('BC', {
 		name: "Banks",
@@ -93,7 +126,7 @@ angular.module('app.bank.ctrl', [])
 	// }
 	var domain = configuration.domain();
 	$scope.url = domain + "/service/banks";
-	$scope.banks;
+	$scope.banks = [];
 
 	httpService.httpGet($scope.url, 'GET_BANKS');
 
@@ -105,6 +138,13 @@ angular.module('app.bank.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -137,7 +177,7 @@ angular.module('app.bank.ctrl', [])
     //pagination end
 
 })
-.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
+.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location, $mdToast){
 	console.log("this is NewBankCtrl");
 	$scope.$emit('BC', {
 		name: "Create Banks",
@@ -240,9 +280,22 @@ angular.module('app.bank.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;		
 			$location.path("/banks/"+$scope.bank.bankId);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 			/*window.location.href = "#banks/" + $scope.bank.bankId;*/
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 	

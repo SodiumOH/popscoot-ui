@@ -4,7 +4,7 @@ angular.module('app.login.ctrl', [])
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	var domain = configuration.domain();
 	$scope.url = {
-		account: domain + "service/auth"
+		account: domain + "/service/auth"
 	}
 	$scope.form = {
 		username: "",
@@ -27,7 +27,7 @@ angular.module('app.login.ctrl', [])
 				console.log(data.data.data.data["Auth-Secret"]);
 				localStorage.setItem("LoginId", data.data.data.data["accountId"]);
 				DAO.setSecret(data.data.data.data["Auth-Secret"]);
-				window.location.href = $scope.path + "index.html"
+				window.location.href = "index.html"
 			/*} else {
 				alert("not admin");
 			}*/

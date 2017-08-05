@@ -34,12 +34,16 @@
 					<md-input-container class="md-block">
 						<label>Start</label>
 						<md-icon><i class="fa fa-play"></i></md-icon>
-						<input ng-model="booking.startDate" type="time">
+						<input ng-model="booking.startDate" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+						placeholder="Date" show-todays-date="" min-date="date" ng-model="dateTime" class=" md-input"
+						readonly="readonly">
 					</md-input-container>
 					<md-input-container class="md-block">
 						<label>End</label>
 						<md-icon><i class="fa fa-stop"></i></md-icon>
-						<input ng-model="booking.endDate" type="time">
+						<input ng-model="booking.endDate" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+						placeholder="Date" show-todays-date="" min-date="date" ng-model="dateTime" class=" md-input"
+						readonly="readonly">
 					</md-input-container>
 					<md-input-container class="md-block">
 						<label>Price</label>
@@ -65,10 +69,3 @@
 	</md-card>
 </div>
 <div>
-
-	create booking here
-	<md-button ng-href="#bookings/1">created</md-button>
-	<md-button ng-href="#accounts/1">created for account</md-button>
-	<md-button ng-href="#scooters/1">created for scooter</md-button>
-	<md-button ng-href="#bookings">list</md-button>
-</div>

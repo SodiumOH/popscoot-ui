@@ -1,6 +1,6 @@
 angular.module('app.booking.ctrl', [])
 
-.controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
+.controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is BookingCtrl')
 	$scope.$emit('BC', {
 		name: "Booking",
@@ -24,6 +24,13 @@ angular.module('app.booking.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -38,8 +45,21 @@ angular.module('app.booking.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.booking = data.data.data.data;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -50,8 +70,21 @@ angular.module('app.booking.ctrl', [])
 	$scope.$on("DELETE_Booking", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -85,7 +118,7 @@ getBooking();
 
 })
 
-.controller('BookingsCtrl', function($scope, $location, httpService, configuration) {
+.controller('BookingsCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is BookingsCtrl');
 	$scope.$emit('BC', {
 		name: "Bookings",
@@ -125,11 +158,11 @@ getBooking();
 
 
 	//orderBy start
-    $scope.itemsOrder = "latest";
-    $scope.reverse = false;
-    $scope.order = function(){
-    	$scope.reverse = !$scope.reverse;
-    }
+	$scope.itemsOrder = "latest";
+	$scope.reverse = false;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -153,7 +186,7 @@ getBooking();
     //pagination end
 })
 
-.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
+.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location, $mdToast){
 	console.log("this is NewBookingCtrl");
 	$scope.$emit('BC', {
 		name: "Create Bookings",
@@ -171,12 +204,10 @@ getBooking();
 	}
 
 
-	$scope.createBooking = function(){
-		httpService.httpPost
-	}
+	
 
 	function getAccounts() {
-		httpService.httpGet($scop.url.accounts, 'GET_TACCOUNTS');
+		httpService.httpGet($scope.url.accounts, 'GET_TACCOUNTS');
 	}
 
 	$scope.$on("GET_TACCOUNTS", function(event, data){
@@ -191,7 +222,7 @@ getBooking();
 		
 	});
 	function getScooters() {
-		httpService.httpGet($scop.url.scooters, 'GET_TSCOOTERS');
+		httpService.httpGet($scope.url.scooters, 'GET_TSCOOTERS');
 	}
 
 	$scope.$on("GET_TSCOOTERS", function(event, data){
@@ -200,6 +231,7 @@ getBooking();
 			$scope.scooters = data.data.data.data;
 		} else {
 			console.log(data.data.data.message);
+
 		}
 		
 	});
@@ -332,8 +364,12 @@ getBooking();
 
 	$scope.createBooking = function(){
 		var create = $scope.booking;
-		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
-		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
+		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SSZ");
+		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SSZ");
+		create.outsetLockId = parseInt($scope.booking.outsetLockId);
+		create.destinationLockId = parseInt($scope.booking.destinationLockId);
+		create.accountId = parseInt($scope.booking.accountId);
+		create.scooterId = parseInt($scope.booking.scooterId);
 		console.log(create);
 		httpService.httpPost($scope.url.bookings, create, "CREATE_BOOKING");
 	}
@@ -341,9 +377,22 @@ getBooking();
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);	
 			$location.path('/bookings/'+$scope.booking.bookingId);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 			/*window.location.href = "#bookings/" + $scope.booking.bookingId*/
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 })

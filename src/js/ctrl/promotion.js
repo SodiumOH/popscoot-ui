@@ -193,7 +193,7 @@ $scope.pageUp = function()
 	$scope.url = configuration.domain()+"/service/promotions";
 
 	httpService.httpGet($scope.url, 'GET_PROMOTIONS');
-	$scope.promotions;
+	$scope.promotions = [];
 
 	$scope.$on("GET_PROMOTIONS", function(event, data){
 		if(data.data.data.status == 1) {

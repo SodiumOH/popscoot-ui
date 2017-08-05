@@ -163,7 +163,7 @@ getHelp();
 		$scope.arrangeB = !$scope.arrangeB;
 	}
 
-	$scope.helps;
+	$scope.helps = [];
 
 
 	httpService.httpGet($scope.url, 'GET_HELPS');
@@ -295,7 +295,7 @@ getHelp();
 	$scope.createHelp = function(){
 		var createForm = $scope.help;
 		console.log(createForm);
-		httpService.httpPost((configuration.domain + "/service/helps"), createForm, 'CREATE_HELP');
+		httpService.httpPost((configuration.domain() + "/service/helps"), createForm, 'CREATE_HELP');
 	}
 	$scope.$on("CREATE_HELP", function(event, data){
 		if(data.data.data.status == 1) {

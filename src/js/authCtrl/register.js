@@ -3,7 +3,7 @@ angular.module('app.register.ctrl', [])
 	var domain = configuration.domain();	
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	$scope.url = {
-		register: domain + "service/accounts"
+		register: domain + "/service/accounts"
 	}
 	$scope.form = {
 		username: "",
@@ -21,11 +21,7 @@ angular.module('app.register.ctrl', [])
 		} 		
 	}
 
-	var directInbox = function(mail){
-		atPos = mail.indexOf("@"),
-		hoster = mail.substring(atPos + 1);
-		window.location.href = 'http://' + hoster;
-	}
+	
 	var showActionToast = function(textContent, position, hideDelay, parent, email) {
 		var toast = $mdToast.simple()
 		.textContent('Activation email sent...')// Accent is used by default, this just demonstrates the usage.
@@ -36,7 +32,7 @@ angular.module('app.register.ctrl', [])
 			if ( response == 'ok' ) {
 				directInbox(email);
 			}else{
-				window.location.href = $scope.path + "auth.html";
+				window.location.href = "auth.html";
 			}
 		});
 	}

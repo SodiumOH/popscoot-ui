@@ -2,7 +2,7 @@ angular.module('app.account.ctrl', [])
 
 .controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration, $mdToast) {
 	console.log('this is AccountCtrl');
-
+	$scope.itemsOrder;
 	$scope.search;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";	
 	var accountId = $routeParams.id;
@@ -230,7 +230,7 @@ angular.module('app.account.ctrl', [])
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
 						$mdToast.show(
 							$mdToast.simple()
-							.textContent(message)
+							.textContent(data.data.data.message)
 							.hideDelay(3000)
 							.position("top right")
 							.theme('error-toast')
@@ -281,7 +281,7 @@ angular.module('app.account.ctrl', [])
 					console.log(data.data.message);
 					$mdToast.show(
 						$mdToast.simple()
-						.textContent(message)
+						.textContent(data.data.message)
 						.hideDelay(3000)
 						.position("top right")
 						.theme('error-toast')
@@ -365,7 +365,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent("message")
+				.textContent(data.data.data.message)
 				.hideDelay(3000)
 				.position("top right")
 				.theme("error-toast")
@@ -420,7 +420,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent(message)
+				.textContent(data.data.data.message)
 				.hideDelay(3000)
 				.position("top right")
 				.theme('error-toast')
@@ -637,7 +637,7 @@ angular.module('app.account.ctrl', [])
 	};
 	console.log("this is NewAccountCtrl");
 	$scope.$emit('BC', {
-		name: "create",
+		name: "createAccount",
 		url: "/new/account"
 	})
 	$scope.account;
@@ -666,7 +666,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent(message)
+				.textContent(data.data.data.message)
 				.hideDelay(3000)
 				.position("top right")
 				.theme('error-toast')

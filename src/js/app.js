@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
 	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.tracking.ctrl', 'app.accountPromo.ctrl'
 	])
 
@@ -7,8 +7,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 	
 	var isAuthenticated = function(){
 		if (localStorage.getItem("UI_SECRET") === null) {
-			var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-			window.location.href = path + "auth.html";
+			window.location.href = "auth.html";
 		}
 	}
 	isAuthenticated();
@@ -44,7 +43,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		itemsPerPage: "Items Per Page",
 		orderBy: "Order By",
 		search: "Search",
-		create: "Create New",
+		create: "",
 		//general edition
 		activated: "activated",
 		deactivated: "deactivated",
@@ -55,6 +54,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		//general information
 		by: "by",	
 		date: "date",
+		id: "id",
 		//not exist...
 		noAccounts: "There are no accounts yet",
 		noBookings: "There are no bookings yet",
@@ -64,7 +64,8 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		noTransactions: "There are no transactions yet",
 		noShareLogs: "There are no shareLogs yet",
 		noPushTokens: "There are no push tokens yet",
-		noPromotions: "There are no promotions yet",
+		noPromotions: "There are no promotions yet",		
+		noHelps: "There are no helps yet",
 		//accounts
 		account: "account",
 		email: "email",
@@ -84,6 +85,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		token: "token",
 		device: "device",
 		status: "status",
+		createAccount: "Create New Account",
 		//scooters
 		scooter: "scooter",
 		scooterId: "Scooter ID",
@@ -96,6 +98,8 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		//booking
 		booking: "booking",
 		bookingId: "booking ID",
+		start: "start",
+		end: "end",
 		startTime: "start time",
 		endTime: "end time",
 		destination: "destination",
@@ -268,7 +272,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 
 	});
 	$translateProvider.useSanitizeValueStrategy('escape');
-	$translateProvider.preferredLanguage('ch');
+	$translateProvider.preferredLanguage('en');
 
 })
 

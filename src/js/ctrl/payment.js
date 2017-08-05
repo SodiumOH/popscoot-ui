@@ -1,6 +1,6 @@
 angular.module('app.payment.ctrl', [])
 
-.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
+.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is PaymentCtrl');
 	$scope.url = {
 		payment: configuration.domain()+"/service/payments/"+$routeParams.id,
@@ -12,7 +12,7 @@ angular.module('app.payment.ctrl', [])
 		url: "payments/"+$routeParams.id
 	});
 	$scope.payment;
-	$scope.transactions;
+	$scope.transactions = [];
 	function getPayment(){
 		httpService.httpGet($scope.url.payment, 'GET_PAYMENT');		
 	};
@@ -25,6 +25,13 @@ angular.module('app.payment.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -36,8 +43,21 @@ angular.module('app.payment.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.payment = data.data.data.data;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -48,8 +68,21 @@ angular.module('app.payment.ctrl', [])
 	$scope.$on("DELETE_payment", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -96,9 +129,39 @@ $scope.$on("GET_TRANSACTIONS", function(event, data){
 });
 getPayment();
 getTransactions();
+
+$scope.itemsOrder = "date";
+$scope.reverse = true;
+$scope.order = function(){
+	$scope.reverse = !$scope.reverse;
+}
+//pagination start
+$scope.currentPageNumber = 1;
+$scope.itemsPerPage = 10;
+
+$scope.getNumberOfPages = function() {
+	var count = $scope.transactions.length / $scope.itemsPerPage;
+	if(($scope.transactions.length % $scope.itemsPerPage) > 0) count++;
+	return Math.floor(count);
+}
+
+$scope.pageDown = function()
+{
+	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+}
+
+$scope.pageUp = function()
+{
+	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+}
+    //pagination end
+
+
+
+
 })
 
-.controller('PaymentsCtrl', function($scope, $location, httpService, configuration) {
+.controller('PaymentsCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is PaymentsCtrl');
 	$scope.path = "#/payments/";
 	/*var path = $location.path();
@@ -106,7 +169,7 @@ getTransactions();
 		$location.path(path);
 	}*/
 	$scope.url = configuration.domain()+"/service/payments";
-	$scope.payments;
+	$scope.payments = [];
 
 	httpService.httpGet($scope.url, 'GET_PAYMENTS');
 
@@ -123,15 +186,22 @@ getTransactions();
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
 	//orderBy start
-    $scope.itemsOrder = "date";
-    $scope.reverse = true;
-    $scope.order = function(){
-    	$scope.reverse = !$scope.reverse;
-    }
+	$scope.itemsOrder = "date";
+	$scope.reverse = true;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -154,7 +224,7 @@ getTransactions();
      }
     //pagination end
 })
-.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog, configuration, $location){
+.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog, configuration, $location, $mdToast){
 	console.log("this is NewPaymentCtrl");
 	function getAccounts() {
 		httpService.httpGet((configuration.domain()+"/service/accounts"), 'GET_BACCOUNTS');
@@ -195,7 +265,7 @@ getTransactions();
 		});
 	};
 
-	function DialogController($scope, $mdDialog, Upload, httpService, localAcc) {
+	function DialogController($scope, $mdDialog, Upload, httpService, localAcc, $mdToast) {
 		$scope.accounts = localAcc;
 
 		$scope.itemsOrder = "active";
@@ -251,10 +321,23 @@ getTransactions();
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.payment = data.data.data.data;
-			$location.path("/payments/"+$scope.payment.paymentId);		
+			$location.path("/payments/"+$scope.payment.paymentId);	
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);	
 			/*window.location.href = "#payments/" + $scope.payment.paymentId;*/
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 	

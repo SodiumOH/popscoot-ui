@@ -9,7 +9,7 @@ angular.module('app.root.ctrl', [])
 	});
 
 	$scope.goHome = function(){
-		window.location.href =  $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/" +"index.html";
+		window.location.href =  "index.html";
 		$scope.breadcrumbs = [];
 	}
 	$scope.$on('GETLOADING', function(){
@@ -104,7 +104,7 @@ angular.module('app.root.ctrl', [])
 			icon: "fa fa-money",
 			hide: true,
 			margin: {'margin-left':'25px'}
-		},{
+		}/*,{
 			path: "miscellaneous",
 			name: "miscellaneous",
 			colapsed: false,
@@ -129,7 +129,7 @@ angular.module('app.root.ctrl', [])
 			path: "analytics",
 			name: "analytics",
 			icon: "fa fa-line-chart"
-		}],
+		}*/],
 		logout: {
 			path: "logout",
 			name: "Logout",
@@ -148,9 +148,7 @@ angular.module('app.root.ctrl', [])
 
 		$scope.goPage = function(path) {
 			if (path == "logout") {
-				var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-
-				window.location.href = (path + "auth.html");
+				window.location.href = ("auth.html");
 				localStorage.removeItem("UI_SECRET");
 			} else if(path == "finance") {
 				$scope.menu.main[5].colapsed = !$scope.menu.main[5].colapsed;

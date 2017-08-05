@@ -13,40 +13,50 @@
 					<div layout-align="center center">
 						<md-input-container class="md-block"> 
 							<label>{{'outsetLockId'|translate}}</label>
+							<md-icon><i class="fa fa-map-marker" aria-hidden="true"></i></md-icon>							
 							<input ng-model="booking.outsetLockId">
 						</md-input-container>
 						<md-input-container class="md-block"">
 							<label>{{'destinationLockId'|translate}}</label>
+							<md-icon><i class="fa fa-map-marker" aria-hidden="true"></i></md-icon>					
 							<input ng-model="booking.destinationLockId">
 						</md-input-container>
 						<md-input-container class="md-block">
-							<label>{{'startTime'|translate}}</label>
-							<input type="datetime" ng-model="booking.startDate">
+							<label>Start</label>
+							<md-icon><i class="fa fa-play"></i></md-icon>
+							<input ng-model="booking.startDate" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+							placeholder="Date" show-todays-date="" min-date="date" ng-model="dateTime" class=" md-input"
+							readonly="readonly">
 						</md-input-container>
 						<md-input-container class="md-block">
-							<label>{{'endTime'|translate}}</label>
-							<input type="datetime" ng-model="booking.endDate"></md-datepicker>
-						</md-input-container>				
+							<label>End</label>
+							<md-icon><i class="fa fa-stop"></i></md-icon>
+							<input ng-model="booking.endDate" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+							placeholder="Date" show-todays-date="" min-date="date" ng-model="dateTime" class=" md-input"
+							readonly="readonly">
+						</md-input-container>	
 						<md-input-container class="md-block"> 
 							<label>{{'price'|translate}}</label>
+							<md-icon><i class="fa fa-usd" aria-hidden="true"></i></md-icon>					
 							<input ng-model="booking.price" type="">
 						</md-input-container>
 						<md-input-container class="md-block">
 							<label>{{'remarks'|translate}}</label>
+							<md-icon><i class="fa fa-comment" aria-hidden="true"></i></md-icon>					
 							<input ng-model="booking.remark"></md-datepicker>
 						</md-input-container>		
 					</div>
 
-					<div layout-gt-xs="row" layout-padding>
+					<div layout-gt-xs="row" layout-align="space-between center" layout-padding>
 						<div>			
-							<span>{{'username'|translate}}: </span>
+							
 
-							<md-button class="md-raised" ng-href="#/accounts/{{booking.account.accountId}}">{{booking.account.username}}</md-button>
+							<md-button class="md-raised" ng-href="#/accounts/{{booking.account.accountId}}"><i class="fa fa-user" aria-hidden="true"></i>{{booking.account.username}}</md-button>
 
 						</div>
 						<div>			
-							<span>{{'integrateId'|translate}}: </span>
-							<md-button class="md-raised" ng-href="#/scooters/{{booking.scooter.scooterId}}">{{booking.scooter.integrateId}}</md-button>
+							
+							<md-button class="md-raised" ng-href="#/scooters/{{booking.scooter.scooterId}}"><i class="fa fa-link" aria-hidden="true"></i>{{booking.scooter.integrateId}}</md-button>
 						</div>
 
 					</div>

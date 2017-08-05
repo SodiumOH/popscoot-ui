@@ -1,23 +1,23 @@
 <md-content id="accountPage" layout-gt-sm="row" layout-padding>
 	<div flex flex-md="35" flex-gt-md="30">
-		<h2 class="title">{{'basicInformation'|translate}}</h2>
+		<h2 class="title large acc-title">{{'basicInformation'|translate}}</h2>
 		<md-card>
 			<md-card-title id="cardAccount">
-				<md-card-title-text>
-					<span class="md-headline">{{account.username}}</span>
+				<md-card-title-text md-truncate style="max-width: 100%">
+					<span class="large">{{account.username}}</span>
 				</md-card-title-text>
 
 				<md-card-title-media>
-					<div ng-if="!uploadImage" class="md-media-lg card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">   
+					<div ng-if="!uploadImage" class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">   
 						<md-button class="md-icon-button" ng-click="uploadPrompt()"><i class="fa fa-camera" aria-hidden="true"></i></md-button>
 					</div>	
 
-					<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="drop-box md-media-lg card-media" 
+					<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="drop-box md-media-sm card-media" 
 					ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
 					accept="image/*" 
 					ngf-pattern="'image/*'">
-					<div style="padding-top: 50px"  ng-hide="preview">Drop images here or click to upload, {{uploadStatus}}</div>
-					<div ng-hide="!preview" class="md-media-lg card-media" style="background-image: url({{dataUrl}}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
+					<div style="padding-top: 10px"  ng-hide="preview" class="large">Drop images here or click to upload, {{uploadStatus}}</div>
+					<div ng-hide="!preview" class="md-media-sm card-media" style="background-image: url({{dataUrl}}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
 				</div>
 
 
@@ -31,30 +31,30 @@
 
 						<div layout-align="center center">
 							<md-input-container class="md-block"> 
-								<label>{{'email' | translate}}</label>
-								<input ng-model="account.email" type="email" disabled>
+								<label class="large" style="max-width: 100%">{{'email' | translate}}</label>
+								<input class="large" ng-model="account.email" type="email" style="text-overflow: ellipsis;" disabled>
 							</md-input-container>
 							<md-input-container class="md-block">
-								<label>{{'facebookId' | translate}}</label>
-								<input ng-model="account.facebookId" disabled>
+								<label class="large" style="max-width: 100%">{{'facebookId' | translate}}</label>
+								<input class="large" ng-model="account.facebookId" disabled>
 							</md-input-container>
 							<md-input-container class="md-block">
-								<label>{{'socialMedia' | translate}}</label>
-								<input ng-model="account.socialMedia" disabled>
+								<label class="large" style="max-width: 100%">{{'socialMedia' | translate}}</label>
+								<input class="large" ng-model="account.socialMedia" disabled>
 							</md-input-container>
 							<div layout="row" layout-align="space-between center">									
-								<md-input-container flex="50" class="md-block">
-									<label>{{'birthday' | translate}}</label>
-									<md-datepicker ng-model="account.birthday"></md-datepicker>
+								<md-input-container class="md-block">
+									<label class="large">{{'birthday' | translate}}</label>
+									<md-datepicker class="large" ng-model="account.birthday"></md-datepicker>
 								</md-input-container>
-								<md-switch flex="40" ng-model="account.active" aria-label="Switch 1" ng-change="">{{getActive(account)|translate}}</md-switch>
+								<md-switch class="large" ng-model="account.active" aria-label="Switch 1" ng-change=""></md-switch>
 							</div>
 						</div>
 						<div>
 
 							<div flex layout="row">					
-								<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updateAccountForm.$invalid">{{'update'|translate}}</md-button>
-								<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
+								<md-button class="md-primary md-raised large" flex="50" type="submit" ng-disabled="updateAccountForm.$invalid">{{'update'|translate}}</md-button>
+								<md-button class="md-warn md-raised large" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
 							</div>
 						</div>
 					</form>
@@ -66,17 +66,17 @@
 	</md-card>
 </div>
 <div flex>
-	<h2 class="title">{{'details'|translate}}</h2>
+	<h2 class="title large acc-title">{{'details'|translate}}</h2>
 	<md-card>
 		<md-tabs md-dynamic-height md-border-bottom style="min-height: 607.898px">
 			<md-tab>
-				<md-tab-label>
+				<md-tab-label class="medium">
 					<i class="fa fa-book"></i> {{'booking'|translate}}
 				</md-tab-label>
 				<md-tab-body>
 					<div ng-if="bookings.length === 0" layout-padding layout-align="center start">
 						<H2>{{'noBookings'|translate}}</H2>
-						<md-button class="md-raised" ng-href="#/new/booking/acc{{account.accountId}}">{{'create'|translate}}</md-button>
+						<md-button class="md-raised" ng-href="#/new/booking/acc{{account.accountId}}"><i class="fa fa-plus"></i></md-button>
 					</div>
 					
 					<md-card ng-if="bookings.length !== 0">
@@ -91,7 +91,7 @@
 								</md-select>				
 							</div> 
 							<div>
-								<span{{'create'|translate}}</span>
+								<span>{{'create'|translate}}</span>
 								<md-button class="md-raised md-icon-button" ng-href="#/new/booking/acc{{account.accountId}}">           
 									<i class="fa fa-plus-circle"></i>
 								</md-button>
@@ -105,12 +105,12 @@
 								<md-card id="bookingCard">
 									<md-card-title>
 										<md-card-title-text>
-											<span class="md-headline">{{'booking'|translate}}: {{item.bookingId}}</span>
-											<span class="sub-head">{{'startTime'|translate}}: {{ item.startDate|rd:1 }}</span>
-											<span class="sub-head">{{'endTime'|translate}}: {{ item.endDate|rd:1 }}</span>
-											<span class="sub-head">{{'destination'|translate}}: {{ item.destinationName}}</span>
+											<span class="md-headline"><i class="fa fa-book" aria-hidden="true"></i> {{'id'|translate|text_fmt:2}}: {{item.bookingId}}</span>
+											<span class="sub-head"><i class="fa fa-clock-o" aria-hidden="true"></i> {{'start'|translate}}: {{ item.startDate|rd:1 }}</span>
+											<span class="sub-head"><i class="fa fa-clock-o" aria-hidden="true"></i> {{'end'|translate}}: {{ item.endDate|rd:1 }}</span>
+											<span class="sub-head"><i class="fa fa-map-marker" aria-hidden="true"></i>: {{ item.destinationName}}</span>
 											<span>
-												{{'scooter'|translate}}: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
+												<i class="fa fa-link" aria-hidden="true"></i>: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
 											</span>						
 										</md-card-title-text>
 									</md-card-title>
@@ -125,275 +125,168 @@
 				</md-tab-body>			
 			</md-tab>		
 			<md-tab>
-				<md-tab-label>
+				<md-tab-label class="medium">
 					<i class="fa fa-money"></i> {{'bank'|translate}}
 				</md-tab-label>
 				<md-tab-body>
 					<div ng-if="banks.length === 0" layout-padding layout-align="center start">							
 						<H2>{{'noBanks'|translate}}</H2>
-						<md-button class="md-raised" ng-href="#/new/bank/{{account.accountId}}">{{'create'|translate}}</md-button>
+						<md-button class="md-raised" ng-href="#/new/bank/{{account.accountId}}"><i class="fa fa-plus"></i></md-button>
 					</div>
 					<md-content ng-if="banks.length !== 0" class="md-padding">
 						<div flex="100">
 							<md-content  ng-repeat="item in banks">
-								<h3>{{'bankId'|translate}}: {{item.bankId}}</h3>
-								<h4>{{'deposit'|translate}}: {{ item.deposit }}</h4>
-								<h4>{{'cash'|translate}}: {{ item.cash }}</h4>
-								<p>{{'stamps'|translate}}: {{item.stamps}}</p>							
-								<p>{{'date'|translate}}: {{ item.date|rd:0}}</span>
-									<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" style="margin-left: 0px">{{'details'|translate}}</md-button>
-								</md-content>	
+								<h3><i class="fa fa-credit-card"></i> {{'id'|translate}}: {{item.bankId}}</h3>
+								<h4><i class="fa fa-money fa-fw"></i> {{'deposit'|translate}}: {{ item.deposit }}</h4>
+								<h4><i class="fa fa-usd fa-fw"></i> {{'cash'|translate}}: {{ item.cash }}</h4>
+								<p><i class="fa fa-circle fa-fw"></i> {{'stamps'|translate}}: {{item.stamps}}</p>							
+								<p><i class="fa fa-calendar fa-fw"></i> {{'date'|translate}}: {{ item.date|rd:0}}</p>
+								<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" style="margin-left: 0px">{{'details'|translate}}</md-button>
+							</md-content>	
 
-							</md-tab-body>					
-						</div>				
-					</md-tab>		
-					<md-tab>
-						<md-tab-label>
-							<i class="fa fa-question-circle"></i> {{'enquiry'|translate}}
-						</md-tab-label>
-						<md-tab-body>
-							<div ng-if="enquiries.length === 0" layout-padding layout-align="center start">
-								<H2>{{'noEnquiries'|translate}}</H2>
+						</md-tab-body>					
+					</div>				
+				</md-tab>		
+				<md-tab>
+					<md-tab-label class="medium">
+						<i class="fa fa-question-circle"></i> {{'enquiry'|translate}}
+					</md-tab-label>
+					<md-tab-body>
+						<div ng-if="enquiries.length === 0" layout-padding layout-align="center start">
+							<H2>{{'noEnquiries'|translate}}</H2>
+						</div>
+						<div ng-if="enquiries.length !== 0" layout="row" layout-wrap>
+							<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in enquiries">
+								<md-card>
+									<md-card-title>
+										<md-card-title-text  md-truncate style="max-width: 100%">
+											<span class="medium">{{item.comment}}</span>
+											<span class="small">{{'enquiryId'|translate}}: {{item.enquiryId}}</span>
+											<span class="small">{{'date'|translate}}: {{item.date|rd:0}}</span>
+
+										</md-card-title-text>
+									</md-card-title>
+									<md-card-actions layout="row" layout-align="end center"> 
+										<md-button class="md-raised" ng-href="{{'#/enquiries/'+item.enquiryId}}">{{'details'|translate}}</md-button>
+									</md-card-actions>
+								</md-card>
 							</div>
-							<md-card ng-if="enquiries.length !== 0">
+						</div>
+					</md-tab-body>				
+				</md-tab>		
+				<md-tab>
+					<md-tab-label class="medium">
+						<i class="fa fa-credit-card"></i> {{'payment'|translate}}
+					</md-tab-label>
+					<md-tab-body>
+						<div ng-if="payments.length === 0" layout-padding layout-align="center start">
+							<H2>{{'noPayments'|translate}}</H2>
+							<md-button class="md-raised" ng-href="#/new/payment/{{account.accountId}}"><i class="fa fa-plus"></i></md-button>
+						</div>
+						<md-card ng-if="payments.length !== 0">
+							<div layout="row" layout-align="start center" layout-padding>
+								<div>
+									<span>{{'create'|translate}}</span>
+									<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
+										<i class="fa fa-plus"></i>
+									</md-button>
+								</div>			
+							</div>
+							<md-divider></md-divider>
+
+							<md-content layout="row" layout-wrap>
+								<div ng-repeat="item in payments" flex="100" flex-gt-xs="50" flex-gt-md="33">
+									<md-card id="bookingCard">
+										<md-card-title>
+											<md-card-title-text>
+												<span class="md-headline large"><i class="fa fa-credit-card"></i>{{'id'|translate|text_fmt:2}}: {{item.paymentId}}</span>
+												<span class="sub-head medium"><i class="fa fa-cc-visa fa-fw"></i>{{'method'|translate}}: {{ item.method }}</span>
+												<span class="sub-head medium"><i class="fa fa-asterisk fa-fw"></i>{{'credential1'|translate}}: {{ item.credential1}}</span>
+												<span class="sub-head medium"><i class="fa fa-asterisk fa-fw"></i>{{'credential2'|translate}}: {{item.credential2}}</span>
+												<span class="sub-head medium"><i class="fa fa-asterisk fa-fw"></i>{{'credential3'|translate}}: {{item.credential3}}</span>
+												<span class="sub-head medium"><i class="fa fa-calendar fa-fw"></i>{{'date'|translate}}: {{item.date|rd:0}}</span>
+												
+											</md-card-title-text>
+										</md-card-title>
+										<md-card-actions layout="row" layout-align="end center">							
+											<md-button class="md-raised medium" ng-href="#/payments/{{item.paymentId}}">{{'details'|translate}}</md-button>	
+										</md-card-actions>
+									</md-card>
+
+								</div>
+							</md-content>
+
+						</md-card>
+					</md-tab-body>
+
+				</md-tab>		
+				<md-tab>
+					<md-tab-label class="medium">
+						<i class="fa fa-refresh"></i> {{'transaction'|translate}}
+					</md-tab-label>
+					<md-tab-body>
+						<div ng-if="transactions.length === 0" layout-padding layout-align="center start">
+							<H2>{{'noTransactions'|translate}}</H2>
+						</div>
+						<md-card ng-if="transactions.length !== 0">
+							<div layout="row" layout-align="space-between center" layout-padding>
 								<div layout="row" layout-align="start center" layout-padding>
 									
-									<span>Order by</span>
-									<md-select ng-model="itemsOrder" placeholder="Item per page">
+									<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
 										<md-option value="date" ng-click="order()">Latest</md-option>
-										<md-option value="scooterId" ng-click="order()">Scooter</md-option>
-										<md-option value="accountId" ng-click="order()">Account</md-option>
-									</md-select>
+									</md-select>				
 								</div> 
-								<md-divider></md-divider>
-								<div layout="row" layout-wrap>
-									<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in enquiries">
-										<md-card>
-											<md-card-title>
-												<md-card-title-text >
-													<span class="md-headline" md-truncate style="max-width: 330px">{{item.comment}}</span>
-													<span class="md-subhead">{{'enquiryId'|translate}}: {{item.enquiryId}}</span>
+							</div>
 
-												</md-card-title-text>
+							<md-divider></md-divider>
 
-												<md-card-title-media>
-													<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
-													</div>
-												</md-card-title-media>
-											</md-card-title>
-											<md-card-actions layout="row" layout-align="end center"> 
-												<md-button class="md-raised" ng-href="{{'#/'+item.enquiryId}}">{{'details'|translate}}</md-button>
-											</md-card-actions>
-										</md-card>
-									</div>
+							<md-content layout="row" layout-wrap>			
+								<div ng-repeat="item in transactions|orderBy:itemsOrder:reverse" flex="100" flex-gt-xs="50" flex-gt-md="33">
+									<md-card id="transactionCard">
+										<md-card-title>
+											<md-card-title-text>
+												<span class="large"><i class="fa fa-refresh"></i> {{'id'|translate}}: {{item.transactionId}}</span>
+												<span class="medium"><i class="fa fa-money"></i> {{'amount'|translate}}: {{ item.amount }}</span>
+												<span class="medium"><i class="fa fa-calendar"></i> {{'date'|translate}}: {{ item.date|rd:0 }}</span>
+												<span class="medium"><i class="fa fa-spinner"></i> {{'status'|translate}}: {{ item.status}}</span>						
+											</md-card-title-text>
+										</md-card-title>
+									</md-card>
+
 								</div>
+							</md-content>
 
+						</md-card>
+					</md-tab-body>
+
+				</md-tab>		
+				<md-tab>
+					<md-tab-label class="medium">
+						<i class="fa fa-facebook"></i> {{'shareLog'|translate}}
+					</md-tab-label>
+					<md-tab-body>
+						<div ng-if="shareLogs.length === 0" layout-padding layout-align="center start">
+							<H2>{{'noShareLogs'|translate}}</H2>
+						</div>
+						<md-content ng-if="shareLogs.length !== 0" layout="row" layout-wrap>		
+							<div ng-repeat="item in shareLogs" flex="100" flex-gt-xs="50" flex-gt-md="33">
+								<md-card id="transactionCard">
+									<md-card-title>
+										<md-card-title-text>
+											<span class="large"><i class="fa fa-facebook-f fa-fw"></i>{{'id'|translate|text_fmt:2}}: {{item.shareLogId}}</span>
+											<span class="medium"><i class="fa fa-globe fa-fw"></i>{{'gateway'|translate}}: {{ item.gateway }}</span>
+											<span class="medium"><i class="fa fa-facebook-square fa-fw"></i>{{'date'|translate}}: {{ item.date|rd:0 }}</span>						
+										</md-card-title-text>
+									</md-card-title>
+								</md-card>
+
+							</div>
+						</md-content>
+
+					</md-tab-body>
+
+				</md-tab>
 								
-							</md-card>
-
-						</md-tab-body>				
-					</md-tab>		
-					<md-tab>
-						<md-tab-label>
-							<i class="fa fa-credit-card"></i> {{'payment'|translate}}
-						</md-tab-label>
-						<md-tab-body>
-							<div ng-if="payments.length === 0" layout-padding layout-align="center start">
-								<H2>{{'noPayments'|translate}}</H2>
-								<md-button class="md-raised" ng-href="#/new/payment/{{account.accountId}}">Create Payments</md-button>
-							</div>
-							<md-card ng-if="payments.length !== 0">
-								<div layout="row" layout-align="start center" layout-padding>
-									<div>
-										<span>{{'create'|translate}}</span>
-										<md-button class="md-raised md-icon-button" ng-href="#/new/payment">           
-											<i class="fa fa-plus"></i>
-										</md-button>
-									</div>			
-								</div>
-								<md-divider></md-divider>
-
-								<md-content layout="row" layout-wrap>
-									<div ng-repeat="item in payments" flex="100" flex-gt-xs="50" flex-gt-md="33">
-										<md-card id="bookingCard">
-											<md-card-title>
-												<md-card-title-text>
-													<span class="md-headline">{{'paymentId'|translate}}: {{item.paymentId}}</span>
-													<table>
-														<tr><td class="ulli">{{'method'|translate}}: </td><td>{{ item.method }}</td></tr>
-														<tr><td class="ulli">{{'credential1'|translate}}: </td><td>{{ item.credential1}}</td></tr>
-														<tr><td class="ulli">{{'credential2'|translate}}: </td><td>{{item.credential2}}</td></tr>
-														<tr><td class="ulli">{{'credential3'|translate}}: </td><td>{{item.credential3}}</td></tr>
-														<tr><td class="ulli">{{'date'|translate}}: </td><td>{{item.date|rd:1}}</td></tr>
-													</table>						
-												</md-card-title-text>
-											</md-card-title>
-											<md-card-actions layout="row" layout-align="end center">							
-												<md-button class="md-raised" ng-href="{{path+item.paymentId}}">{{'details'|translate}}</md-button>	
-											</md-card-actions>
-										</md-card>
-
-									</div>
-								</md-content>
-
-							</md-card>
-						</md-tab-body>
-
-					</md-tab>		
-					<md-tab>
-						<md-tab-label>
-							<i class="fa fa-refresh"></i> {{'transaction'|translate}}
-						</md-tab-label>
-						<md-tab-body>
-							<div ng-if="transactions.length === 0" layout-padding layout-align="center start">
-								<H2>{{'noTransactions'|translate}}</H2>
-							</div>
-							<md-card ng-if="transactions.length !== 0">
-								<div layout="row" layout-align="space-between center" layout-padding>
-									<div layout="row" layout-align="start center" layout-padding>
-										
-										<span>Order by</span>
-										<md-select ng-model="itemsOrder" placeholder="Item per page">
-											<md-option value="date" ng-click="order()">Latest</md-option>
-											<md-option value="username" ng-click="order()">Username</md-option>
-											<md-option value="active" ng-click="order()">Active</md-option>
-										</md-select>				
-									</div> 
-								</div>
-
-								<md-divider></md-divider>
-
-								<md-content layout="row" layout-wrap>			
-									<div ng-repeat="item in transactions" flex="100" flex-gt-xs="50" flex-gt-md="33">
-										<md-card id="transactionCard">
-											<md-card-title>
-												<md-card-title-text>
-													<span class="md-headline">{{'transactionId'|translate}}: {{item.transactionId}}</span>
-													<span class="sub-head">{{'tamount'|translate}}: {{ item.amount }}</span>
-													<span class="sub-head">{{'date'|translate}}: {{ item.date|rd:0 }}</span>
-													<span class="sub-head">{{'status'|translate}}: {{ item.status}}</span>						
-												</md-card-title-text>
-											</md-card-title>
-										</md-card>
-
-									</div>
-								</md-content>
-
-							</md-card>
-						</md-tab-body>
-
-					</md-tab>		
-					<md-tab>
-						<md-tab-label>
-							<i class="fa fa-facebook"></i> {{'shareLog'|translate}}
-						</md-tab-label>
-						<md-tab-body>
-							<div ng-if="shareLogs.length === 0" layout-padding layout-align="center start">
-								<H2>{{'noShareLog'|translate}}</H2>
-							</div>
-							<md-card ng-if="shareLogs.length !== 0">
-								<md-content layout="row" layout-wrap>		
-									<div ng-repeat="item in shareLogs" flex="100" flex-gt-xs="50" flex-gt-md="33">
-										<md-card id="transactionCard">
-											<md-card-title>
-												<md-card-title-text>
-													<span class="md-headline">{{'shareLogId'|translate}}: {{item.shareLogId}}</span>
-													<span class="sub-head">{{'gateway'|translate}}: {{ item.gateway }}</span>
-													<span class="sub-head">{{'date'|translate}}: {{ item.date|rd:0 }}</span>						
-												</md-card-title-text>
-											</md-card-title>
-										</md-card>
-
-									</div>
-								</md-content>
-							</md-card>
-						</md-tab-body>
-
-					</md-tab>
-					<md-tab>
-						<md-tab-label>
-							<i class="fa fa-bell"></i> {{'pushTokens'|translate}}
-						</md-tab-label>
-						<md-tab-body>
-							<div ng-if="pushTokens.length === 0" layout-padding layout-align="center start">
-								<H2>{{'noPushTokens'|translate}}</H2>
-								<md-button class="md-raised" ng-href="">{{'create'|translate}}</md-button>
-							</div>
-							<md-card ng-if="pushTokens.length !== 0">
-								<md-content layout="row" layout-wrap>		
-									<div ng-repeat="item in pushTokens" flex="100" flex-gt-xs="50" flex-gt-md="33">
-										<md-card id="transactionCard">
-											<md-card-title>
-												<md-card-title-text>
-													<span class="md-headline">{{'pushTokenId'|translate}}: {{item.pushTokenId}}</span>
-													<span class="sub-head">{{'token'|translate}}: {{ item.token }}</span>
-													<span class="sub-head">{{'device'|translate}}: {{ item.device }}</span>	
-													<span class="sub-head">{{'status'|translate}}: {{item.active}}</span>	
-													<span class="sub-head">{{'create'|translate}}: {{item.date|rd:0}}</span>					
-												</md-card-title-text>
-											</md-card-title>
-										</md-card>
-
-									</div>
-								</md-content>
-							</md-card>
-						</md-tab-body>
-
-					</md-tab>		
-					<md-tab>
-						<md-tab-label>
-							<i class="fa fa-gift"></i> {{'promotion'|translate}}
-						</md-tab-label>
-						<md-tab-body>
-							<div ng-if="promotions.length === 0" layout-padding layout-align="center start">
-								<H2>{{'noPromotions'|translate}}</H2>
-								<md-button class="md-raised" ng-click="promoDialog($event)">{{'create'|translate}}</md-button>
-							</div>
-							<md-card ng-if="promotions.length !== 0">
-								<div layout="row" layout-align="space-between center" layout-padding>
-									<div layout="row" layout-align="start center" layout-padding>
-										
-										<span>Order by</span>
-										<md-select ng-model="itemsOrder" placeholder="Item per page">
-											<md-option value="date" ng-click="order()">Latest</md-option>
-											<md-option value="username" ng-click="order()">Username</md-option>
-											<md-option value="active" ng-click="order()">Active</md-option>
-										</md-select>				
-									</div> 
-									<div>
-										<span>{{'create'|translate}}</span>
-										<md-button class="md-raised md-icon-button" ng-click="promoDialog($event)">           
-											<i class="fa fa-plus"></i>
-										</md-button>
-									</div>			
-								</div>
-								<md-divider></md-divider>
-								<md-content layout="row" layout-wrap>
-									<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in promotions">
-										<md-card>
-											<md-card-title>
-												<md-card-title-text>
-													<span class="md-headline">{{'name'|translate}}: {{ item.name }}</span>
-													<span class="md-subhead">{{'promotionId'|translate}}: {{item.promotionId}}</span>
-													<span class="md-subhead">{{'description'|translate}}: {{ item.description }}</span>
-													<span class="md-subhead">{{'amount'|translate}}: {{item.amount}}</span>
-													<span class="md-subhead">{{'date'|translate}}: {{item.date|rd:0}}</span>
-												</md-card-title-text>
-												<md-card-title-media>
-													<div class="md-media-sm card-media" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
-													</div>
-												</md-card-title-media> 
-											</md-card-title>
-											<md-card-actions layout="row" layout-align="end center"> 
-												<md-button class="md-raised" ng-href="{{'#/promotions/'+item.promotionId}}">{{'details'|translate}}</md-button>
-											</md-card-actions>
-										</md-card>
-									</div>
-								</md-content>
-
-							</md-card>
-						</md-tab-body>
-					</md-tab>							
 				</md-tabs>
 			</md-card>
 		</div>

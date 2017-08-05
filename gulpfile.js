@@ -11,7 +11,7 @@ var reload = browserSyn.reload;
 /** ======
 Parameters
 ======= */
-var SRC = "src", DEST = "app"
+var SRC = "src", DEST = "app", INJ = ""
 
 gulp.task('default', function() {
 	console.log(`
@@ -60,8 +60,9 @@ var LIBRARIES = [
 	'./node_modules/ng-img-crop-full-extended/compile/minified/*.js',
 	'./node_modules/angular-drag-and-drop-lists/*.js',
 	'./node_modules/iframe/*',
-	'./node_modules/angular-translate/dist/*.js'
-
+	'./node_modules/angular-translate/dist/*.js',
+	'./node_modules/mdPickers/dist/*',
+	'./node_modules/ng-material-datetimepicker/dist/*'
 ];
 
 gulp.task('build-lib', function() {
@@ -110,6 +111,28 @@ gulp.task('build-js', function() {
 	.pipe(gulp.dest(DEST + '/js'));
 });
 
+var INJECTRES_LOCAL = [
+	INJ + '/lib/roboto-fontface/css/roboto/roboto-fontface.css',
+	INJ + '/lib/font-awesome/css/font-awesome.min.css',
+	INJ + '/lib/moment/min/moment.min.js',
+	INJ + '/lib/angular/angular.min.js',
+	INJ + '/lib/angular-route/angular-route.min.js',
+	INJ + '/lib/angular-aria/angular-aria.min.js',
+	INJ + '/lib/angular-animate/angular-animate.min.js',
+	INJ + '/lib/angular-material/angular-material.min.css',
+	INJ + '/lib/angular-material/angular-material.min.js',
+	INJ + '/css/style.css',
+	INJ + '/css/ng-img-crop.css',
+	INJ + '/js/main.js',
+	INJ + '/lib/angular-avatar/dist/angular-avatar.js',
+	INJ + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css',
+	INJ + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
+	INJ + '/lib/ng-file-upload/dist/ng-file-upload.js',
+	INJ + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js',
+	INJ + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
+	INJ + '/lib/angular-translate/dist/angular-translate.min.js'
+];
+
 var INJECTRES = [
 	DEST + '/lib/roboto-fontface/css/roboto/roboto-fontface.css',
 	DEST + '/lib/font-awesome/css/font-awesome.min.css',
@@ -129,7 +152,9 @@ var INJECTRES = [
 	DEST + '/lib/ng-file-upload/dist/ng-file-upload.js',
 	DEST + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js',
 	DEST + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
-	DEST + '/lib/angular-translate/dist/angular-translate.min.js'
+	DEST + '/lib/angular-translate/dist/angular-translate.min.js',
+	DEST + '/lib/mdPickers/dist/*',
+	DEST + '/lib/ng-material-datetimepicker/dist/*',
 ];
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {

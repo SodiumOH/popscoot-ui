@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="/app/img/favicon.ico">
 	<title>POPSCOOT</title>
 	<!-- inject:css -->
 	<!-- endinject -->
@@ -16,10 +17,11 @@
 				md-is-locked-open="$mdMedia('gt-md')"
 				md-whiteframe="4"
 				ng-style="{'min-height': browserHeight + 'px'}"
+				style="max-width: 250px"
 				>
 
-				<md-toolbar id='profileInfo' class="md-theme-indigo" layout-padding>
-					<span>POPSCOOT</span>
+				<md-toolbar id='profileInfo' class="md-theme-indigo popscoot" layout-padding>
+					<span style="padding-top: 13px">POPSCOOT</span>
 				</md-toolbar>
 				<md-content>
 					<md-list>
@@ -28,7 +30,7 @@
 								<i class="{{item.icon}} fa-lg fa-fw" aria-hidden="true"></i>
 							</div>
 							<div layout="row" layout-align="space-between center">
-								<p>{{ item.name | translate}}</p>
+								<p class="large">{{ item.name | translate}}</p>
 								<i ng-if="item.icon2 && !item.colapsed" class="{{item.icon2.folded}} fa-lg fa-fw" aria-hidden="true" ></i>
 								<i ng-if="item.icon2 && item.colapsed" class="{{item.icon2.colapsed}} fa-lg fa-fw" aria-hidden="true" ></i>
 							</div>		
@@ -38,14 +40,14 @@
 				</md-content>
 			</md-sidenav>
 			<div flex>
-				<md-toolbar class="md-hue-2">
+				<md-toolbar class="md-hue-2 popscoot">
 					<div class="md-toolbar-tools">
 						<md-button class="md-icon-button" ng-click="openLeftMenu()" hide-gt-md>
 							<i class="fa fa-bars fa-2x" aria-hidden="true" ></i>
 						</md-button>
 						<h2 flex md-truncate>
-							<md-button ng-click="goHome()">{{'Home' | translate}} <i class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
-							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)">{{item.name |text_fmt:0|translate}}<i ng-hide="$index == BCLength" class="fa fa-arrow-right" aria-hidden="true"></i></md-button>
+							<md-button ng-click="goHome()" class="large">{{'Home' | translate}} <i class="fa fa-angle-right" aria-hidden="true"></i></md-button>
+							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)" class="large">{{item.name |translate}}<i ng-hide="$index == BCLength" class="fa fa-angle-right" aria-hidden="true"></i></md-button>
 						</h2>
 						<md-menu md-offset="0 50">
 							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
@@ -53,15 +55,15 @@
 							</md-button>
 							<md-menu-content width="4">
 								<md-menu-item>
-									<md-button ng-click="changeLanguage('ch')">中文</md-button>									
+									<md-button ng-click="changeLanguage('ch')" class="large">中文</md-button>									
 								</md-menu-item>
 								<md-menu-divider></md-menu-divider>
 								<md-menu-item layout-align="end end">
-									<md-button ng-click="changeLanguage('en')">English</md-button>									
+									<md-button ng-click="changeLanguage('en')" class="large">English</md-button>									
 								</md-menu-item>
 							</md-menu-content>
 						</md-menu>
-						<span>{{Laccount.email}}</span>
+						<span class="large">{{Laccount.email}}</span>
 						<md-menu md-offset="0 50">
 							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
 								

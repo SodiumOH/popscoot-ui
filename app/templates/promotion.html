@@ -1,25 +1,25 @@
 <div>
 	<md-content layout-gt-sm="row" layout-padding>
 		<div flex flex-md="35" flex-gt-md="30">
-			<md-card>
+			<md-card class="large">
 				<md-card-title>
 					<md-card-title-text>
 						<span class="md-headline" md-truncate>{{promotion.name}}</span>
 
 						<span class="md-subhead">{{'promotionId'|translate}}: {{promotion.promotionId}}</span>
-						<span class="md-subhead">{{'date'|translate}}: {{promotion.date}}</span>
+						<span class="md-subhead">{{'date'|translate}}: {{promotion.date|rd:0}}</span>
 					</md-card-title-text>
 					<md-card-title-media>
-						<div ng-if="!uploadImage" class="md-media-lg card-media" style="background-image: url({{promotion.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">   
+						<div ng-if="!uploadImage" class="md-media-sm card-media" style="background-image: url({{promotion.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">   
 							<md-button class="md-icon-button" ng-click="uploadPrompt()"><i class="fa fa-camera" aria-hidden="true"></i></md-button>
 						</div>	
 
-						<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="md-media-lg card-media drop-box" 
+						<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="md-media-sm card-media drop-box" 
 						ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
 						accept="image/*" 
 						ngf-pattern="'image/*'" >
 						<div style="padding-top: 50px"  ng-hide="preview">Drop images here or click to upload, {{uploadStatus}}</div>
-						<div ng-hide="!preview" class="md-media-lg card-media" style="background-image: url({{dataUrl}}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
+						<div ng-hide="!preview" class="md-media-sm card-media" style="background-image: url({{dataUrl}}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
 					</div>
 					<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> 
 				</md-card-title-media>

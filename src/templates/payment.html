@@ -1,13 +1,13 @@
 <div>
 	<md-content layout-gt-md="row" layout-padding>
 		<div flex flex-md="35" flex-gt-md="30">
-			<md-card>
+			<md-card class="large">
 				<md-card-title>
 					<md-card-title-text>
 						<span class="md-headline" md-truncate>{{'by'|translate}}: {{payment.account.username}}</span>
 
-						<span class="md-subhead">{{'paymentId'|translate}}: {{payment.paymentId}}</span>
-						<span class="md-subhead">{{'date'|translate}}: {{payment.date}}</span>
+						<span class="md-subhead large">{{'paymentId'|translate}}: {{payment.paymentId}}</span>
+						<span class="md-subhead large">{{'date'|translate}}: {{payment.date|rd:0}}</span>
 					</md-card-title-text>
 				</md-card-title>
 				<md-content layout-padding>	
@@ -35,11 +35,11 @@
 
 						<div layout-gt-xs="row" layout-padding layout-align="space-between center">
 							<div>			
-								<span>{{'username'|translate}}: </span>
-								<md-button class="md-raised" ng-href="#/accounts/{{payment.account.accountId}}">{{payment.account.username}}</md-button>
+								
+								<md-button class="md-raised" ng-href="#/accounts/{{payment.account.accountId}}"><i class="fa fa-user"></i>{{payment.account.username}}</md-button>
 
 							</div>
-							<md-switch flex="45" ng-model="scooter.active" aria-label="Switch 1" ng-change="">{{payment.active?"activated":"deactivated"|translate}}</md-switch>
+							<md-switch ng-model="scooter.active" aria-label="Switch 1" ng-change=""></md-switch>
 						</div>
 
 						<div flex layout="row">					
@@ -64,7 +64,7 @@
 							<md-option value=30>30</md-option>
 						</md-select>
 						<span>{{'orderBy'|translate}}</span>
-						<md-select ng-model="itemsOrder" placeholder="{{'username'|translate}}">
+						<md-select ng-model="itemsOrder" placeholder="{{'itemsOrder'|translate}}">
 							<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
 						</md-select>				
 					</div> 
@@ -73,27 +73,29 @@
 				<md-divider></md-divider>
 
 				<md-content layout="row" layout-wrap>
-					<H2 ng-if="transactions.length === 0">{{'noTransactions'|translate}}</H2>				
-					<div ng-repeat="item in transactions" flex="100" flex-gt-xs="50" flex-gt-md="33">
+					<H2 ng-if="transactions.length === 0" layout-padding>{{'noTransactions'|translate}}</H2>				
+					<div ng-repeat="item in transactions|orderBy: itemsOrder: reverse|paginate: currentPageNumber: itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
 						<md-card id="transactionCard">
 							<md-card-title>
 								<md-card-title-text>
-									<span class="md-headline">{{'transactionId'|translate}}: {{item.transactionId}}</span>
-									<span class="sub-head">{{'amount'|translate}}: {{ item.amount }}</span>
-									<span class="sub-head">{{'date'|translate}}: {{ item.date }}</span>
-									<span class="sub-head">{{'status'|translate}}: {{ item.status}}</span>						
+									<span class="large"><i class="fa fa-refresh"></i> {{'transactionId'|translate}}: {{item.transactionId}}</span>
+									<span class="medium"><i class="fa fa-money"></i> {{'amount'|translate}}: {{ item.amount }}</span>
+									<span class="medium"><i class="fa fa-calendar"></i> {{'date'|translate}}: {{ item.date|rd:0 }}</span>
+									<span class="medium"><i class="fa fa-spinner"></i> {{'status'|translate}}: {{ item.status}}</span>
 								</md-card-title-text>
 							</md-card-title>
 						</md-card>
 
 					</div>
-				</md-content>
-				<div ng-if="transactions.length !== 0" layout="row" layout-align="space-around center">
-					<md-button class="md-raised" ng-click="currentPageNumber--">{{'pageUp'|translate}}</md-button>
-					<md-button class="md-raised" ng-click="currentPageNumber++">{{'pageDown'|translate}}</md-button>
-				</div>
 
+				</md-content>
+				<div layout="row" layout-align="space-around center">
+					<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>				
+					<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
+				</div>
+				
 			</md-card>
+
 		</div>
 
 	</md-content>

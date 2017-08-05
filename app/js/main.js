@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
 	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.tracking.ctrl', 'app.accountPromo.ctrl'
 	])
 
@@ -7,8 +7,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 	
 	var isAuthenticated = function(){
 		if (localStorage.getItem("UI_SECRET") === null) {
-			var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-			window.location.href = path + "auth.html";
+			window.location.href = "auth.html";
 		}
 	}
 	isAuthenticated();
@@ -44,7 +43,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		itemsPerPage: "Items Per Page",
 		orderBy: "Order By",
 		search: "Search",
-		create: "Create New",
+		create: "",
 		//general edition
 		activated: "activated",
 		deactivated: "deactivated",
@@ -55,6 +54,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		//general information
 		by: "by",	
 		date: "date",
+		id: "id",
 		//not exist...
 		noAccounts: "There are no accounts yet",
 		noBookings: "There are no bookings yet",
@@ -64,7 +64,8 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		noTransactions: "There are no transactions yet",
 		noShareLogs: "There are no shareLogs yet",
 		noPushTokens: "There are no push tokens yet",
-		noPromotions: "There are no promotions yet",
+		noPromotions: "There are no promotions yet",		
+		noHelps: "There are no helps yet",
 		//accounts
 		account: "account",
 		email: "email",
@@ -84,6 +85,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		token: "token",
 		device: "device",
 		status: "status",
+		createAccount: "Create New Account",
 		//scooters
 		scooter: "scooter",
 		scooterId: "Scooter ID",
@@ -96,6 +98,8 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 		//booking
 		booking: "booking",
 		bookingId: "booking ID",
+		start: "start",
+		end: "end",
 		startTime: "start time",
 		endTime: "end time",
 		destination: "destination",
@@ -268,7 +272,7 @@ angular.module('POPSCOOT', ['dndLists', 'pascalprecht.translate','ngAvatar', 'ng
 
 	});
 	$translateProvider.useSanitizeValueStrategy('escape');
-	$translateProvider.preferredLanguage('ch');
+	$translateProvider.preferredLanguage('en');
 
 })
 
@@ -482,7 +486,7 @@ angular.module('app.root.ctrl', [])
 	});
 
 	$scope.goHome = function(){
-		window.location.href =  $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/" +"index.html";
+		window.location.href =  "index.html";
 		$scope.breadcrumbs = [];
 	}
 	$scope.$on('GETLOADING', function(){
@@ -577,7 +581,7 @@ angular.module('app.root.ctrl', [])
 			icon: "fa fa-money",
 			hide: true,
 			margin: {'margin-left':'25px'}
-		},{
+		}/*,{
 			path: "miscellaneous",
 			name: "miscellaneous",
 			colapsed: false,
@@ -602,7 +606,7 @@ angular.module('app.root.ctrl', [])
 			path: "analytics",
 			name: "analytics",
 			icon: "fa fa-line-chart"
-		}],
+		}*/],
 		logout: {
 			path: "logout",
 			name: "Logout",
@@ -621,9 +625,7 @@ angular.module('app.root.ctrl', [])
 
 		$scope.goPage = function(path) {
 			if (path == "logout") {
-				var path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
-
-				window.location.href = (path + "auth.html");
+				window.location.href = ("auth.html");
 				localStorage.removeItem("UI_SECRET");
 			} else if(path == "finance") {
 				$scope.menu.main[5].colapsed = !$scope.menu.main[5].colapsed;
@@ -754,7 +756,7 @@ angular.module('app.account.ctrl', [])
 
 .controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration, $mdToast) {
 	console.log('this is AccountCtrl');
-
+	$scope.itemsOrder;
 	$scope.search;
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";	
 	var accountId = $routeParams.id;
@@ -982,7 +984,7 @@ angular.module('app.account.ctrl', [])
 						$scope.uploadStatus = "Failed..."+data.data.data.message;
 						$mdToast.show(
 							$mdToast.simple()
-							.textContent(message)
+							.textContent(data.data.data.message)
 							.hideDelay(3000)
 							.position("top right")
 							.theme('error-toast')
@@ -1033,7 +1035,7 @@ angular.module('app.account.ctrl', [])
 					console.log(data.data.message);
 					$mdToast.show(
 						$mdToast.simple()
-						.textContent(message)
+						.textContent(data.data.message)
 						.hideDelay(3000)
 						.position("top right")
 						.theme('error-toast')
@@ -1117,7 +1119,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent("message")
+				.textContent(data.data.data.message)
 				.hideDelay(3000)
 				.position("top right")
 				.theme("error-toast")
@@ -1172,7 +1174,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent(message)
+				.textContent(data.data.data.message)
 				.hideDelay(3000)
 				.position("top right")
 				.theme('error-toast')
@@ -1389,7 +1391,7 @@ angular.module('app.account.ctrl', [])
 	};
 	console.log("this is NewAccountCtrl");
 	$scope.$emit('BC', {
-		name: "create",
+		name: "createAccount",
 		url: "/new/account"
 	})
 	$scope.account;
@@ -1418,7 +1420,7 @@ angular.module('app.account.ctrl', [])
 			console.log(data.data.data.message);
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent(message)
+				.textContent(data.data.data.message)
 				.hideDelay(3000)
 				.position("top right")
 				.theme('error-toast')
@@ -1435,7 +1437,7 @@ angular.module('app.analytics.ctrl', [])
 
 angular.module('app.bank.ctrl', [])
 
-.controller('BankCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
+.controller('BankCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is BankCtrl')
 	var domain = configuration.domain();
 	$scope.$emit('BC', {
@@ -1457,6 +1459,13 @@ angular.module('app.bank.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 	getBank();
@@ -1468,8 +1477,21 @@ angular.module('app.bank.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -1480,8 +1502,21 @@ angular.module('app.bank.ctrl', [])
 	$scope.$on("DELETE_Bank", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -1515,7 +1550,7 @@ angular.module('app.bank.ctrl', [])
 
 })
 
-.controller('BanksCtrl', function($scope, $location, httpService, configuration) {
+.controller('BanksCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is BanksCtrl');
 	$scope.$emit('BC', {
 		name: "Banks",
@@ -1528,7 +1563,7 @@ angular.module('app.bank.ctrl', [])
 	// }
 	var domain = configuration.domain();
 	$scope.url = domain + "/service/banks";
-	$scope.banks;
+	$scope.banks = [];
 
 	httpService.httpGet($scope.url, 'GET_BANKS');
 
@@ -1540,6 +1575,13 @@ angular.module('app.bank.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -1572,7 +1614,7 @@ angular.module('app.bank.ctrl', [])
     //pagination end
 
 })
-.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
+.controller("NewBankCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location, $mdToast){
 	console.log("this is NewBankCtrl");
 	$scope.$emit('BC', {
 		name: "Create Banks",
@@ -1675,9 +1717,22 @@ angular.module('app.bank.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.bank = data.data.data.data;		
 			$location.path("/banks/"+$scope.bank.bankId);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent("Success")
+						.hideDelay(3000)
+						.position("top right")
+						);
 			/*window.location.href = "#banks/" + $scope.bank.bankId;*/
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 	
@@ -1686,7 +1741,7 @@ angular.module('app.bank.ctrl', [])
 
 angular.module('app.booking.ctrl', [])
 
-.controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration) {
+.controller('BookingCtrl', function($scope,$location, $mdDialog, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is BookingCtrl')
 	$scope.$emit('BC', {
 		name: "Booking",
@@ -1710,6 +1765,13 @@ angular.module('app.booking.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -1724,8 +1786,21 @@ angular.module('app.booking.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.booking = data.data.data.data;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -1736,8 +1811,21 @@ angular.module('app.booking.ctrl', [])
 	$scope.$on("DELETE_Booking", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -1771,7 +1859,7 @@ getBooking();
 
 })
 
-.controller('BookingsCtrl', function($scope, $location, httpService, configuration) {
+.controller('BookingsCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is BookingsCtrl');
 	$scope.$emit('BC', {
 		name: "Bookings",
@@ -1811,11 +1899,11 @@ getBooking();
 
 
 	//orderBy start
-    $scope.itemsOrder = "latest";
-    $scope.reverse = false;
-    $scope.order = function(){
-    	$scope.reverse = !$scope.reverse;
-    }
+	$scope.itemsOrder = "latest";
+	$scope.reverse = false;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -1839,7 +1927,7 @@ getBooking();
     //pagination end
 })
 
-.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location){
+.controller("NewBookingCtrl", function($scope, $routeParams, $mdDialog, httpService, configuration, $location, $mdToast){
 	console.log("this is NewBookingCtrl");
 	$scope.$emit('BC', {
 		name: "Create Bookings",
@@ -1857,12 +1945,10 @@ getBooking();
 	}
 
 
-	$scope.createBooking = function(){
-		httpService.httpPost
-	}
+	
 
 	function getAccounts() {
-		httpService.httpGet($scop.url.accounts, 'GET_TACCOUNTS');
+		httpService.httpGet($scope.url.accounts, 'GET_TACCOUNTS');
 	}
 
 	$scope.$on("GET_TACCOUNTS", function(event, data){
@@ -1877,7 +1963,7 @@ getBooking();
 		
 	});
 	function getScooters() {
-		httpService.httpGet($scop.url.scooters, 'GET_TSCOOTERS');
+		httpService.httpGet($scope.url.scooters, 'GET_TSCOOTERS');
 	}
 
 	$scope.$on("GET_TSCOOTERS", function(event, data){
@@ -1886,6 +1972,7 @@ getBooking();
 			$scope.scooters = data.data.data.data;
 		} else {
 			console.log(data.data.data.message);
+
 		}
 		
 	});
@@ -2018,8 +2105,12 @@ getBooking();
 
 	$scope.createBooking = function(){
 		var create = $scope.booking;
-		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
-		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SS+HHmm");
+		create.startDate = moment($scope.booking.startDate).format("YYYY-MM-DDTHH:MM:SSZ");
+		create.endDate = moment($scope.booking.endDate).format("YYYY-MM-DDTHH:MM:SSZ");
+		create.outsetLockId = parseInt($scope.booking.outsetLockId);
+		create.destinationLockId = parseInt($scope.booking.destinationLockId);
+		create.accountId = parseInt($scope.booking.accountId);
+		create.scooterId = parseInt($scope.booking.scooterId);
 		console.log(create);
 		httpService.httpPost($scope.url.bookings, create, "CREATE_BOOKING");
 	}
@@ -2027,9 +2118,22 @@ getBooking();
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);	
 			$location.path('/bookings/'+$scope.booking.bookingId);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 			/*window.location.href = "#bookings/" + $scope.booking.bookingId*/
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 })
@@ -2040,15 +2144,15 @@ angular.module('app.dashboard.ctrl', [])
 	$scope.loadingIframe = true;
 	$scope.mapSource = $sce.trustAsResourceUrl(configuration.iframe()+"/map");
 	window.uploadDone = function(){
-		console.log(666);
 		$scope.loadingIframe = false;
+		console.log($scope.loadingIframe);
 	}
 })
 
 
 angular.module('app.enquiry.ctrl', [])
 
-.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService, configuration) {
+.controller('EnquiryCtrl', function($location, $mdDialog, $scope, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is EnquiryCtrl');
 	$scope.$emit('BC', {
 		name: "Enquiry",
@@ -2070,6 +2174,13 @@ angular.module('app.enquiry.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 	$scope.updateEnquiry = function(){
@@ -2092,9 +2203,21 @@ angular.module('app.enquiry.ctrl', [])
 	$scope.$on("DELETE_Enquiry", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			console.log("uhmmmmm");
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -2124,10 +2247,10 @@ angular.module('app.enquiry.ctrl', [])
     	$scope.status = 'Action canceled';
     });
 };
-	getEnquiry();
+getEnquiry();
 })
 
-.controller('EnquiriesCtrl', function($scope, $location, httpService, configuration) {
+.controller('EnquiriesCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is EnquiriesCtrl')
 	$scope.$emit('BC', {
 		name: "Enquiries",
@@ -2181,6 +2304,13 @@ angular.module('app.enquiry.ctrl', [])
     	} else {
     		console.log(data.data.data.message);
     		$scope.$emit("GETFINISHED");
+    		$mdToast.show(
+    			$mdToast.simple()
+    			.textContent(data.data.data.message)
+    			.hideDelay(3000)
+    			.position("top right")
+    			.theme('error-toast')
+    			);
     	}
     });
 })
@@ -2349,7 +2479,7 @@ getHelp();
 		$scope.arrangeB = !$scope.arrangeB;
 	}
 
-	$scope.helps;
+	$scope.helps = [];
 
 
 	httpService.httpGet($scope.url, 'GET_HELPS');
@@ -2481,7 +2611,7 @@ getHelp();
 	$scope.createHelp = function(){
 		var createForm = $scope.help;
 		console.log(createForm);
-		httpService.httpPost((configuration.domain + "/service/helps"), createForm, 'CREATE_HELP');
+		httpService.httpPost((configuration.domain() + "/service/helps"), createForm, 'CREATE_HELP');
 	}
 	$scope.$on("CREATE_HELP", function(event, data){
 		if(data.data.data.status == 1) {
@@ -2498,7 +2628,7 @@ getHelp();
 
 angular.module('app.payment.ctrl', [])
 
-.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration) {
+.controller('PaymentCtrl', function($scope,$mdDialog, $location, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is PaymentCtrl');
 	$scope.url = {
 		payment: configuration.domain()+"/service/payments/"+$routeParams.id,
@@ -2510,7 +2640,7 @@ angular.module('app.payment.ctrl', [])
 		url: "payments/"+$routeParams.id
 	});
 	$scope.payment;
-	$scope.transactions;
+	$scope.transactions = [];
 	function getPayment(){
 		httpService.httpGet($scope.url.payment, 'GET_PAYMENT');		
 	};
@@ -2523,6 +2653,13 @@ angular.module('app.payment.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -2534,8 +2671,21 @@ angular.module('app.payment.ctrl', [])
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.payment = data.data.data.data;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -2546,8 +2696,21 @@ angular.module('app.payment.ctrl', [])
 	$scope.$on("DELETE_payment", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -2594,9 +2757,39 @@ $scope.$on("GET_TRANSACTIONS", function(event, data){
 });
 getPayment();
 getTransactions();
+
+$scope.itemsOrder = "date";
+$scope.reverse = true;
+$scope.order = function(){
+	$scope.reverse = !$scope.reverse;
+}
+//pagination start
+$scope.currentPageNumber = 1;
+$scope.itemsPerPage = 10;
+
+$scope.getNumberOfPages = function() {
+	var count = $scope.transactions.length / $scope.itemsPerPage;
+	if(($scope.transactions.length % $scope.itemsPerPage) > 0) count++;
+	return Math.floor(count);
+}
+
+$scope.pageDown = function()
+{
+	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+}
+
+$scope.pageUp = function()
+{
+	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+}
+    //pagination end
+
+
+
+
 })
 
-.controller('PaymentsCtrl', function($scope, $location, httpService, configuration) {
+.controller('PaymentsCtrl', function($scope, $location, httpService, configuration, $mdToast) {
 	console.log('this is PaymentsCtrl');
 	$scope.path = "#/payments/";
 	/*var path = $location.path();
@@ -2604,7 +2797,7 @@ getTransactions();
 		$location.path(path);
 	}*/
 	$scope.url = configuration.domain()+"/service/payments";
-	$scope.payments;
+	$scope.payments = [];
 
 	httpService.httpGet($scope.url, 'GET_PAYMENTS');
 
@@ -2621,15 +2814,22 @@ getTransactions();
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
 	//orderBy start
-    $scope.itemsOrder = "date";
-    $scope.reverse = true;
-    $scope.order = function(){
-    	$scope.reverse = !$scope.reverse;
-    }
+	$scope.itemsOrder = "date";
+	$scope.reverse = true;
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -2652,7 +2852,7 @@ getTransactions();
      }
     //pagination end
 })
-.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog, configuration, $location){
+.controller('NewPaymentCtrl', function($scope, httpService, $mdDialog, configuration, $location, $mdToast){
 	console.log("this is NewPaymentCtrl");
 	function getAccounts() {
 		httpService.httpGet((configuration.domain()+"/service/accounts"), 'GET_BACCOUNTS');
@@ -2693,7 +2893,7 @@ getTransactions();
 		});
 	};
 
-	function DialogController($scope, $mdDialog, Upload, httpService, localAcc) {
+	function DialogController($scope, $mdDialog, Upload, httpService, localAcc, $mdToast) {
 		$scope.accounts = localAcc;
 
 		$scope.itemsOrder = "active";
@@ -2749,10 +2949,23 @@ getTransactions();
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
 			$scope.payment = data.data.data.data;
-			$location.path("/payments/"+$scope.payment.paymentId);		
+			$location.path("/payments/"+$scope.payment.paymentId);	
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);	
 			/*window.location.href = "#payments/" + $scope.payment.paymentId;*/
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 	
@@ -2954,7 +3167,7 @@ $scope.pageUp = function()
 	$scope.url = configuration.domain()+"/service/promotions";
 
 	httpService.httpGet($scope.url, 'GET_PROMOTIONS');
-	$scope.promotions;
+	$scope.promotions = [];
 
 	$scope.$on("GET_PROMOTIONS", function(event, data){
 		if(data.data.data.status == 1) {
@@ -3020,7 +3233,7 @@ $scope.pageUp = function()
 })
 angular.module('app.scooter.ctrl', [])
 
-.controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration) {
+.controller('ScooterCtrl', function($mdDialog,$location, $scope, $routeParams, httpService, configuration, $mdToast) {
 	console.log('this is ScooterCtrl')
 	$scope.$emit('BC', {
 		name: "Scooter",
@@ -3043,6 +3256,13 @@ angular.module('app.scooter.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 	function getBookings (){
@@ -3057,6 +3277,13 @@ angular.module('app.scooter.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -3093,7 +3320,7 @@ angular.module('app.scooter.ctrl', [])
 					"folder": "/popscoot"
 				}
 				console.log(uploadForm);
-				httpService.httpPost("http://test.popscoot.com/popscoot/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
+				httpService.httpPost(configuration.domain()+"/service/file/upload/", uploadForm, 'UPLOAD_IMAGE');
 				$scope.uploadStatus = "Uploading...";
 				$scope.$on("UPLOAD_IMAGE", function(event, data){
 					if(data.data.data.status == 1) {
@@ -3126,8 +3353,21 @@ angular.module('app.scooter.ctrl', [])
 			$scope.scooter = data.data.data.data;
 			$scope.uploadImage = false;
 			$scope.preview = false;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 
@@ -3138,8 +3378,22 @@ angular.module('app.scooter.ctrl', [])
 	$scope.$on("DELETE_scooter", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
+			$location.path("/scooters/");
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
 
@@ -3157,8 +3411,8 @@ angular.module('app.scooter.ctrl', [])
     $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.scooter.integrateId) {
-    		deletescooter();    		
-    		window.location.href = $scope.path + "index.html#/scooters";
+    		deletescooter();   
+    		$location.path('/scooters')
     	} else {
 
     		$scope.status = 'Username Mismatch';
@@ -3174,7 +3428,7 @@ getBookings();
 })
 
 
-.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService) {
+.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService, $mdToast) {
 	console.log('this is ScootersCtrl');
 
 	$scope.$emit('BC', {
@@ -3207,9 +3461,16 @@ getBookings();
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	});
-	    
+
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -3232,7 +3493,7 @@ getBookings();
      }
     //pagination end
 })
-.controller('NewScooterCtrl', function($scope, configuration, httpService){
+.controller('NewScooterCtrl', function($scope, configuration, httpService, $location, $mdToast){
 	console.log("this is NewScooterCtrl");
 	$scope.$emit('BC', {
 		name: "Create Scooters",
@@ -3246,27 +3507,33 @@ getBookings();
 	$scope.scooter;
 	$scope.createScooter = function(){
 		var createForm = $scope.scooter;
+		createForm.mediaId = 0;
 		console.log(createForm);
 		httpService.httpPost($scope.url.scooter, createForm, 'CREATE_Scooter');
 	}
 	$scope.$on("CREATE_Scooter", function(event, data){
 		if(data.data.data.status == 1) {
 			console.log(data.data.data.data);
-			$scope.scooter = data.data.data.data;		
-			window.location.href = "#scooters/" + $scope.scooter.scooterId
+			$scope.scooter = data.data.data.data;	
+			$location.path("/scooters/" + $scope.scooter.scooterId);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
 		} else {
 			console.log(data.data.data.message);
+			$mdToast.show(
+						$mdToast.simple()
+						.textContent(data.data.data.message)
+						.hideDelay(3000)
+						.position("top right")
+						.theme('error-toast')
+						);
 		}
 	})
 })
-.filter('paginate', function(){
-	return function(array, pageNumber, itemsPerPage){
-		var begin = ((pageNumber - 1) * itemsPerPage);
-		var end = begin + itemsPerPage;
-		return array.slice(begin, end);
-	};
-})
-
 
 
 
@@ -3811,6 +4078,10 @@ angular.module('app.forgetPassword.ctrl', [])
 	$scope.form = {
 		email: ""
 	}
+  $scope.updatePWForm = {
+        password: "",
+        secret: ""
+    };
 	$scope.success = false;
 	$scope.forgetPassword = function(){
 		var body = {
@@ -3820,11 +4091,7 @@ angular.module('app.forgetPassword.ctrl', [])
 		
 	}
 
-	var directInbox = function(mail){
-		atPos = mail.indexOf("@"),
-		hoster = mail.substring(atPos + 1);
-		window.location.href = 'http://' + hoster;
-	}
+
 	var showActionToast = function(textContent, position, hideDelay, parent) {
 		var toast = $mdToast.simple()
 		.textContent('Email sent...')
@@ -3865,12 +4132,12 @@ angular.module('app.forgetPassword.ctrl', [])
 		}
 	})
 
-    $scope.updatePWForm;
+
     $scope.updatePassword = function(){
      console.log($scope.updatePWForm);
-     httpService.httpPut("http://test.popscoot.com/popscoot/service/auth", $scope.updatePWForm, "CHANGE_PASSOWRD");
+     httpService.httpPut(configuration.domain()+"/service/auth", $scope.updatePWForm, "UPDATE_PASSWORD");
    }
-   $scope.$on('CHANGE_PASSOWRD', function(event, data){
+   $scope.$on('UPDATE_PASSWORD', function(event, data){
      if(data.data.data.status == 1) {
       console.log(data.data.data.data);
       $mdToast.showSimple("Update success").position("top right").hideDelay(500);
@@ -3891,7 +4158,7 @@ angular.module('app.login.ctrl', [])
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	var domain = configuration.domain();
 	$scope.url = {
-		account: domain + "service/auth"
+		account: domain + "/service/auth"
 	}
 	$scope.form = {
 		username: "",
@@ -3914,7 +4181,7 @@ angular.module('app.login.ctrl', [])
 				console.log(data.data.data.data["Auth-Secret"]);
 				localStorage.setItem("LoginId", data.data.data.data["accountId"]);
 				DAO.setSecret(data.data.data.data["Auth-Secret"]);
-				window.location.href = $scope.path + "index.html"
+				window.location.href = "index.html"
 			/*} else {
 				alert("not admin");
 			}*/
@@ -3937,7 +4204,7 @@ angular.module('app.register.ctrl', [])
 	var domain = configuration.domain();	
 	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	$scope.url = {
-		register: domain + "service/accounts"
+		register: domain + "/service/accounts"
 	}
 	$scope.form = {
 		username: "",
@@ -3955,11 +4222,7 @@ angular.module('app.register.ctrl', [])
 		} 		
 	}
 
-	var directInbox = function(mail){
-		atPos = mail.indexOf("@"),
-		hoster = mail.substring(atPos + 1);
-		window.location.href = 'http://' + hoster;
-	}
+	
 	var showActionToast = function(textContent, position, hideDelay, parent, email) {
 		var toast = $mdToast.simple()
 		.textContent('Activation email sent...')// Accent is used by default, this just demonstrates the usage.
@@ -3970,7 +4233,7 @@ angular.module('app.register.ctrl', [])
 			if ( response == 'ok' ) {
 				directInbox(email);
 			}else{
-				window.location.href = $scope.path + "auth.html";
+				window.location.href = "auth.html";
 			}
 		});
 	}

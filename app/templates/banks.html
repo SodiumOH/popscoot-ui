@@ -24,20 +24,21 @@
 			</div>
 			<md-divider></md-divider>
 			<md-content layout="row" layout-wrap>
-				<H2 ng-if="banks.length === 0">{{'noBanks'|translate}}</H2>
+				<H2 ng-if="banks.length === 0" layout-padding>{{'noBanks'|translate}}</H2>
 				<div ng-repeat="item in banks|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
 					<md-card id="bookingCard">
 						<md-card-title>
 							<md-card-title-text>
-								<span class="md-headline">{{'bankId'|translate}}: {{item.bankId}}</span>
-								<span class="sub-head">{{'deposit'|translate}}: {{ item.deposit }}</span>
-								<span class="sub-head">{{'cash'|translate}}: {{ item.cash }}</span>
-								<span class="sub-head">{{'stamps'|translate}}: {{item.stamps}}</span>								
-								<span class="sub-head">{{'date'|translate}}: {{ item.date|rd:0}}</span>	
-								<span class="sub-head">
-									{{'by'|translate}}: <a ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a>
+								<span class="md-headline"><i class="fa fa-credit-card"></i> {{'id'|translate|text_fmt:2}} : {{item.bankId}}</span>
+								<span class="md-subhead"><i class="fa fa-money fa-fw"></i> {{'deposit'|translate}}: {{ item.deposit }}</span>
+								<span class="md-subhead"><i class="fa fa-usd fa-fw"></i> {{'cash'|translate}}: {{ item.cash }}</span>
+								<span class="md-subhead"><i class="fa fa-circle fa-fw"></i> {{'stamps'|translate}}: {{item.stamps}}</span>								
+								<span class="md-subhead"><i class="fa fa-calendar fa-fw"></i> {{'date'|translate}}: {{ item.date|rd:0}}</span>	
+								<span class="md-subhead">
+									<i class="fa fa-user fa-fw"></i> {{'by'|translate}}: <a ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a>
 								</span>					
 							</md-card-title-text>
+							<div></div>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center">							
 							<md-button class="md-raised" ng-href="{{path+item.bankId}}">{{'details'|translate}}</md-button>	
