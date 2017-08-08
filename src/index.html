@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" href="/app/img/favicon.ico">
+	<meta charset="utf-8">
+	<link rel="icon" href="img/favicon.png">
 	<title>POPSCOOT</title>
 	<!-- inject:css -->
 	<!-- endinject -->
@@ -9,118 +10,90 @@
 <body>
 	<div id="root" ng-app="POPSCOOT">
 		<div flex ng-controller="RootCtrl">
-			<md-progress-linear md-mode="indeterminate" class="md-accent" ng-if="getLoad"></md-progress-linear>
+			<md-progress-linear md-mode="indeterminate" class="md-accent popscoot-loading-bar" ng-if="getLoad"></md-progress-linear>
 			<div layout="row">
-				<md-sidenav
-				class="md-sidenav-left"
-				md-component-id="left"
-				md-is-locked-open="$mdMedia('gt-md')"
-				md-whiteframe="4"
-				ng-style="{'min-height': browserHeight + 'px'}"
-				style="max-width: 250px"
-				>
-
-				<md-toolbar id='profileInfo' class="md-theme-indigo popscoot" layout-padding>
-					<span style="padding-top: 13px">POPSCOOT</span>
-				</md-toolbar>
-				<md-content>
-					<md-list>
-						<md-list-item class="md-1-line" ng-repeat="item in menu.main" ng-hide="item.hide" ng-click="goPage(item.path)">
-							<div class="md-avatar" ng-style="item.margin">
-								<i class="{{item.icon}} fa-lg fa-fw" aria-hidden="true"></i>
-							</div>
-							<div layout="row" layout-align="space-between center">
-								<p class="large">{{ item.name | translate}}</p>
-								<i ng-if="item.icon2 && !item.colapsed" class="{{item.icon2.folded}} fa-lg fa-fw" aria-hidden="true" ></i>
-								<i ng-if="item.icon2 && item.colapsed" class="{{item.icon2.colapsed}} fa-lg fa-fw" aria-hidden="true" ></i>
-							</div>		
-							<md-divider></md-divider>					
-						</md-list-item>
-					</md-list>
-				</md-content>
-			</md-sidenav>
-			<div flex>
-				<md-toolbar class="md-hue-2 popscoot">
-					<div class="md-toolbar-tools">
-						<md-button class="md-icon-button" ng-click="openLeftMenu()" hide-gt-md>
-							<i class="fa fa-bars fa-2x" aria-hidden="true" ></i>
-						</md-button>
-						<h2 flex md-truncate>
-							<md-button ng-click="goHome()" class="large">{{'Home' | translate}} <i class="fa fa-angle-right" aria-hidden="true"></i></md-button>
-							<md-button ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)" class="large">{{item.name |translate}}<i ng-hide="$index == BCLength" class="fa fa-angle-right" aria-hidden="true"></i></md-button>
-						</h2>
-						<md-menu md-offset="0 50">
-							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
-								<i class="fa fa-cog fa-2x" aria-hidden="true"></i>
+				<md-sidenav class="md-sidenav-left popscoot-sidenav" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4" ng-style="{'min-height': browserHeight + 'px'}">
+					<md-toolbar id='profileInfo' class="md-theme-indigo popscoot logo" layout-padding ng-click="popWebsite()">
+					</md-toolbar>
+					<md-content>
+						<md-list>
+							<md-list-item class="md-1-line" ng-repeat="item in menu.main" ng-hide="item.hide" ng-click="goPage(item.path, $index)"  ng-class="{selected: selected === $index}">
+								<div class="md-avatar" ng-style="item.margin">
+									<i class="{{item.icon}} fa-lg fa-fw" aria-hidden="true"></i>
+								</div>
+								<div layout="row" layout-align="space-between center">
+									<p class="large" ng-bind="item.name | translate"></p>
+									<i ng-if="item.icon2 && !item.colapsed" class="{{item.icon2.folded}} fa-lg fa-fw" aria-hidden="true" ></i>
+									<i ng-if="item.icon2 && item.colapsed" class="{{item.icon2.colapsed}} fa-lg fa-fw" aria-hidden="true" ></i>
+								</div>		
+								<md-divider></md-divider>					
+							</md-list-item>
+						</md-list>
+					</md-content>
+				</md-sidenav>
+				<div flex>
+					<md-toolbar class="md-hue-2 popscoot">
+						<div class="md-toolbar-tools">
+							<md-button class="md-icon-button" ng-click="openLeftMenu()" hide-gt-md>
+								<i class="fa fa-bars fa-2x" aria-hidden="true" ></i>
 							</md-button>
-							<md-menu-content width="4">
-								<md-menu-item>
-									<md-button ng-click="changeLanguage('ch')" class="large">中文</md-button>									
-								</md-menu-item>
-								<md-menu-divider></md-menu-divider>
-								<md-menu-item layout-align="end end">
-									<md-button ng-click="changeLanguage('en')" class="large">English</md-button>									
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
-						<span class="large">{{Laccount.email}}</span>
-						<md-menu md-offset="0 50">
-							<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
-								
-								<div style="border-radius: 100%; background-color: #C0C0C0;">{{Laccount.username.split("")[0]}}</div>
-							</md-button>
-							<md-menu-content width="4">
-								<md-menu-item>
-									<md-button ng-href="{{path+Laccount.accountId}}">
-										<i class="fa fa-user" aria-hidden="true"></i>Profile
-									</md-button>
-								</md-menu-item>
-								<md-menu-divider></md-menu-divider>
-								<md-menu-item layout-align="end end">
-									<md-button aria-label="More" ng-click="goPage(menu.logout.path)">
-										<i class="fa fa-sign-out" aria-hidden="true"></i>Logout
-									</md-button>
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
+							<h2 flex md-truncate>
+								<md-button ng-click="goHome()" class="large" >
+									<span ng-bind="'Home' | translate"></span>
+									<i class="fa fa-angle-right" aria-hidden="true"></i>
+								</md-button>
+								<md-button ng-disabled="$index == BCLength" ng-repeat="item in breadcrumbs track by $index" ng-click="goBC(item.url, $index)" class="large BC">
+									<span ng-bind="item.name |translate"></span>
+									<i ng-hide="$index == BCLength" class="fa fa-angle-right" aria-hidden="true"></i>
+								</md-button>
+							</h2>
 
-					</div>
-				</md-toolbar>
-				<md-content>
-
-					<ng-view id="view"></ng-view>	
-				</md-content>
-
+							<md-menu md-offset="0 50">
+								<md-button aria-label="Open phone interactions menu" ng-click="openMenu($mdMenu, $event)">
+									<span ng-bind="languageDisplay"></span>
+									<i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+								</md-button>
+								<md-menu-content width="4">
+									<md-menu-item>
+										<md-button ng-click="changeLanguage('ch')" class="large" ng-bind="'chinese'|translate"></md-button>
+									</md-menu-item>
+									<md-menu-divider></md-menu-divider>
+									<md-menu-item layout-align="end end">
+										<md-button ng-click="changeLanguage('en')" class="large" ng-bind="'english'|translate"></md-button>
+									</md-menu-item>
+								</md-menu-content>
+							</md-menu>
+							<span class="large" ng-bind="Laccount.email"></span>
+							<md-menu md-offset="0 50">
+								<md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="openMenu($mdMenu, $event)">
+									<div class="avatar-icon" ng-style="Laccount.avatar.url|bg_css" ng-bind="Laccount.username.split('')[0]"></div>
+								</md-button>
+								<md-menu-content width="4">
+									<md-menu-item>
+										<md-button ng-href="{{path+Laccount.accountId}}">
+											<i class="fa fa-fw" ng-class="icons.profile"></i>
+											<span ng-bind="'profile'|translate|text_fmt:1"></span>
+										</md-button>
+									</md-menu-item>
+									<md-menu-divider></md-menu-divider>
+									<md-menu-item layout-align="end end">
+										<md-button aria-label="More" ng-click="goPage(menu.logout.path)">
+											<i class="fa fa-fw" ng-class="icons.logout"></i>
+											<span ng-bind="'logout'|translate|text_fmt:1"></span>
+										</md-button>
+									</md-menu-item>
+								</md-menu-content>
+							</md-menu>
+						</div>
+					</md-toolbar>
+					<md-content>
+						<ng-view id="view"></ng-view>	
+					</md-content>
+				</div>
 			</div>
 		</div>
-
-
-
-
-
-
 	</div>
-
-</div>
-
 <!-- inject:js -->
 <!-- endinject -->
 </body>
 </html>
-
-
-			<!-- <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
-				<div layout="row" layout-align="end stretch">
-					<md-button ng-click="openLeftMenu()" hide-gt-md>
-						Open
-					</md-button>
-				<md-nav-item ng-repeat="item in menu" md-nav-click="goto(item.path)" name="{{item.path}}" ng-click="goPage(item.path)">
-					{{item.name}}
-				</md-nav-item>
-				<div>
-					<md-button ng-click="goPage(menu[10].path)">{{menu[10].name}}</md-button>
-				</div>
-
-			</div>
-
-		</md-nav-bar> -->

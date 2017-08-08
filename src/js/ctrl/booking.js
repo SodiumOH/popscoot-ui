@@ -8,7 +8,8 @@ angular.module('app.booking.ctrl', [])
 	})
 	$scope.booking = {};
 	$scope.url = {
-		booking: configuration.domain()+"/service/bookings/"+$routeParams.id
+		booking: configuration.domain()+"/service/bookings/"+$routeParams.id,
+		trip: configuration.domain()+"/api/trip"
 	}
 	//console.log($scope.url);
 	function getBooking (){
@@ -21,16 +22,22 @@ angular.module('app.booking.ctrl', [])
 			console.log(data.data.data.data);
 			$scope.booking = data.data.data.data;
 			$scope.$emit("GETFINISHED");
+
+			$scope.tripForm = {
+				accountId: $scope.booking.account.accountId,
+				bookingId: $scope.booking.bookingId
+
+			}
 		} else {
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -54,12 +61,12 @@ angular.module('app.booking.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	})
 
@@ -79,16 +86,145 @@ angular.module('app.booking.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
+	
+	
+	$scope.start = function(startev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+    .title('Starting trip...')
+    .textContent('Confirm starting trip?')
+    .ariaLabel('Lucky day')
+    .targetEvent(startev)
+    .ok('Start')
+    .cancel('Cancel');
 
-	$scope.showPrompt = function(ev) {
+    $mdDialog.show(confirm).then(function() {
+    	var form = $scope.tripForm;
+    	form.action = "start";
+    	console.log(form);
+    	httpService.httpPut($scope.url.trip, form, "STARTING_TRIP");
+    	$scope.$on("STARTING_TRIP", function(event,data){
+    		if(data.status == 1) {
+    			console.log(data.data.data);
+    			getBooking();
+    			$mdToast.show(
+    				$mdToast.simple()
+    				.textContent("Success")
+    				.hideDelay(3000)
+    				.position("top right")
+    				);
+
+    		} else {
+    			console.log(data);
+    			$mdToast.show(
+    				$mdToast.simple()
+    				.textContent(data.data.message)
+    				.hideDelay(3000)
+    				.position("top right")
+    				.theme('error-toast')
+    				);
+
+    		}
+    	})
+    }, function() {
+
+    });
+};
+$scope.end = function(endev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+    .title('Ending trip...')
+    .textContent('Confirm ending trip?')
+    .ariaLabel('Lucky day')
+    .targetEvent(endev)
+    .ok('End')
+    .cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function() {
+    	var form = $scope.tripForm;
+    	form.action = "end";
+    	console.log(form);
+    	httpService.httpPut($scope.url.trip, form, "ENDING_TRIP");
+    	$scope.$on("ENDING_TRIP", function(event,data){
+    		if(data.status == 1) {
+    			console.log(data.data.data);
+    			getBooking();
+    			$mdToast.show(
+    				$mdToast.simple()
+    				.textContent("Success")
+    				.hideDelay(3000)
+    				.position("top right")
+    				);
+
+    		} else {
+    			console.log(data);
+    			$mdToast.show(
+    				$mdToast.simple()
+    				.textContent(data.data.message)
+    				.hideDelay(3000)
+    				.position("top right")
+    				.theme('error-toast')
+    				);
+
+    		}
+    	})
+    }, function() {
+
+    });
+};
+$scope.cancel = function(cancelev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+    .title('Canceling trip...')
+    .textContent('Confirm canceling trip?')
+    .ariaLabel('Lucky day')
+    .targetEvent(cancelev)
+    .ok('Yes')
+    .cancel('No');
+
+    $mdDialog.show(confirm).then(function() {
+    	var form = $scope.tripForm;
+    	form.action = "cancel";
+    	console.log(form);
+    	httpService.httpPut($scope.url.trip, form, "CANCELING_TRIP");
+    	$scope.$on("CANCELING_TRIP", function(event,data){
+    		if(data.status == 1) {
+    			console.log(data.data.data);
+    			getBooking();
+    			$mdToast.show(
+    				$mdToast.simple()
+    				.textContent("Success")
+    				.hideDelay(3000)
+    				.position("top right")
+    				);
+
+    		} else {
+    			console.log(data);
+    			$mdToast.show(
+    				$mdToast.simple()
+    				.textContent(data.data.message)
+    				.hideDelay(3000)
+    				.position("top right")
+    				.theme('error-toast')
+    				);
+
+    		}
+    	})
+    }, function() {
+
+    });
+};
+
+
+$scope.showPrompt = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.prompt()
     .title('Confirm Deletion')
@@ -99,7 +235,6 @@ angular.module('app.booking.ctrl', [])
     .ok('Confirm')
     .cancel('Cancel');
 
-    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.booking.bookingId) {
     		deleteBooking();    		
@@ -158,7 +293,7 @@ getBooking();
 
 
 	//orderBy start
-	$scope.itemsOrder = "latest";
+	$scope.itemsOrder = "bookingId";
 	$scope.reverse = false;
 	$scope.order = function(){
 		$scope.reverse = !$scope.reverse;
@@ -261,7 +396,6 @@ getBooking();
 	
 	function DialogController($scope, $mdDialog, Upload, httpService, localAcc) {
 		$scope.accounts = localAcc;
-
 		$scope.itemsOrder = "active";
 		$scope.reverse = true;
 		$scope.order = function(){
@@ -387,12 +521,12 @@ getBooking();
 		} else {
 			console.log(data.data.data.message);
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	})
 })

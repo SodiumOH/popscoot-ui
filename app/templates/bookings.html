@@ -17,10 +17,19 @@
 					</md-select>
 					<span>{{'orderBy'|translate}}</span>
 					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
-						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
-						<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
-						<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
+						<md-option value="startTime" ng-click="order()">{{'startTime'|translate|text_fmt:1}}</md-option>
+						<md-option value="endTime" ng-click="order()">{{'endTime'|translate|text_fmt:1}}</md-option>
+						<md-option value="username" ng-click="order()">{{'username'|translate|text_fmt:1}}</md-option>
+						<md-option value="bookingId" ng-click="order()">{{'id'|translate|text_fmt:2}}</md-option>
 					</md-select>				
+				</div>
+				<div>
+					<div>
+						<md-input-container>
+							<label>{{'search'|translate}}</label>
+							<input ng-model="search"></md-input-container>
+						</md-input-container>    
+					</div>
 				</div> 
 			</div>
 			
@@ -28,14 +37,14 @@
 			
 			<md-content layout="row" layout-wrap>
 				<H2 ng-if="bookings.length === 0" layout-padding>{{'noBookings'|translate}}</H2>				
-				<div ng-repeat="item in bookings|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
+				<div ng-repeat="item in bookings|filter: search|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
 					<md-card id="bookingCard">
 						<md-card-title>
-							<md-card-title-text>
+							<md-card-title-text class="popscoot-card">
 
 								<span class="md-headline"><i class="fa fa-book fa-fw"></i>{{'id'|translate|text_fmt:2}}: {{item.bookingId}}</span>
-								<span class="md-subhead"><i class="fa fa-play fa-fw"></i> {{'startTime'|translate}}: {{ item.startDate|rd:1 }}</span>
-								<span class="md-subhead"><i class="fa fa-stop fa-fw"></i> {{'endTime'|translate}}: {{ item.endDate|rd:1 }}</span>
+								<span class="md-subhead"><i class="fa fa-clock-o fa-fw"></i> {{'startTime'|translate}}: {{ item.startDate|rd:1 }}</span>
+								<span class="md-subhead"><i class="fa fa-clock-o fa-fw"></i> {{'endTime'|translate}}: {{ item.endDate|rd:1 }}</span>
 								<span class="md-subhead"><i class="fa fa-map-marker fa-fw"></i> {{'destination'|translate}}: {{ item.destinationName}}</span>
 								<span class="md-subhead"><i class="fa fa-user fa-fw"></i> {{'by'|translate}}: <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></span>
 								<span class="md-subhead"><i class="fa fa-bicycle fa-fw"></i> {{'scooter'|translate}}: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a></span>
@@ -44,7 +53,7 @@
 							<div></div>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center">							
-							<md-button class="md-raised" ng-href="{{'#/bookings/'item.bookingId}}">{{'details'|translate}}</md-button>	
+							<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">{{'details'|translate}}</md-button>	
 						</md-card-actions>
 					</md-card>
 

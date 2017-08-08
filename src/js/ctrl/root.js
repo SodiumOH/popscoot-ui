@@ -1,12 +1,20 @@
 angular.module('app.root.ctrl', [])
 
 .controller('RootCtrl', function(configuration, httpService, $rootScope, $scope, $location, $mdDialog, $route, $mdSidenav, $window, $translate) {
+	$scope.icons = {
+		profile: "fa-user",
+		logout: "fa-sign-out"
+	}
 	$scope.breadcrumbs = [];
 	$scope.$on('BC', function(evt, data){
 		$scope.breadcrumbs.push(data);
 		console.log($scope.breadcrumbs);
 		$scope.BCLength = $scope.breadcrumbs.length-1;
 	});
+
+	$scope.popWebsite = function(){
+		window.location.href="http://popscoot.com";
+	}
 
 	$scope.goHome = function(){
 		window.location.href =  "index.html";
@@ -36,20 +44,17 @@ angular.module('app.root.ctrl', [])
 			}
 		});
 	}
-
+	$scope.languageDisplay = "EN";
 	$scope.changeLanguage = function(key){
 		$translate.use(key);
-		console.log("changeLanguage");
+		if (key ==="en") {
+			$scope.languageDisplay = "EN";
+		} else {
+			$scope.languageDisplay = "CH";
+		}
 	}
 
 
-	$scope.language = LANG_CH;
-	$scope.setCH = function(){		
-		$scope.language = LANG_CH;
-	}
-	$scope.setEN = function(){		
-		$scope.language = LANG_EN;
-	}
 
 	$scope.browserHeight = $window.innerHeight;
 	angular.element($window).on('resize', function () {
@@ -74,7 +79,7 @@ angular.module('app.root.ctrl', [])
 		}, {
 			path: "scooters",
 			name: "scooters",
-			icon: "fa fa-bicycle"
+			icon: "fa fa-motorcycle"
 		}, {
 			path: "bookings",
 			name: "bookings",
@@ -146,9 +151,11 @@ angular.module('app.root.ctrl', [])
 			$mdSidenav(id).close();
 		}
 
-		$scope.goPage = function(path) {
+		$scope.selected = null;
+		$scope.goPage = function(path, id) {
+			$scope.selected = id;
 			if (path == "logout") {
-				window.location.href = ("auth.html");
+				window.location.href = "auth.html";
 				localStorage.removeItem("UI_SECRET");
 			} else if(path == "finance") {
 				$scope.menu.main[5].colapsed = !$scope.menu.main[5].colapsed;
@@ -165,6 +172,7 @@ angular.module('app.root.ctrl', [])
 		$scope.goBC = function(path, index){
 			$location.path(path);
 			$scope.breadcrumbs.splice(index);
+			$scope.selected = null;
 		}
 
 		
@@ -204,73 +212,4 @@ angular.module('app.root.ctrl', [])
   getLoginAccount();
 
 })
-.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
-	return {
-		scope: {
-			section: '='
-		},
-		templateUrl: 'templates/menu-toggle.html',
-		link: function($scope, $element) {
-			var controller = $element.parent().controller();
 
-      // Used for toggling the visibility of the accordion's content, after
-      // all of the animations are completed. This prevents users from being
-      // allowed to tab through to the hidden content.
-      $scope.renderContent = false;
-
-      $scope.isOpen = function() {
-      	return controller.isOpen($scope.section);
-      };
-
-      $scope.toggle = function() {
-      	controller.toggleOpen($scope.section);
-      };
-
-      $mdUtil.nextTick(function() {
-      	$scope.$watch(function () {
-      		return controller.isOpen($scope.section);
-      	}, function (open) {
-      		var $ul = $element.find('ul');
-      		var $li = $ul[0].querySelector('a.active');
-
-      		if (open) {
-      			$scope.renderContent = true;
-      		}
-
-      		$$rAF(function() {
-      			var targetHeight = open ? $ul[0].scrollHeight : 0;
-
-      			$animateCss($ul, {
-      				easing: 'cubic-bezier(0.35, 0, 0.25, 1)',
-      				to: { height: targetHeight + 'px' },
-              duration: 0.75 // seconds
-          }).start().then(function() {
-          	var $li = $ul[0].querySelector('a.active');
-
-          	$scope.renderContent = open;
-
-          	if (open && $li && $ul[0].scrollTop === 0) {
-          		var activeHeight = $li.scrollHeight;
-          		var activeOffset = $li.offsetTop;
-          		var offsetParent = $li.offsetParent;
-          		var parentScrollPosition = offsetParent ? offsetParent.offsetTop : 0;
-
-                // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
-                var negativeOffset = activeHeight * 2;
-                var newScrollTop = activeOffset + parentScrollPosition - negativeOffset;
-
-                $mdUtil.animateScrollTo(document.querySelector('.docs-menu').parentNode, newScrollTop);
-            }
-        });
-      });
-      	});
-      });
-
-      var parentNode = $element[0].parentNode.parentNode.parentNode;
-      if(parentNode.classList.contains('parent-list-item')) {
-      	var heading = parentNode.querySelector('h2');
-      	$element[0].firstChild.setAttribute('aria-describedby', heading.id);
-      }
-  }
-};
-}])

@@ -37,19 +37,19 @@
         <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="account in accounts|filter: search|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
             <md-card>
              <md-card-title>
-              <md-card-title-text md-truncate style="max-width: 100%">
+              <md-card-title-text md-truncate class="popscoot-card">
                <span class="md-headline">{{account.username}}</span>
                <span class="md-subhead"><i class="fa fa-envelope" aria-hidden="true"></i>: {{account.email}}</span>
                <span class="md-subhead"><i class="fa fa-calendar" aria-hidden="true"></i>: {{account.date|rd:0}}</span>
 
              </md-card-title-text>
              <md-card-title-media>
-               <div class="md-media-sm card-media" style="background-image: url({{account.avatar.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+               <div class="md-media-sm card-media avatar" ng-style="account.avatar.url|bg_css">            
                </div>
              </md-card-title-media>
            </md-card-title>
            <md-card-actions layout="row" layout-align="end center"> 
-           <md-switch ng-model="account.active" aria-label="Switch 1" ng-change></md-switch>
+           <md-switch ng-model="account.active" aria-label="Switch 1" ng-change="activate(account.accountId)"></md-switch>
             <md-button class="md-raised" ng-href="{{path+account.accountId}}">{{'details'|translate}}</md-button>
           </md-card-actions>
         </md-card>

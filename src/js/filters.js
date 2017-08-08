@@ -44,6 +44,38 @@ angular.module('app.filters', [])
 		return array.slice(begin, end);
 	};
 })
+.filter('percentage', ['$filter', function ($filter) {
+  return function (input, decimals) {
+    return $filter('number')(input * 100, decimals) + '%';
+  };
+}])
+.filter('bg_css', function(){
+	return function(url){
+		if(url) {
+			var css = {
+				"background-image": "url('"+url+"')"
+			}
+			return css;
+		} else {
+			return null;
+		}
+	}
+})
+.filter('file_size', function(){
+	return function(fileSize){
+		if(fileSize < 1024){
+			return fileSize+"b";
+		}else if (fileSize < 1024*1024) {
+			return (fileSize/1024).toFixed(2)+"kb";
+		} else if (fileSize < 1024*1024*1024) {
+			return (fileSize/1024/1024).toFixed(2)+"mb";
+		} else if (fileSize < 1024*1024*1024*1024) {
+			return (fileSize/1024/1024/1024).toFixed(2)+"gb";
+		} else {
+			return (fileSize/1024/1024/1024/1024).toFixed(2)+"tb";
+		}
+	}
+})
 
 
 

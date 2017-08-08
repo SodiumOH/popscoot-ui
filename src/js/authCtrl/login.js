@@ -1,7 +1,6 @@
 angular.module('app.login.ctrl', [])
 .controller('LoginCtrl', function($scope, httpService, $location, configuration, toastService, $mdToast){
 	$scope.authSecret;
-	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	var domain = configuration.domain();
 	$scope.url = {
 		account: domain + "/service/auth"

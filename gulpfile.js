@@ -23,11 +23,11 @@ gulp.task('default', function() {
 
 gulp.task('build-media', function() {
 	return gulp.src([
-		SRC + "/media/*.png",
-		SRC + "/media/*.jpg",
+		SRC + "/img/*.png",
+		SRC + "/img/*.jpg",
 	])
 	.pipe(imagemin())
-	.pipe(gulp.dest(DEST + '/media'));
+	.pipe(gulp.dest(DEST + '/img'));
 });
 
 var LIBRARIES = [
@@ -55,14 +55,14 @@ var LIBRARIES = [
 	'./node_modules/angular-avatar/dist/angular-avatar.js',
 	'./node_modules/lf-ng-md-file-input/dist/*',
 	'./node_modules/ng-file-upload/dist/*',
-	'./node_modules/ng-img-crop-full-extended/source/js/**/*.js',
-	'./node_modules/ng-img-crop-full-extended/source/js/*.js',
-	'./node_modules/ng-img-crop-full-extended/compile/minified/*.js',
 	'./node_modules/angular-drag-and-drop-lists/*.js',
 	'./node_modules/iframe/*',
 	'./node_modules/angular-translate/dist/*.js',
 	'./node_modules/mdPickers/dist/*',
-	'./node_modules/ng-material-datetimepicker/dist/*'
+	'./node_modules/ng-material-datetimepicker/dist/*',
+	'./node_modules/angular-chart.js/dist/angular-chart.min.js',
+	'./node_modules/chart.js/dist/Chart.min.js',
+	'./node_modules/chart.js/dist/Chart.js'
 ];
 
 gulp.task('build-lib', function() {
@@ -73,7 +73,7 @@ gulp.task('build-lib', function() {
 });
 
 gulp.task('build-css', function() {
-	return gulp.src([SRC + '/scss/style.scss', './node_modules/ng-img-crop-full-extended/compile/minified/ng-img-crop.scss'])
+	return gulp.src([SRC + '/scss/style.scss'])
 	.pipe(sass().on('error', sass.logError))
 	.pipe(gulp.dest(DEST + '/css'));
 });
@@ -96,7 +96,6 @@ var JAVASCRIPTS = [
 	SRC + '/js/filters.js',
 	SRC + '/js/services.js',
 	SRC + '/js/dao.js',
-	SRC + '/js/languages.js',
 	SRC + '/js/authapp.js',
 	SRC + '/js/authCtrl/changePassword.js',
 	SRC + '/js/authCtrl/forgetPassword.js',
@@ -111,27 +110,6 @@ gulp.task('build-js', function() {
 	.pipe(gulp.dest(DEST + '/js'));
 });
 
-var INJECTRES_LOCAL = [
-	INJ + '/lib/roboto-fontface/css/roboto/roboto-fontface.css',
-	INJ + '/lib/font-awesome/css/font-awesome.min.css',
-	INJ + '/lib/moment/min/moment.min.js',
-	INJ + '/lib/angular/angular.min.js',
-	INJ + '/lib/angular-route/angular-route.min.js',
-	INJ + '/lib/angular-aria/angular-aria.min.js',
-	INJ + '/lib/angular-animate/angular-animate.min.js',
-	INJ + '/lib/angular-material/angular-material.min.css',
-	INJ + '/lib/angular-material/angular-material.min.js',
-	INJ + '/css/style.css',
-	INJ + '/css/ng-img-crop.css',
-	INJ + '/js/main.js',
-	INJ + '/lib/angular-avatar/dist/angular-avatar.js',
-	INJ + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css',
-	INJ + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
-	INJ + '/lib/ng-file-upload/dist/ng-file-upload.js',
-	INJ + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js',
-	INJ + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
-	INJ + '/lib/angular-translate/dist/angular-translate.min.js'
-];
 
 var INJECTRES = [
 	DEST + '/lib/roboto-fontface/css/roboto/roboto-fontface.css',
@@ -143,23 +121,23 @@ var INJECTRES = [
 	DEST + '/lib/angular-animate/angular-animate.min.js',
 	DEST + '/lib/angular-material/angular-material.min.css',
 	DEST + '/lib/angular-material/angular-material.min.js',
-	DEST + '/css/style.css',
-	DEST + '/css/ng-img-crop.css',
-	DEST + '/js/main.js',
 	DEST + '/lib/angular-avatar/dist/angular-avatar.js',
 	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css',
 	DEST + '/lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
 	DEST + '/lib/ng-file-upload/dist/ng-file-upload.js',
-	DEST + '/lib/ng-img-crop-full-extended/compile/minified/ng-img-crop.js',
 	DEST + '/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
 	DEST + '/lib/angular-translate/dist/angular-translate.min.js',
 	DEST + '/lib/mdPickers/dist/*',
 	DEST + '/lib/ng-material-datetimepicker/dist/*',
+	DEST + '/lib/chart.js/dist/Chart.min.js',
+	DEST + '/lib/angular-chart.js/dist/*',
+	DEST + '/css/style.css',
+	DEST + '/js/main.js'
 ];
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {
 	console.log(INJECTRES)
-	return gulp.src([SRC + '/index.html', SRC + '/auth.html'], {
+	return gulp.src([SRC + '/index.html', SRC + '/auth.html', SRC + '/**/*.html'], {
 		base: SRC
 	})
 	.pipe(inject(gulp.src(INJECTRES, {

@@ -4,7 +4,6 @@ angular.module('app.account.ctrl', [])
 	console.log('this is AccountCtrl');
 	$scope.itemsOrder;
 	$scope.search;
-	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";	
 	var accountId = $routeParams.id;
 	$scope.$emit('BC', 
 	{
@@ -339,6 +338,36 @@ angular.module('app.account.ctrl', [])
 		};
 	}
 
+	$scope.activate = function(accountId){
+		var activateForm = {
+			accountId: accountId
+		}
+		httpService.httpPost(configuration.domain()+"/service/account/activation", activateForm, "ACCOUNT_ACTIVATION");
+	}
+	$scope.$on("ACCOUNT_ACTIVATION", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.account = data.data.data.data;
+			$scope.uploadImage = false;
+			$scope.preview = false;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
+		} else {
+			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme("error-toast")
+				);
+		}
+	})
+
 
 	$scope.updateAccount = function(){
 		var updateForm = {
@@ -398,7 +427,6 @@ angular.module('app.account.ctrl', [])
 			return 'deactivated'
 		}
 	}
-	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	
 	//deletion related
 	deleteAccount = function(){
@@ -475,7 +503,7 @@ angular.module('app.account.ctrl', [])
 	
 })
 
-.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout, configuration) {
+.controller('AccountsCtrl', function($mdMedia, $scope, $location, httpService, $timeout, configuration, $mdToast) {
 	console.log('this is AccountsCtrl');
 	$scope.$emit('BC', {
 		name: "Accounts",
@@ -619,6 +647,36 @@ angular.module('app.account.ctrl', [])
     //pagination end
 
     
+	$scope.activate = function(accountId){
+		var activateForm = {
+			accountId: accountId
+		}
+		httpService.httpPost(configuration.domain()+"/service/account/activation", activateForm, "ACCOUNTS_ACTIVATION");
+	}
+	$scope.$on("ACCOUNTS_ACTIVATION", function(event, data){
+		if(data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.account = data.data.data.data;
+			$scope.uploadImage = false;
+			$scope.preview = false;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
+		} else {
+			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme("error-toast")
+				);
+		}
+	})
+
 
     $scope.getActive = function (acc){
     	if (acc.active) {

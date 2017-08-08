@@ -8,7 +8,7 @@ angular.module('app.tracking.ctrl', [])
 	
 	console.log($scope.trackingId);
 	$scope.param = {
-		trackingSource: $sce.trustAsResourceUrl(configuration.iframe()+"/pmds/" + $routeParams.id)
+		trackingSource: $sce.trustAsResourceUrl(configuration.iframe()+"pmds/" + $routeParams.id)
 	}
 	console.log($scope.trackingId);
 })

@@ -75,16 +75,27 @@ angular.module('app.service', [])
     }
 })
 
-.factory('configuration', function($rootScope, $http){
-    return {
+.factory('configuration', function($rootScope, $http, $location){
+    if($location.host() === "localhost"){
+        return {
+            domain: function() {
+                return "http://test.popscoot.com/popscoot/";
+            },
+            iframe: function(){
+                return "http://test.popscoot.com/gps/";
+            }
+        }
+    }else{
+       return {
         domain: function() {
-            return "http://test.popscoot.com/popscoot/";
+            return "/popscoot/";
         },
         iframe: function(){
-            return "http://test.popscoot.com/gps/";
+            return "/gps/";
         }
     }
-})
+    
+}})
 .factory('sortBy', function($rootScope){
     return function sortBy(propertyName){
         $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;

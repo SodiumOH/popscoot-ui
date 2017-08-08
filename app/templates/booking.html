@@ -48,19 +48,23 @@
 					</div>
 
 					<div layout-gt-xs="row" layout-align="space-between center" layout-padding>
-						<div>			
-							
-
+						<div>
 							<md-button class="md-raised" ng-href="#/accounts/{{booking.account.accountId}}"><i class="fa fa-user" aria-hidden="true"></i>{{booking.account.username}}</md-button>
-
 						</div>
-						<div>			
-							
+						<div>	
 							<md-button class="md-raised" ng-href="#/scooters/{{booking.scooter.scooterId}}"><i class="fa fa-link" aria-hidden="true"></i>{{booking.scooter.integrateId}}</md-button>
 						</div>
-
 					</div>
-
+					<md-divider></md-divider>
+					<div flex layout="row">
+						<md-button ng-disabled="booking.status!==1" flex="33" class="md-raised" ng-click="start($event)"><i class="fa fa-play" aria-hidden="true"></i>
+						{{'start'|translate}}</md-button>
+						<md-button ng-disabled="booking.status!==2" flex="33" class="md-raised" ng-click="end($event)"><i class="fa fa-stop" aria-hidden="true"></i>
+						{{'end'|translate}}</md-button>
+						<md-button ng-disabled="booking.status!==1" flex="33" class="md-raised md-warn" ng-click="cancel($event)"><i class="fa fa-times" aria-hidden="true"></i>
+						{{'cancel'|translate}}</md-button>
+					</div>
+					<md-divider></md-divider>
 					<div flex layout="row">					
 						<md-button class="md-primary md-raised" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">{{'update'|translate}}</md-button>
 						<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>

@@ -141,7 +141,6 @@ angular.module('app.promotion.ctrl', [])
     .ok('Confirm')
     .cancel('Cancel');
 
-    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.promotion.promotionId) {
     		deletePromotion();    		

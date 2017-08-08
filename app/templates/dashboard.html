@@ -1,2 +1,61 @@
 
+
 <iframe src="{{mapSource}}" class="dashboard" onLoad="uploadDone();"></iframe>
+<div flex layout="row" layout-wrap>
+	
+	<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in dashboard">
+		<md-card>
+			<md-card-title>
+				<md-card-title-text>
+					<div layout="row">					
+						<span class="md-headline" ng-bind="item.title"></span>
+						<md-button class="md-icon-button" ng-href="item.path"><i class="fa fa-ellipsis-h"></i></md-button>
+					</div>
+					<div layout="row" ng-repeat="label in item.labels">
+						<div class="popscoot-chart-legend" ng-style="{'background-color': chartColors[$index]}"></div>
+						<span class="large">
+							<span ng-bind="label"></span>:
+							<i class="fa fa-fw" ng-class="item.icons[$index]"></i>
+							<span ng-bind="item.data[$index]"></span>
+						</span>
+					</div>
+				</md-card-title-text>
+				<md-card-title-media>
+					<canvas id="doughnut" class="md-media-md card-media chart chart-doughnut" chart-options="chartOpt" chart-data="item.data" chart-colors="chartColors"></canvas>
+					<div class="pie-chart-center md-subhead" layout="row" layout-align="center center">Total: <span ng-bind="item.total"></span></div>
+				</md-card-title-media>
+			</md-card-title>
+			
+		</md-card>
+	</div>
+
+	<div flex="100" flex-gt-xs="50" flex-gt-md="33">
+		<md-card >
+			<md-card-title class="file-card-title">
+				<md-card-title-text>
+					<span class="md-headline" ng-bind="'storage'|translate|text_fmt:1"></span>
+					<span class="large">
+						<span ng-bind="'size'|translate|text_fmt:1"></span>:
+						<span ng-bind="mediaData.size|file_size"></span>
+					</span>
+					<span class="large">
+						<span ng-bind="'count'|translate|text_fmt:1"></span>:
+						<span ng-bind="mediaData.count"></span>
+						<span ng-bind="'files'|translate"></span>
+					</span>		
+					<span class="large">
+						<span ng-bind="'average'|translate|text_fmt:1"></span>:
+						<span ng-bind="mediaData.size/mediaData.count|file_size"></span>&#47;
+						<span ng-bind="'file'|translate"></span>
+					</span>		
+				</md-card-title-text>		
+				<md-card-title-media>
+					<div class="md-media-md card-media file-icon">
+						<i class="fa fa-database fa-fw"></i>
+					</div>
+				</md-card-title-media>		
+			</md-card-title>
+		</md-card>		
+	</div>
+
+</div>

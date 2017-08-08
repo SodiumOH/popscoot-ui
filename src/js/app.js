@@ -1,4 +1,4 @@
-angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'ngImgCrop', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
+angular.module('POPSCOOT', ['chart.js', 'ngMaterialDatePicker', 'dndLists', 'pascalprecht.translate','ngAvatar', 'ngRoute', 'ngMaterial', 'lfNgMdFileInput', 'ngFileUpload', 'app.service', 'app.root.ctrl', 'app.filters',  'app.account.ctrl', 'app.analytics.ctrl', 'app.bank.ctrl', 
 	'app.booking.ctrl', 'app.dashboard.ctrl', 'app.enquiry.ctrl', 'app.help.ctrl', 'app.payment.ctrl', 'app.promotion.ctrl', 'app.scooter.ctrl', 'app.tracking.ctrl', 'app.accountPromo.ctrl'
 	])
 
@@ -22,6 +22,17 @@ angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.tr
 	})
 
 	$translateProvider.translations('en', {
+		//language
+		english: "English",
+		chinese: "中文",
+		//dashboard
+		storage: "storage",
+		files: "files",
+		file: "file",
+		average: "average",
+		size: "size",
+		count: "count",
+		//sidenav
 		dashboard: "DASHBOARD",
 		splash: "SPLASH",
 		accounts: "ACCOUNTS",
@@ -36,6 +47,9 @@ angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.tr
 		finance: "FINANCE",
 		miscellaneous: "MISCELLANEOUS",
 		Home: "Home",
+		//user menu
+		profile: "profile",
+		logout: "logout",
 		//order
 		latest: "Latest",
 		active: "Active",
@@ -95,6 +109,8 @@ angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.tr
 		model: "model",
 		tracking: "tracking",
 		createScooter: "Create New Scooter",
+		on: "on",
+		off: "off",
 		//booking
 		booking: "booking",
 		bookingId: "booking ID",
@@ -113,6 +129,7 @@ angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.tr
 		enquiry: "enquiry",
 		enquiryId: "enquiry ID",
 		comment: "comment",
+		deactivate: "deactivate",
 		//bank
 		bank: "bank",
 		bankId: "bank ID",
@@ -419,9 +436,6 @@ angular.module('POPSCOOT', ['ngMaterialDatePicker', 'dndLists', 'pascalprecht.tr
 })
 
 .config(function($mdIconProvider) {
-	$mdIconProvider
-	.iconSet("call", 'img/icons/sets/communication-icons.svg', 24)
-	.iconSet("social", 'img/icons/sets/social-icons.svg', 24);
 })
 
 

@@ -94,7 +94,6 @@ angular.module('app.bank.ctrl', [])
     .ok('Confirm')
     .cancel('Cancel');
 
-    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.bank.bankId) {
     		deleteBank();    		

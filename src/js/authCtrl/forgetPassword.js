@@ -1,7 +1,6 @@
 angular.module('app.forgetPassword.ctrl', [])
 .controller('ForgetPasswordCtrl', function($scope, httpService, $location, $mdToast, toastService, configuration){
 	var domain = configuration.domain();	
-	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	$scope.url = {
 		forgetPassword: domain + "service/auth"
 	}

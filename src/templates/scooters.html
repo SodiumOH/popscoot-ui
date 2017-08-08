@@ -18,9 +18,10 @@
 				<span>{{'orderBy'|translate}}</span>
 				<md-select ng-model="itemsOrder" placeholder="Item per page">
 					<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
-					<md-option value="name" ng-click="order()">{{'name'|translate}}</md-option>
+					<md-option value="name" ng-click="order()">{{'name'|translate|text_fmt:1}}</md-option>
 					<md-option value="scooterId" ng-click="order()">{{'scooterId'|translate}}</md-option>
 					<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
+					<!-- <md-option value="battery" ng-click="order()">{{'battery'|translate|text_fmt:1}}</md-option> -->
 				</md-select>				
 			</div> 
 			
@@ -34,15 +35,15 @@
 						<md-card-title-text>
 							<span class="md-headline">{{item.name}}</span>
 							<span class="md-subhead">{{'scooterId'|translate}}: {{item.scooterId}}</span>
-							<span class="md-subhead"><i class="fa fa-battery-full" aria-hidden="true"></i>: {{item.battery}}</span>
+							<!-- <span class="md-subhead"><i class="fa fa-battery-full" aria-hidden="true"></i>: {{item.battery|percentage: 0}}</span> -->
 						</md-card-title-text>
 						<md-card-title-media>
-							<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+							<div class="md-media-sm avatar" ng-style="item.image.url|bg_css">            
 							</div>
 						</md-card-title-media>
 					</md-card-title>
 					<md-card-actions layout="row" layout-align="end center"> 
-						<md-switch ng-model="item.active" aria-label="Switch 1" ng-change></md-switch>
+						<md-switch ng-model="item.active" aria-label="Switch 1" ng-click="deactivateScooters(item)"></md-switch>
 						<md-button class="md-raised" ng-href="{{'#/scooters/'+item.scooterId}}">{{'details'|translate}}</md-button>
 					</md-card-actions>
 				</md-card>

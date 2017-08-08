@@ -6,7 +6,7 @@ angular.module('app.enquiry.ctrl', [])
 		name: "Enquiry",
 		url: "enquiries/"+$routeParams.id
 	})
-	$scope.enquiry;
+	$scope.enquiry={};
 	$scope.url = {
 		enquiry: configuration.domain() + "/service/enquiries/"+$routeParams.id
 	}
@@ -31,6 +31,35 @@ angular.module('app.enquiry.ctrl', [])
 				);
 		}
 	});
+
+	$scope.deactivateEnquiry =function(){
+		$scope.updateForm = {
+			active : $scope.enquiry.active == false
+		}
+		httpService.httpPut($scope.url.enquiry, $scope.updateForm,"DEACTIVATE_ENQUIRY");
+	}
+	$scope.$on("DEACTIVATE_ENQUIRY", function(event, data){
+		if (data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.enquiry = data.data.data.data;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
+		} else {
+			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
+		}
+	})
+
 	$scope.updateEnquiry = function(){
 		var updateForm = $scope.enquiry;
 		httpService.httpPut($scope.url.enquiry, updateForm, 'UPDATE_Enquiry');
@@ -79,8 +108,6 @@ angular.module('app.enquiry.ctrl', [])
     .targetEvent(ev)
     .ok('Confirm')
     .cancel('Cancel');
-
-    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.enquiry.enquiryId) {
     		deleteEnquiry();    
@@ -115,6 +142,9 @@ getEnquiry();
 	$scope.order = function(){
 		$scope.reverse = !$scope.reverse;
 	}
+
+
+
 
 	//pagination start
 	
@@ -161,4 +191,33 @@ getEnquiry();
     			);
     	}
     });
+
+
+	$scope.deactivateEnquiries =function(enquiry){
+		$scope.updateForm = {
+			active : enquiry.active == false
+		}
+		httpService.httpPut(configuration.domain()+"/service/enquiries/"+enquiry.enquiryId, $scope.updateForm,"DEACTIVATE_ENQUIRIES");
+	}
+	$scope.$on("DEACTIVATE_ENQUIRIES", function(event, data){
+		if (data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			httpService.httpGet($scope.url, 'GET_ENQUIRIES');
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
+		} else {
+			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
+		}
+	})
 })

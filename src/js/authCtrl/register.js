@@ -1,7 +1,6 @@
 angular.module('app.register.ctrl', [])
 .controller('RegisterCtrl', function($scope, httpService, toastService, configuration, $location, $mdToast){
 	var domain = configuration.domain();	
-	$scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
 	$scope.url = {
 		register: domain + "/service/accounts"
 	}

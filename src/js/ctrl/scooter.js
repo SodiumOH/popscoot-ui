@@ -24,14 +24,17 @@ angular.module('app.scooter.ctrl', [])
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
+
+
+
 	function getBookings (){
 		httpService.httpGet($scope.url.bookings, 'GET_BOOKINGS');		
 	}
@@ -45,12 +48,12 @@ angular.module('app.scooter.ctrl', [])
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -108,6 +111,86 @@ angular.module('app.scooter.ctrl', [])
 		}
 	};
 
+
+	$scope.deactivateScooter =function(){
+		$scope.updateForm = {
+			active : $scope.scooter.active == false
+		}
+		httpService.httpPut($scope.url.scooter, $scope.updateForm, "DEACTIVATE_SCOOTER");
+	}
+	$scope.$on("DEACTIVATE_SCOOTER", function(event, data){
+		if (data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			$scope.scooter = data.data.data.data;
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
+		} else {
+			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
+		}
+	})
+
+	var switchURL = configuration.domain()+"/api/pmds/rest";
+	$scope.scooterOn = function(){
+		httpService.httpGet(switchURL+"/immobilizer_off/"+$scope.scooter.gpsId, "SCOOTERON");
+		$scope.$on("SCOOTERON", function(event,data){
+			if (data.status == 1) {
+				console.log(data);
+				$scope.$emit("GETFINISHED");
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent(data.data.data.Result)
+					.hideDelay(3000)
+					.position("top right")
+					);
+			} else {
+				$scope.$emit("GETFINISHED");
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent("Error")
+					.hideDelay(3000)
+					.position("top right")
+					.theme('error-toast')
+					);
+			}
+			
+		})
+	}
+	$scope.scooterOff = function(){
+		httpService.httpGet(switchURL+"/immobilizer_on/"+$scope.scooter.gpsId, "SCOOTEROFF");
+		$scope.$on("SCOOTEROFF", function(event,data){
+			if (data.status == 1) {
+				console.log(data);
+				$scope.$emit("GETFINISHED");
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent(data.data.data.Result)
+					.hideDelay(3000)
+					.position("top right")
+					);
+			} else {
+				$scope.$emit("GETFINISHED");
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent("Error")
+					.hideDelay(3000)
+					.position("top right")
+					.theme('error-toast')
+					);
+			}
+		})
+	}
+
 	$scope.updateScooter = function(){
 		var updateForm = $scope.scooter;
 		updateForm.mediaId = mediaId;
@@ -129,12 +212,12 @@ angular.module('app.scooter.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	})
 
@@ -155,12 +238,12 @@ angular.module('app.scooter.ctrl', [])
 		} else {
 			console.log(data.data.data.message);
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
@@ -174,8 +257,6 @@ angular.module('app.scooter.ctrl', [])
     .targetEvent(ev)
     .ok('Confirm')
     .cancel('Cancel');
-
-    $scope.path = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/app/";
     $mdDialog.show(confirm).then(function(result) {
     	if (result == $scope.scooter.integrateId) {
     		deletescooter();   
@@ -195,7 +276,7 @@ getBookings();
 })
 
 
-.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService, $mdToast) {
+.controller('ScootersCtrl', function($mdMedia, $scope, $location, httpService, $mdToast, configuration) {
 	console.log('this is ScootersCtrl');
 
 	$scope.$emit('BC', {
@@ -205,7 +286,7 @@ getBookings();
 
 	$scope.scooters = [];
 
-	$scope.url = "http://test.popscoot.com/popscoot/service/scooters"
+	$scope.url = configuration.domain()+"/service/scooters"
 	/*var path = $location.path();
 	$scope.goPage = function(path){
 		$location.path(path);
@@ -229,15 +310,43 @@ getBookings();
 			console.log(data.data.data.message);
 			$scope.$emit("GETFINISHED");
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	});
 
+
+	$scope.deactivateScooters =function(scooter){
+		$scope.updateForm = {
+			active : scooter.active == false
+		}
+		httpService.httpPut($scope.url+"/"+scooter.scooterId, $scope.updateForm,"DEACTIVATE_SCOOTERS");
+	}
+	$scope.$on("DEACTIVATE_SCOOTERS", function(event, data){
+		if (data.data.data.status == 1) {
+			console.log(data.data.data.data);
+			httpService.httpGet($scope.url, 'GET_SCOOTERS');
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent("Success")
+				.hideDelay(3000)
+				.position("top right")
+				);
+		} else {
+			console.log(data.data.data.message);
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
+		}
+	})
 
      //pagination start
      $scope.currentPageNumber = 1;
@@ -275,6 +384,7 @@ getBookings();
 	$scope.createScooter = function(){
 		var createForm = $scope.scooter;
 		createForm.mediaId = 0;
+		createForm.battery = 1;
 		console.log(createForm);
 		httpService.httpPost($scope.url.scooter, createForm, 'CREATE_Scooter');
 	}
@@ -292,12 +402,12 @@ getBookings();
 		} else {
 			console.log(data.data.data.message);
 			$mdToast.show(
-						$mdToast.simple()
-						.textContent(data.data.data.message)
-						.hideDelay(3000)
-						.position("top right")
-						.theme('error-toast')
-						);
+				$mdToast.simple()
+				.textContent(data.data.data.message)
+				.hideDelay(3000)
+				.position("top right")
+				.theme('error-toast')
+				);
 		}
 	})
 })

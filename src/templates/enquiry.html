@@ -8,7 +8,7 @@
 			</md-card-title-text>
 		</md-card-title>
 		<md-content layout-padding>
-		<div flex style="background-image: url({{enquiry.image.url}}); background-repeat: no-repeat; background-position: center; background-size: contain;min-height: 400px; min-width: 100%"></div>
+			<div flex style="background-image: url({{enquiry.image.url}}); background-repeat: no-repeat; background-position: center; background-size: contain;min-height: 400px; min-width: 100%"></div>
 			<div>
 				<form name="userForm" ng-submit="updateEnquiry()">
 
@@ -19,15 +19,18 @@
 						</md-input-container>
 					</div>
 
-					<div layout-gt-xs="row" layout-padding>
+					<div layout-gt-xs="row" layout-padding layout-align="space-between center">
 						<div>			
 							<md-button class="md-raised" ng-href="#/accounts/{{enquiry.account.accountId}}"><i class="fa fa-user"></i>{{enquiry.account.username}}</md-button>
 
 						</div>
+						<div>
+							<md-switch ng-model="enquiry.active" ng-click="deactivateEnquiry()"></md-switch>
+						</div>
 					</div>
 
-					<div flex layout="row" layout-align="center center">
-						<md-button class="md-warn md-raised" flex="80" ng-click="showPrompt($event)">{{'delete'| translate}}</md-button>
+					<div flex layout="row" layout-align="center center">						
+						<md-button class="md-warn md-raised" flex="100" ng-click="showPrompt($event)">{{'delete'| translate}}</md-button>
 					</div>
 
 				</form>

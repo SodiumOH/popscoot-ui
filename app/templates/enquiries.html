@@ -19,7 +19,7 @@
 				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in enquiries|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
 					<md-card>
 						<md-card-title>
-							<md-card-title-text md-truncate style="max-width: 100%">
+							<md-card-title-text md-truncate class="popscoot-card">
 
 								<span class="md-headline">{{item.comment}}</span>
 								<span class="md-subhead"><i class="fa fa-question fa-fw"></i> {{'id'|translate|text_fmt:2}}: {{item.enquiryId}}</span>
@@ -28,11 +28,12 @@
 							</md-card-title-text>
 
 							<md-card-title-media>
-								<div class="md-media-sm" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+								<div class="md-media-sm avatar" ng-style="item.image.url|bg_css">            
 								</div>
 							</md-card-title-media>
 						</md-card-title>
 						<md-card-actions layout="row" layout-align="end center"> 
+							<md-switch ng-model="item.active" ng-click="deactivateEnquiries(item)"></md-switch>
 							<md-button class="md-raised" ng-href="{{path+item.enquiryId}}">{{'details'|translate}}</md-button>
 						</md-card-actions>
 					</md-card>
@@ -45,6 +46,8 @@
 				<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
 			</div>
 		</md-card>
+
+
 
 		
 
