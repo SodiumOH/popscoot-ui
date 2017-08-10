@@ -116,6 +116,8 @@ md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolb
 
 .md-button.md-primary.md-raised.popscoot-primary {
   background-color: #e2288f; }
+  .md-button.md-primary.md-raised.popscoot-primary:hover {
+    background-color: #b4186e; }
 
 .file-card-title {
   min-height: 128px; }

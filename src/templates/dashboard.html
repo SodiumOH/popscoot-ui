@@ -11,7 +11,7 @@
 				<md-card-title-text>
 					<div layout="row">					
 						<span class="md-headline" ng-bind="item.title"></span>
-						<md-button class="md-icon-button" ng-href="item.path"><i class="fa fa-ellipsis-h"></i></md-button>
+						<md-button class="md-icon-button" ng-href="{{item.path}}"><i class="fa fa-ellipsis-h"></i></md-button>
 					</div>
 					<div layout="row" ng-repeat="label in item.labels">
 						<div class="popscoot-chart-legend" ng-style="{'background-color': chartColors[$index]}"></div>
