@@ -112,6 +112,10 @@ angular.module('POPSCOOT', ['chart.js', 'ngMaterialDatePicker', 'dndLists', 'pas
 		on: "on",
 		off: "off",
 		//booking
+		booked: "booked",
+		traveling: "traveling",
+		completed: "completed",
+		canceled: "canceled",
 		booking: "booking",
 		bookingId: "booking ID",
 		start: "start",

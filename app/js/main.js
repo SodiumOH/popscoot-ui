@@ -112,6 +112,10 @@ angular.module('POPSCOOT', ['chart.js', 'ngMaterialDatePicker', 'dndLists', 'pas
 		on: "on",
 		off: "off",
 		//booking
+		booked: "booked",
+		traveling: "traveling",
+		completed: "completed",
+		canceled: "canceled",
 		booking: "booking",
 		bookingId: "booking ID",
 		start: "start",
@@ -2011,6 +2015,26 @@ getBooking();
 		url: "bookings"
 	})
 	$scope.path = "#/bookings/";
+	$scope.selectList = [{
+		name: 'booked',
+		value: 1
+	},{
+		name: 'traveling',
+		value: 2
+	},{
+		name: 'completed',
+		value: 3
+	},{
+		name: 'canceled',
+		value: 4
+	}]
+	$scope.statusMatch = function(status){
+		return function(item){
+			return item.status == status;
+		}
+	}
+	$scope.status = [1,2,3,4];
+	
 
 	// var path = $location.path();
 	// $scope.goPage = function(path){
@@ -4009,6 +4033,32 @@ angular.module('app.filters', [])
 		} else {
 			return (fileSize/1024/1024/1024/1024).toFixed(2)+"tb";
 		}
+	}
+})
+.filter('booking_status', function(){
+	return function(status){
+		if (status == 1) {
+			return "booked";
+		}else if (status == 2) {
+			return "traveling";
+		}else if (status == 3) {
+			return "completed";
+		}else if (status == 4){
+			return "canceled";
+		}else {
+			return "error";
+		}
+	}
+})
+.filter('status_filter', function(){
+	return function(items, status){
+		var filtered = [];
+		items.forEach(function(item){
+			if(status.indexOf(item.status)>-1){
+				filtered.push(item);
+			}
+		})
+		return filtered;
 	}
 })
 

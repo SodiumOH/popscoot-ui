@@ -76,6 +76,32 @@ angular.module('app.filters', [])
 		}
 	}
 })
+.filter('booking_status', function(){
+	return function(status){
+		if (status == 1) {
+			return "booked";
+		}else if (status == 2) {
+			return "traveling";
+		}else if (status == 3) {
+			return "completed";
+		}else if (status == 4){
+			return "canceled";
+		}else {
+			return "error";
+		}
+	}
+})
+.filter('status_filter', function(){
+	return function(items, status){
+		var filtered = [];
+		items.forEach(function(item){
+			if(status.indexOf(item.status)>-1){
+				filtered.push(item);
+			}
+		})
+		return filtered;
+	}
+})
 
 
 

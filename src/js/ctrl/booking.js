@@ -260,6 +260,26 @@ getBooking();
 		url: "bookings"
 	})
 	$scope.path = "#/bookings/";
+	$scope.selectList = [{
+		name: 'booked',
+		value: 1
+	},{
+		name: 'traveling',
+		value: 2
+	},{
+		name: 'completed',
+		value: 3
+	},{
+		name: 'canceled',
+		value: 4
+	}]
+	$scope.statusMatch = function(status){
+		return function(item){
+			return item.status == status;
+		}
+	}
+	$scope.status = [1,2,3,4];
+	
 
 	// var path = $location.path();
 	// $scope.goPage = function(path){
