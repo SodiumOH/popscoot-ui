@@ -32,14 +32,8 @@
 							</md-input-container>
 
 						</div>
-
-						<div layout-gt-xs="row" layout-padding layout-align="space-between center">
-							<div>			
-								
-								<md-button class="md-raised" ng-href="#/accounts/{{payment.account.accountId}}"><i class="fa fa-user"></i>{{payment.account.username}}</md-button>
-
-							</div>
-							<md-switch ng-model="scooter.active" aria-label="Switch 1" ng-change=""></md-switch>
+						<div flex="100">
+							<md-button class="md-raised" ng-href="#/accounts/{{payment.account.accountId}}" md-truncate><i class="fa fa-user"></i>{{payment.account.username}}</md-button>							
 						</div>
 
 						<div flex layout="row">					
@@ -93,7 +87,7 @@
 					<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>				
 					<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
 				</div>
-				
+
 			</md-card>
 
 		</div>
