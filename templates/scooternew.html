@@ -1,0 +1,38 @@
+<div flex flex-gt-md="50" layout-padding>
+	<h2>Create new Scooter</h2>
+	<md-card>
+		<md-card-content>
+			<form name="updateAccountForm" ng-submit="createScooter()">
+
+				<div layout-align="center center">
+					<md-input-container class="md-block"> 
+						<label>Name</label>
+						<input ng-model="scooter.name">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Model</label>
+						<input ng-model="scooter.model">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>IntegratedID</label>
+						<input ng-model="scooter.integrateId">
+					</md-input-container>
+					
+					<md-input-container class="md-block">
+						<label>gpsId</label>
+						<input ng-model="scooter.gpsId">
+					</md-input-container>
+				</div>
+
+
+				<div>
+					
+					<div flex layout="row">					
+						<md-button class="md-primary md-raised popscoot-primary" flex type="submit" ng-disabled="updateAccountForm.$invalid">Create</md-button>
+					</div>
+				</div>
+			</form>
+		</md-card-content>
+		
+	</md-card>
+</div>

@@ -1,0 +1,96 @@
+<div>
+	<md-content layout-gt-md="row" layout-padding>
+		<div flex flex-md="35" flex-gt-md="30">
+			<md-card class="large">
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline" md-truncate>{{'by'|translate}}: {{payment.account.username}}</span>
+
+						<span class="md-subhead large">{{'paymentId'|translate}}: {{payment.paymentId}}</span>
+						<span class="md-subhead large">{{'date'|translate}}: {{payment.date|rd:0}}</span>
+					</md-card-title-text>
+				</md-card-title>
+				<md-content layout-padding>	
+					<form name="updatePaymentForm" ng-submit="updatePayment()">
+
+						<div layout-align="center center">
+							<md-input-container class="md-block"> 
+								<label>{{'method'|translate}}</label>
+								<input ng-model="payment.method">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>{{'credential1'|translate}}</label>
+								<input ng-model="payment.credential1">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>{{'credential2'|translate}}</label>
+								<input ng-model="payment.credential2">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label>{{'credential3'|translate}}</label>
+								<input ng-model="payment.credential3">
+							</md-input-container>
+
+						</div>
+						<div flex="100">
+							<md-button class="md-raised" ng-href="#/accounts/{{payment.account.accountId}}" md-truncate><i class="fa fa-user"></i>{{payment.account.username}}</md-button>							
+						</div>
+
+						<div flex layout="row">					
+							<md-button class="md-primary md-raised popscoot-primary" flex="50" type="submit" ng-disabled="updatePaymentForm.$invalid">{{'udpate'|translate}}</md-button>
+							<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
+						</div>
+
+					</form>
+
+				</md-content>
+
+			</md-card>
+		</div>
+		<div flex>
+			<md-card style="min-height: 607.898px">
+				<div layout="row" layout-align="space-between center" layout-padding>
+					<div layout="row" layout-align="start center" layout-padding>
+						<span>{{'itemsPerPage'|translate}}</span>
+						<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+							<md-option value=10>10</md-option>
+							<md-option value=20>20</md-option>
+							<md-option value=30>30</md-option>
+						</md-select>
+						<span>{{'orderBy'|translate}}</span>
+						<md-select ng-model="itemsOrder" placeholder="{{'itemsOrder'|translate}}">
+							<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+						</md-select>				
+					</div> 
+				</div>
+
+				<md-divider></md-divider>
+
+				<md-content layout="row" layout-wrap>
+					<H2 ng-if="transactions.length === 0" layout-padding>{{'noTransactions'|translate}}</H2>				
+					<div ng-repeat="item in transactions|orderBy: itemsOrder: reverse|paginate: currentPageNumber: itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
+						<md-card id="transactionCard">
+							<md-card-title>
+								<md-card-title-text>
+									<span class="large"><i class="fa fa-refresh"></i> {{'transactionId'|translate}}: {{item.transactionId}}</span>
+									<span class="medium"><i class="fa fa-money"></i> {{'amount'|translate}}: {{ item.amount }}</span>
+									<span class="medium"><i class="fa fa-calendar"></i> {{'date'|translate}}: {{ item.date|rd:0 }}</span>
+									<span class="medium"><i class="fa fa-spinner"></i> {{'status'|translate}}: {{ item.status}}</span>
+								</md-card-title-text>
+							</md-card-title>
+						</md-card>
+
+					</div>
+
+				</md-content>
+				<div layout="row" layout-align="space-around center">
+					<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>				
+					<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
+				</div>
+
+			</md-card>
+
+		</div>
+
+	</md-content>
+</div>

@@ -11,7 +11,7 @@ var reload = browserSyn.reload;
 /** ======
 Parameters
 ======= */
-var SRC = "src", DEST = "app", INJ = ""
+var SRC = "src", DEST = "app", INJ = "./"
 
 gulp.task('default', function() {
 	console.log(`
@@ -134,13 +134,36 @@ var INJECTRES = [
 	DEST + '/css/style.css',
 	DEST + '/js/main.js'
 ];
+var INJECTRES_LOCAL = [
+	INJ + 'lib/roboto-fontface/css/roboto/roboto-fontface.css',
+	INJ + 'lib/font-awesome/css/font-awesome.min.css',
+	INJ + 'lib/moment/min/moment.min.js',
+	INJ + 'lib/angular/angular.min.js',
+	INJ + 'lib/angular-route/angular-route.min.js',
+	INJ + 'lib/angular-aria/angular-aria.min.js',
+	INJ + 'lib/angular-animate/angular-animate.min.js',
+	INJ + 'lib/angular-material/angular-material.min.css',
+	INJ + 'lib/angular-material/angular-material.min.js',
+	INJ + 'lib/angular-avatar/dist/angular-avatar.js',
+	INJ + 'lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.css',
+	INJ + 'lib/lf-ng-md-file-input/dist/lf-ng-md-file-input.js',
+	INJ + 'lib/ng-file-upload/dist/ng-file-upload.js',
+	INJ + 'lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
+	INJ + 'lib/angular-translate/dist/angular-translate.min.js',
+	INJ + 'lib/mdPickers/dist/*',
+	INJ + 'lib/ng-material-datetimepicker/dist/*',
+	INJ + 'lib/chart.js/dist/Chart.min.js',
+	INJ + 'lib/angular-chart.js/dist/*',
+	INJ + 'css/style.css',
+	INJ + 'js/main.js'
+];
 
 gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], function() {
 	console.log(INJECTRES)
 	return gulp.src([SRC + '/index.html', SRC + '/auth.html', SRC + '/**/*.html'], {
 		base: SRC
 	})
-	.pipe(inject(gulp.src(INJECTRES, {
+	.pipe(inject(gulp.src(INJECTRES_LOCAL, {
 		read: false
 	})))
 	.pipe(removeHtmlComments())

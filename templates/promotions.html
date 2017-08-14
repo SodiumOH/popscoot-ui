@@ -1,0 +1,60 @@
+<div>
+	<div flex>
+		<md-card>
+			<div layout="row" layout-align="space-between center" layout-padding>
+				<div>
+					<span>{{'create'|translate}}</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/promotion">           
+						<i class="fa fa-plus"></i>
+					</md-button>
+				</div>		
+				<div layout="row" layout-align="start center" layout-padding>
+					<span>{{'itemsPerPage'|translate}}</span>
+					<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+						<md-option value=10>10</md-option>
+						<md-option value=20>20</md-option>
+						<md-option value=30>30</md-option>
+					</md-select>
+					<span>{{'orderBy'|translate}}</span>
+					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+						<md-option value="amount" ng-click="order()">{{'amount'|translate}}</md-option>
+					</md-select>				
+				</div> 	
+			</div>
+			<md-divider></md-divider>
+			<md-content layout="row" layout-wrap>
+				<H2 ng-if="promotions.length === 0">{{'noPromotions'|translate}}</H2>
+				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in promotions|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
+					<md-card>
+						<md-card-title>
+							<md-card-title-text>
+								<span class="md-headline">{{'name'|translate}}: {{ item.name }}</span>
+								<table>
+									<tr><td class="ulli">{{'promotionId'|translate}}: </td><td>{{item.promotionId}}</td></tr>
+									<tr><td class="ulli">{{'description'|translate}}: </td><td>{{ item.description }}</td></tr>
+									<tr><td class="ulli">{{'amount'|translate}}: </td><td>{{item.amount}}</td></tr>
+									<tr><td class="ulli">{{'date'|translate}}: </td><td>{{item.date|rd:0}}</td></tr>
+								</table>
+							</md-card-title-text>
+							<md-card-title-media>
+								<div class="md-media-sm card-media" style="background-image: url({{item.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">            
+								</div>
+							</md-card-title-media>  
+						</md-card-title>
+						<md-card-actions layout="row" layout-align="end center"> 
+							<md-button class="md-raised" ng-href="{{path+item.promotionId}}">{{'details'|translate}}</md-button>
+						</md-card-actions>
+					</md-card>
+				</div>
+			</md-content>
+			<div layout="row" layout-align="space-around center">
+				<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
+				
+				<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
+			</div>
+
+		</md-card>
+
+	</div>
+</div>

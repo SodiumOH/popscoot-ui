@@ -1,0 +1,129 @@
+<div>
+	<md-content layout-gt-sm="row" layout-padding>
+		<div flex flex-md="35" flex-gt-md="30">
+			<md-card class="large">
+				<md-card-title>
+					<md-card-title-text>
+						<span class="md-headline large">{{scooter.name}}</span>
+						<span class="md-subhead large">{{scooter.date|rd:0}}</span>
+					</md-card-title-text>
+					<md-card-title-media>
+						<div ng-if="!uploadImage" class="md-media-sm card-media" style="background-image: url({{scooter.image.url}}); background-color: #C0C0C0; background-repeat: no-repeat; background-position: center; background-size: contain;">   
+							<md-button class="md-icon-button" ng-click="uploadPrompt()"><i class="fa fa-camera" aria-hidden="true"></i></md-button>
+						</div>					
+						<div ng-hide="!uploadImage" ngf-drop ngf-select ng-model="files" class="md-media-sm card-media drop-box" 
+						ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+						accept="image/*" 
+						ngf-pattern="'image/*'" >
+						<div style="padding-top: 10px"  ng-hide="preview" class="large">Drop images here or click to upload, {{uploadStatus}}</div>
+						<div ng-hide="!preview" class="md-media-sm card-media" style="background-image: url({{dataUrl}}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
+					</div>
+					<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> 
+				</md-card-title-media>
+			</md-card-title>
+			<md-card-content layout-padding>
+				<div>
+					<form name="updatescooterForm" ng-submit="updateScooter()">
+
+						<div layout-align="center center">
+							<md-input-container class="md-block"> 
+								<label class="large" >{{'integrateId'|translate}}</label>
+								<input class="large" ng-model="scooter.integrateId">
+							</md-input-container>
+							<md-input-container class="md-block"> 
+								<label class="large">{{'name'|translate}}</label>
+								<input ng-model="scooter.name">
+							</md-input-container>
+							<md-input-container class="md-block">
+								<label>{{'model'|translate}}</label>
+								<input ng-model="scooter.model">
+							</md-input-container>
+							
+						</div>
+
+						<div>
+							<div flex layout="row" layout-align="space-around center"> 
+								<md-switch flex="50" ng-model="scooter.active" aria-label="Switch 1" ng-click="deactivateScooter()"></md-switch>
+								<md-button flex="30" class="md-raised" ng-href="#/tracking/{{scooter.gpsId}}">{{'tracking'|translate}}</md-button>
+							</div>
+
+							<md-divider></md-divider>
+							<div flex layout="row">
+								<md-button flex="50" class="md-raised" ng-click="scooterOn()"><i class="fa fa-play" aria-hidden="true"></i>
+									{{'on'|translate}}
+								</md-button>
+								<md-button flex="50" class="md-raised" ng-click="scooterOff()"><i class="fa fa-power-off" aria-hidden="true"></i>
+									{{'off'|translate}}
+									</md-button>
+							</div>
+							<md-divider></md-divider>
+
+
+							<div flex layout="row">					
+								<md-button class="md-primary md-raised popscoot-primary" flex="50" type="submit" ng-disabled="updatescooterForm.$invalid">{{'update'|translate}}</md-button>
+								<md-button class="md-warn md-raised" flex="50" ng-click="showPrompt($event)">{{'delete'|translate}}</md-button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</md-card-content>
+		</md-card>
+	</div>
+	<div flex>
+		<md-card style="min-height: 607.898px">
+			<div layout="row" layout-align="space-between center" layout-padding>
+				<div layout="row" layout-align="start center" layout-padding>
+					<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+						<md-option value=10>10</md-option>
+						<md-option value=20>20</md-option>
+						<md-option value=30>30</md-option>
+					</md-select>
+					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+						<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+						<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
+					</md-select>				
+				</div> 
+				<div>
+					<span>{{'create'|translate}}</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/booking/sco{{scooter.scooterId}}">           
+						<i class="fa fa-plus"></i>
+					</md-button>
+				</div>			
+			</div>
+
+			<md-divider></md-divider>
+
+			<md-content layout="row" layout-wrap>
+				<H2 ng-if="bookings.length === 0" layout-padding>There are currently no bookings</H2>				
+				<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
+					<md-card id="bookingCard">
+						<md-card-title>
+							<md-card-title-text>
+
+								<span class="large"><i class="fa fa-book fa-fw"></i>{{'id'|translate|text_fmt:2}}: {{item.bookingId}}</span>
+								<span class="medium"><i class="fa fa-play fa-fw"></i> {{'startTime'|translate|text_fmt:1}}: {{ item.startDate|rd:1 }}</span>
+								<span class="medium"><i class="fa fa-stop fa-fw"></i> {{'endTime'|translate|text_fmt:1}}: {{ item.endDate|rd:1 }}</span>
+								<span class="medium"><i class="fa fa-map-marker fa-fw"></i> {{'destination'|translate|text_fmt:1}}: {{ item.destinationName}}</span>
+								<span class="medium"><i class="fa fa-user fa-fw"></i> {{'by'|translate|text_fmt:1}}: <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></span>
+
+							</md-card-title-text>
+							<div></div>
+						</md-card-title>
+						<md-card-actions layout="row" layout-align="end center">							
+							<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">{{'details'|translate}}</md-button>	
+						</md-card-actions>
+					</md-card>
+
+
+				</div>
+			</md-content>
+
+		</div>
+	</md-card>
+</div>
+
+</md-content>
+
+
+</div>

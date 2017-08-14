@@ -1,0 +1,54 @@
+<div flex flex-gt-md="50" layout-padding>
+	<h2>Create new Payment</h2>
+	<md-card>
+		<md-card-content>
+			<form name="createPaymentForm" ng-submit="createPayment()">
+
+				<div layout-align="center center">
+					<div layout="row">
+						<md-input-container flex class="md-block"> 
+							<label>Account</label>
+							<input ng-model="accountId">
+						</md-input-container>
+						<md-button class="md-icon-button" ng-click="accDialog($event)"><i class="fa fa-plus"></i></md-button>
+					</div>
+					<md-input-container class="md-block">
+						<label>Method</label>						
+						<md-icon><i class="fa fa-home"></i></md-icon>
+						<input ng-model="payment.method" >
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Credential1</label>
+						<md-icon><i class="fa fa-home"></i></md-icon>
+						<input ng-model="payment.credential1">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Credential2</label>
+						<md-icon><i class="fa fa-home"></i></md-icon>
+						<input ng-model="payment.credential2">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>credential3</label>
+						<md-icon><i class="fa fa-home"></i></md-icon>
+						<input ng-model="payment.credential3">
+					</md-input-container>
+				</div>
+
+
+				<div>
+					
+					<div flex layout="row">					
+						<md-button class="md-primary md-raised popscoot-primary" flex type="submit" ng-disabled="createPaymentForm.$invalid">Create</md-button>
+					</div>
+				</div>
+			</form>
+		</md-card-content>
+		
+	</md-card>
+</div>
+<div>
+	
+	create payment here
+	<md-button ng-href="#payments/1">created</md-button>
+	<md-button ng-href="#payments">list</md-button>
+</div>

@@ -1,0 +1,54 @@
+	<div flex>
+		<md-card>
+			<div layout="row" layout-align="start center" layout-padding>
+				<span>{{'itemsPerPage'|translate}}</span>
+				<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+					<md-option value=10>10</md-option>
+					<md-option value=20>20</md-option>
+					<md-option value=30>30</md-option>
+				</md-select>
+				<span>{{'orderBy'|translate}}</span>
+				<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+					<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+					<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+				</md-select>
+			</div> 
+			<md-divider></md-divider>
+			<H2 ng-if="enquiries.length === 0" layout-padding>{{'noEnquiries'|translate}}</H2>	
+			<div ng-if="enquiries.length !== 0" layout="row" layout-wrap>
+				<div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in enquiries|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
+					<md-card>
+						<md-card-title>
+							<md-card-title-text md-truncate class="popscoot-card">
+
+								<span class="md-headline">{{item.comment}}</span>
+								<span class="md-subhead"><i class="fa fa-question fa-fw"></i> {{'id'|translate|text_fmt:2}}: {{item.enquiryId}}</span>
+								<span class="md-subhead"><i class="fa fa-calendar fa-fw"></i> : {{item.date|rd:0}}</span>
+								<span class="md-subhead"><i class="fa fa-user fa-fw"></i> : <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></span>							
+							</md-card-title-text>
+
+							<md-card-title-media>
+								<div class="md-media-sm avatar" ng-style="item.image.url|bg_css">            
+								</div>
+							</md-card-title-media>
+						</md-card-title>
+						<md-card-actions layout="row" layout-align="end center"> 
+							<md-switch ng-model="item.active" ng-click="deactivateEnquiries(item)"></md-switch>
+							<md-button class="md-raised" ng-href="{{path+item.enquiryId}}">{{'details'|translate}}</md-button>
+						</md-card-actions>
+					</md-card>
+				</div>
+			</div>
+
+			<div layout="row" layout-align="space-around center">
+				<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
+				
+				<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
+			</div>
+		</md-card>
+
+
+
+		
+
+	</div>

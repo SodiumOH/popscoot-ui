@@ -1,0 +1,72 @@
+  <md-content >	
+
+    <div flex>
+      <md-card id="accountsPage">
+       <div layout="row" layout-align="space-between center" layout-padding>
+        <div>
+          <span class="">{{'create'|translate}}</span>
+          <md-button class="md-raised md-icon-button" ng-href="#/new/account">           
+            <i class="fa fa-plus"></i>
+          </md-button>
+        </div>      
+        <div layout="row" layout-align="start center" layout-padding>
+          <span>{{'itemsPerPage'|translate}}</span>
+          <md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+            <md-option value=10>10</md-option>
+            <md-option value=20>20</md-option>
+            <md-option value=30>30</md-option>
+          </md-select>
+          <span>{{'orderBy'|translate}}</span>
+          <md-select ng-model="itemsOrder" placeholder="{{'create'|translate}}">
+            <md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
+            <md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
+            <md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
+          </md-select>        
+        </div> 
+        <div>
+          <md-input-container>
+            <label>{{'search'|translate}}</label>
+            <input ng-model="search"></md-input-container>
+          </md-input-container>    
+        </div>
+      </div>
+      <md-divider></md-divider>
+
+      <div ng-if="itemsPerPage!='all'" flex>
+        <div flex layout="row" layout-wrap>
+        <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="account in accounts|filter: search|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage">
+            <md-card>
+             <md-card-title>
+              <md-card-title-text md-truncate class="popscoot-card">
+               <span class="md-headline">{{account.username}}</span>
+               <span class="md-subhead"><i class="fa fa-envelope" aria-hidden="true"></i>: {{account.email}}</span>
+               <span class="md-subhead"><i class="fa fa-calendar" aria-hidden="true"></i>: {{account.date|rd:0}}</span>
+
+             </md-card-title-text>
+             <md-card-title-media>
+               <div class="md-media-sm card-media avatar" ng-style="account.avatar.url|bg_css">            
+               </div>
+             </md-card-title-media>
+           </md-card-title>
+           <md-card-actions layout="row" layout-align="end center"> 
+           <md-switch ng-model="account.active" aria-label="Switch 1" ng-change="activate(account.accountId)"></md-switch>
+            <md-button class="md-raised" ng-href="{{path+account.accountId}}">{{'details'|translate}}</md-button>
+          </md-card-actions>
+        </md-card>
+      </div>
+
+    </div>  
+    <div layout="row" layout-align="space-around center">
+      <md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
+      
+      <md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
+    </div>
+  </div>
+</md-card>
+
+</div>
+
+
+</md-content>
+
+
