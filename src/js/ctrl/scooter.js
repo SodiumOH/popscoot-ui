@@ -273,6 +273,50 @@ angular.module('app.scooter.ctrl', [])
 
 getScooter();
 getBookings();
+
+$scope.selectList = [{
+	name: 'booked',
+	value: 1
+},{
+	name: 'traveling',
+	value: 2
+},{
+	name: 'completed',
+	value: 3
+},{
+	name: 'canceled',
+	value: 4
+}]
+
+$scope.status = [3];
+
+//orderBy start
+$scope.itemsOrder = "bookingId";
+$scope.reverse = false;
+$scope.order = function(){
+	$scope.reverse = !$scope.reverse;
+}
+
+     //pagination start
+     $scope.currentPageNumber = 1;
+     $scope.itemsPerPage = 10;
+
+     $scope.getNumberOfPages = function() {
+     	var count = $scope.bookings.length / $scope.itemsPerPage;
+     	if(($scope.bookings.length % $scope.itemsPerPage) > 0) count++;
+     	return Math.floor(count);
+     }
+
+     $scope.pageDown = function()
+     {
+     	if($scope.currentPageNumber > 1) $scope.currentPageNumber--;
+     }
+
+     $scope.pageUp = function()
+     {
+     	if($scope.currentPageNumber < $scope.getNumberOfPages()) $scope.currentPageNumber++;
+     }
+    //pagination end
 })
 
 

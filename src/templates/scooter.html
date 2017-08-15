@@ -57,7 +57,7 @@
 								</md-button>
 								<md-button flex="50" class="md-raised" ng-click="scooterOff()"><i class="fa fa-power-off" aria-hidden="true"></i>
 									{{'off'|translate}}
-									</md-button>
+								</md-button>
 							</div>
 							<md-divider></md-divider>
 
@@ -75,56 +75,79 @@
 	<div flex>
 		<md-card style="min-height: 607.898px">
 			<div layout="row" layout-align="space-between center" layout-padding>
+				<div>
+					<span>{{'create'|translate}}</span>
+					<md-button class="md-raised md-icon-button" ng-href="#/new/booking">           
+						<i class="fa fa-plus"></i>
+					</md-button>
+				</div>			
 				<div layout="row" layout-align="start center" layout-padding>
-					<md-select ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
+					<span class="large">{{'itemsPerPage'|translate}}</span>
+					<md-select class="large" ng-model="itemsPerPage" placeholder="{{'itemsPerPage'|translate}}">
 						<md-option value=10>10</md-option>
 						<md-option value=20>20</md-option>
 						<md-option value=30>30</md-option>
 					</md-select>
-					<md-select ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
-						<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
-						<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
-						<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
-					</md-select>				
-				</div> 
+					<span class="large">{{'orderBy'|translate}}</span>
+					<md-select class="large" ng-model="itemsOrder" placeholder="{{'orderBy'|translate}}">
+						<md-option value="startTime" ng-click="order()">{{'startTime'|translate|text_fmt:1}}</md-option>
+						<md-option value="endTime" ng-click="order()">{{'endTime'|translate|text_fmt:1}}</md-option>
+						<md-option value="username" ng-click="order()">{{'username'|translate|text_fmt:1}}</md-option>
+						<md-option value="bookingId" ng-click="order()">{{'id'|translate|text_fmt:2}}</md-option>
+						<md-option value="status" ng-click="order()">{{'status'|translate|text_fmt:1}}</md-option>
+					</md-select>	
+					<span class="large">{{'status'|translate|text_fmt: 1}}</span>
+					<md-select class="large" ng-model="status" multiple>
+						<md-optgroup>
+							<md-option ng-value="item.value" ng-repeat="item in selectList">{{item.name|translate|text_fmt:1}}</md-option>
+						</md-optgroup>
+					</md-select>	
+				</div>
 				<div>
-					<span>{{'create'|translate}}</span>
-					<md-button class="md-raised md-icon-button" ng-href="#/new/booking/sco{{scooter.scooterId}}">           
-						<i class="fa fa-plus"></i>
-					</md-button>
-				</div>			
-			</div>
-
-			<md-divider></md-divider>
-
-			<md-content layout="row" layout-wrap>
-				<H2 ng-if="bookings.length === 0" layout-padding>There are currently no bookings</H2>				
-				<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
-					<md-card id="bookingCard">
-						<md-card-title>
-							<md-card-title-text>
-
-								<span class="large"><i class="fa fa-book fa-fw"></i>{{'id'|translate|text_fmt:2}}: {{item.bookingId}}</span>
-								<span class="medium"><i class="fa fa-play fa-fw"></i> {{'startTime'|translate|text_fmt:1}}: {{ item.startDate|rd:1 }}</span>
-								<span class="medium"><i class="fa fa-stop fa-fw"></i> {{'endTime'|translate|text_fmt:1}}: {{ item.endDate|rd:1 }}</span>
-								<span class="medium"><i class="fa fa-map-marker fa-fw"></i> {{'destination'|translate|text_fmt:1}}: {{ item.destinationName}}</span>
-								<span class="medium"><i class="fa fa-user fa-fw"></i> {{'by'|translate|text_fmt:1}}: <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></span>
-
-							</md-card-title-text>
-							<div></div>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center">							
-							<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">{{'details'|translate}}</md-button>	
-						</md-card-actions>
-					</md-card>
-
+					<md-input-container class="large">
+						<label>{{'search'|translate}}</label>
+						<input ng-model="search"></md-input-container>
+					</div> 
 
 				</div>
-			</md-content>
 
-		</div>
-	</md-card>
-</div>
+				<md-divider></md-divider>
+
+				<md-content layout="row" layout-wrap>
+					<H2 ng-if="bookings.length === 0" layout-padding>There are currently no bookings</H2>				
+					<div ng-repeat="item in bookings|filter: search|status_filter: status|orderBy:itemsOrder:reverse|paginate:currentPageNumber:itemsPerPage" flex="100" flex-gt-xs="50" flex-gt-md="33">
+						<md-card id="bookingCard">
+							<md-card-title>
+								<md-card-title-text>
+
+									<span class="large"><i class="fa fa-book fa-fw"></i>{{'id'|translate|text_fmt:2}}: {{item.bookingId}}</span>
+									<span class="medium"><i class="fa fa-play fa-fw"></i> {{'startTime'|translate|text_fmt:1}}: {{ item.startDate|rd:1 }}</span>
+									<span class="medium"><i class="fa fa-stop fa-fw"></i> {{'endTime'|translate|text_fmt:1}}: {{ item.endDate|rd:1 }}</span>
+									<span class="medium"><i class="fa fa-map-marker fa-fw"></i> {{'destination'|translate|text_fmt:1}}: {{ item.destinationName}}</span>
+									<span class="medium"><i class="fa fa-user fa-fw"></i> {{'by'|translate|text_fmt:1}}: <a class="sub-head" ng-href="{{'#/accounts/'+item.account.accountId}}">{{item.account.username}}</a></span>
+									<span class="medium"><i class="fa fa-book fa-fw"></i> {{'status'|translate}}: {{item.status|booking_status|text_fmt: 1}}</span>
+
+								</md-card-title-text>
+								<div></div>
+							</md-card-title>
+							<md-card-actions layout="row" layout-align="end center">							
+								<md-button class="md-raised" ng-href="{{'#/bookings/'+item.bookingId}}">{{'details'|translate}}</md-button>	
+							</md-card-actions>
+						</md-card>
+
+
+					</div>
+
+				</md-content>
+				<div layout="row" layout-align="space-around center">
+					<md-button ng-disabled="currentPageNumber === 1" class="md-raised" ng-click="pageDown();">{{'pageUp'|translate}}</md-button>
+
+					<md-button ng-disabled="currentPageNumber >= getNumberOfPages()" class="md-raised" ng-click="pageUp();">{{'pageDown'|translate}}</md-button>
+				</div>
+
+			</div>
+		</md-card>
+	</div>
 
 </md-content>
 
