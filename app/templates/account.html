@@ -149,9 +149,10 @@
 							<p><i class="fa fa-circle fa-fw"></i>
 							{{'stamps'|translate}}: {{item.stamps}}</p>	
 							<p><i class="fa fa-calendar fa-fw"></i>
-							{{'date'|translate}}: {{ item.date|rd:0}}</p>			
+							{{'date'|translate}}: {{ item.date|rd:0}}</p>
+							<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" >{{'details'|translate}}</md-button>
 						</div>
-						<md-button class="md-raised" ng-href="#/banks/{{item.bankId}}" >{{'details'|translate}}</md-button>
+						
 					</div>
 					
 				</md-tab-body>	

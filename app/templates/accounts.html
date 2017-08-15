@@ -50,7 +50,7 @@
            </md-card-title>
            <md-card-actions layout="row" layout-align="end center"> 
            <md-switch ng-model="account.active" aria-label="Switch 1" ng-change="activate(account.accountId)"></md-switch>
-            <md-button class="md-raised" ng-href="{{path+account.accountId}}">{{'details'|translate}}</md-button>
+            <md-button class="md-raised" ng-href="#/accounts/{{account.accountId}}">{{'details'|translate}}</md-button>
           </md-card-actions>
         </md-card>
       </div>
