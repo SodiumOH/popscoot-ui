@@ -31,13 +31,13 @@
 
             <md-divider></md-divider>
             <div layout="row" layout-wrap>
-              <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in scooters|filter: search">
+              <div flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="item in scooters|filter: search|paginate:1:10|orderBy: item.name">
                 <md-card>
                   <md-card-title>
                     <md-card-title-text>
-                      <span class="md-headline">{{item.integrateId}}</span>
+                      <span class="md-headline">{{item.name}}</span>
                       <span class="md-subhead">ScooterID: {{item.scooterId}}</span>
-                      <span class="md-subhead">Battery: {{item.battery}}</span>
+                      <span class="md-subhead">Model: {{item.model}}</span>
                       <span class="md-subhead">Active: {{item.active?"Active":"Deactivated"}}</span>
                     </md-card-title-text>
                     <md-card-title-media>
@@ -47,15 +47,12 @@
                   </md-card-title>
 
                   <md-card-actions layout="row" layout-align="end center"> 
-                   <md-button ng-click="answer(item)">Select</md-button>
+                   <md-button class="md-raised" ng-click="answer(item)">Select</md-button>
                  </md-card-actions>
                </md-card>
              </div>
            </div>  
-           <div layout="row" layout-align="space-around center">
-            <md-button class="md-raised" >Prev</md-button>
-            <md-button class="md-raised" >Next</md-button>
-          </div>
+          
 
         </md-card>
 
