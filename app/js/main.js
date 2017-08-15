@@ -2362,7 +2362,7 @@ angular.module('app.dashboard.ctrl', [])
 				path: "#/banks"
 			},{
 				title: "Scooters",
-				labels: ["Active", "Inactive"],
+				labels: ["Travelling", "Stopped"],
 				data: [results.scooterData.activeCount, results.scooterData.notActiveCount],
 				total: results.scooterData.activeCount+results.scooterData.notActiveCount,
 				path: "#/scooters",
