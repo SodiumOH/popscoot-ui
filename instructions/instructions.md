@@ -28,7 +28,7 @@ Author: Viatick
 #### <a name="Authentication"></a>Authentication
 ##### <a name="Login"></a>Login
 key in your username (case insensitive) and password to log in to the admin system. Login button is disabled if either field is left empty
-![login][login]
+![login page][login]
 
 ##### <a name="Forget Password"></a>Forget password:
 In case of forgetting password, click on forget password link and key in your email registered with our system. Send email button will be disabled if email is empty or in wrong format
