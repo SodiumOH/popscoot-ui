@@ -115,7 +115,7 @@ Left side shows details of the payment. Our system allows **method and 3 credent
 Right side shows transaction history under this payment (work in progress). Our system **does not** allow change, deletion or addition of new entry to transactions.
 ![payment page][payment]
 
-[login]:img/login.png
+[login]:img/login.PNG
 [register]:img/register.png
 [forget password]:img/forgetpassword.png
 [change password]:img/updatepassword.png
