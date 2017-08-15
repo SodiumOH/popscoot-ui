@@ -6,6 +6,7 @@ var inject = require('gulp-inject');
 var removeHtmlComments = require('gulp-remove-html-comments');
 var webserver = require('gulp-webserver');
 var clean = require('gulp-clean');
+var replace = require('gulp-replace');
 var browserSyn = require('browser-sync');
 var reload = browserSyn.reload;
 /** ======
@@ -163,10 +164,11 @@ gulp.task('build-html', ['build-media', 'build-lib', 'build-css', 'build-js'], f
 	return gulp.src([SRC + '/index.html', SRC + '/auth.html', SRC + '/**/*.html'], {
 		base: SRC
 	})
-	.pipe(inject(gulp.src(INJECTRES_LOCAL, {
+	.pipe(inject(gulp.src(INJECTRES, {
 		read: false
 	})))
 	.pipe(removeHtmlComments())
+	.pipe(replace('/app/', ""))
 	.pipe(gulp.dest(DEST));
 });
 
@@ -178,6 +180,7 @@ gulp.task('build-html-lite', function() {
 		read: false
 	})))
 	.pipe(removeHtmlComments())
+	.pipe(replace('/app/', ""))
 	.pipe(gulp.dest(DEST));
 });
 
@@ -203,6 +206,13 @@ gulp.task('serve', ['build', 'live-load'], function() {
 		fallback: 'auth.html'
 	}));
 });
+
+gulp.task('replace', function(){
+	console.log([DEST + '/index.html', DEST + '/auth.html', DEST + '/**/*.html']);
+	return gulp.src([DEST + '/index.html', DEST + '/auth.html', DEST + '/**/*.html'])
+	.pipe(replace('/app/', ""))
+	.pipe(gulp.dest(DEST));
+})
 
 gulp.task('clean', function() {
 	return gulp.src(DEST, {read: false})

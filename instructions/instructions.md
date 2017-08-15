@@ -11,11 +11,11 @@ Author: Viatick
 * [Authentication](#Authentication)
     * [Login](#Login)
     * [Register](#Register)
-    * [Forget Password](#Forget Password)
+    * [Forget Password](#ForgetPassword)
 * [General Operations](#General)
     * [Navigation](#Navigation)
     * [Filter headers](#Filter)
-    * [Image upload](#Image Upload)
+    * [Image upload](#ImageUpload)
 * [Main Pages](#Main)
     * [Dashboard/home page](#Dashboard)
     * [Accounts](#Accounts)
@@ -30,7 +30,7 @@ Author: Viatick
 key in your username (case insensitive) and password to log in to the admin system. Login button is disabled if either field is left empty
 ![login page][login]
 
-##### <a name="Forget Password"></a>Forget password:
+##### <a name="ForgetPassword"></a>Forget password:
 In case of forgetting password, click on forget password link and key in your email registered with our system. Send email button will be disabled if email is empty or in wrong format
 ![forget password][forget password]
 
@@ -45,12 +45,13 @@ key in your email, username, and password (2 times). You will be redirected to l
 ##### <a name="Navigation"></a>General Navigation:
 Side navigation: Click on the buttons to navigate to your desired page. “Popscoot” logo on top will navigate you to popscoot official website.
 Toolbar: Click on avatar on top right corner to toggle user menu, where you can access and modify your particulars in your profile page and log out of the system. Click on gears to select language (simplified Chinese work in progress). While browsing through different pages, a series of link buttons will appear in the toolbar (breadcrumbs), you can click on buttons to navigate to pages you visited earlier. When the links get too long, the later ones will be hidden. You can make the series shorter by clicking on buttons in front
+![navigation][navigation]
 
 ##### <a name="Filter"></a>Filter headers:
 Click on the plus button to add a new entry. You can select number of items per page and the order of the elements from the dropdowns in the middle. In order drop down, by clicking on the order parameter again will put the items in reverse of the same ordering parameter. You can type any keyword in the search field.
 ![filter header][filter]
 
-##### <a name="Image Upload"></a>Image upload:
+##### <a name="ImageUpload"></a>Image upload:
 Images in our system (including avatars for accounts, scooters, images for promotions and helps (work in progress)) are changeable. Click on the camera icon on the top left corner, an image upload area will show up. After successful upload of a new image, remember to click on update button to update the item.
 ![image upload][image upload]
 
