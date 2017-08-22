@@ -3,28 +3,29 @@
 	<md-card>
 		<md-card-content>
 			<form name="updateAccountForm" ng-submit="createAccount()">
-
 				<div layout-align="center center">
 					<md-input-container class="md-block"> 
 						<label>Email</label>
 						<md-icon><i class="fa fa-envelope"></i></md-icon>
-						<input ng-model="account.email" type="email" >
+						<input ng-model="account.email" type="email" required>
 					</md-input-container>
 					<md-input-container class="md-block">
 						<label>Username</label>
 						<md-icon><i class="fa fa-font"></i></md-icon>
-						<input ng-model="account.username" >
+						<input ng-model="account.username" type="text" required>
 					</md-input-container>
 					<md-input-container class="md-block">
 						<label>Password</label>
 						<md-icon><i class="fa fa-asterisk"></i></md-icon>
-						<input ng-model="account.password" type="password">
+						<input ng-model="account.password" type="password" required>
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Tag</label>
+						<md-icon><i class="fa fa-tag"></i></md-icon>
+						<input ng-model="account.tag" type="text">
 					</md-input-container>
 				</div>
-
-
 				<div>
-					
 					<div flex layout="row">					
 						<md-button class="md-primary md-raised popscoot-primary" flex type="submit" ng-disabled="updateAccountForm.$invalid">Create</md-button>
 					</div>

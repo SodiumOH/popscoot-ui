@@ -3,6 +3,7 @@ angular.module('app.account.ctrl', [])
 .controller('AccountCtrl', function($timeout, $mdDialog, $location, $routeParams, $scope, httpService, configuration, $mdToast) {
 	console.log('this is AccountCtrl');
 	$scope.itemsOrder;
+	$scope.reverse = true;
 	$scope.search;
 	var accountId = $routeParams.id;
 	$scope.$emit('BC', 
@@ -43,7 +44,9 @@ angular.module('app.account.ctrl', [])
 	$scope.enquiries = [];
 	$scope.hasBank = false;
 
-
+	$scope.order = function(){
+		$scope.reverse = !$scope.reverse;
+	}
 
 	function getAccount() {
 		httpService.httpGet($scope.url.account, 'GET_ACCOUNT');
@@ -373,7 +376,8 @@ angular.module('app.account.ctrl', [])
 		var updateForm = {
 			accountId: $scope.init_form.accountId,
 			birthday: moment($scope.account.birthday).format("YYYY-MM-DDTHH:MM:SSZ"),
-			mediaId: mediaId
+			mediaId: mediaId,
+			tag: $scope.account.tag
 		}
 		console.log(updateForm);
 		httpService.httpPut($scope.url.account, updateForm, 'UPDATE_ACCOUNT');
@@ -703,7 +707,8 @@ angular.module('app.account.ctrl', [])
 		var createForm = {
 			username: $scope.account.username,
 			email: $scope.account.email,
-			password: $scope.account.password
+			password: $scope.account.password,
+			tag: $scope.account.tag
 		}
 		console.log(createForm);
 		httpService.httpPost($scope.url.account, createForm, 'CREATE_ACCOUNT');

@@ -167,7 +167,8 @@ angular.module('POPSCOOT', ['chart.js', 'ngMaterialDatePicker', 'dndLists', 'pas
 		order: "order",
 		createHelp: "create new help",
 		content: "content",
-		title: "title"
+		title: "title",
+		tag: "tag"
 });
 	$translateProvider.translations('ch', {
 		dashboard: "控制台",
@@ -289,7 +290,8 @@ angular.module('POPSCOOT', ['chart.js', 'ngMaterialDatePicker', 'dndLists', 'pas
 		order: "顺序",
 		createHelp: "新增",
 		content: "内容",
-		title: "标题"
+		title: "标题",
+		tag: "标签"
 
 	});
 	$translateProvider.useSanitizeValueStrategy('escape');

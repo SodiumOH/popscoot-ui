@@ -3,6 +3,7 @@
 		<md-card-title>
 			<md-card-title-text>
 				<span class="md-headline">{{'booking'|translate}}: {{booking.bookingId}}</span>
+				<span class="md-subhead">{{'status'|translate}}: {{booking.status|booking_status|text_fmt: 1}}</span>
 				<span class="md-subhead">{{'date'|translate}}: {{booking.date|rd:0}}</span>
 			</md-card-title-text>
 		</md-card-title>

@@ -70,8 +70,7 @@ md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolb
   background-color: #C0C0C0;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
-  transform: rotate(90deg); }
+  background-size: contain; }
 
 .img-preview {
   background-repeat: no-repeat;
@@ -93,6 +92,9 @@ md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolb
 
 .account-tabs {
   min-height: 607.898px; }
+
+.account-card-actions {
+  margin-top: -16px; }
 
 .avatar-icon {
   border-radius: 100%;

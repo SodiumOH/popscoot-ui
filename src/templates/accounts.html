@@ -39,16 +39,16 @@
              <md-card-title>
               <md-card-title-text md-truncate class="popscoot-card">
                <span class="md-headline">{{account.username}}</span>
-               <span class="md-subhead"><i class="fa fa-envelope" aria-hidden="true"></i>: {{account.email}}</span>
-               <span class="md-subhead"><i class="fa fa-calendar" aria-hidden="true"></i>: {{account.date|rd:0}}</span>
-
+               <span class="md-subhead"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i>: {{account.email}}</span>
+               <span class="md-subhead"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i>: {{account.date|rd:0}}</span>
+               <span class="md-subhead"><i class="fa fa-fw fa-tag" aria-hidden="true"></i>: {{account.tag|default_val:'Nan.'}}</span>
              </md-card-title-text>
              <md-card-title-media>
                <div class="md-media-sm card-media avatar" ng-style="account.avatar.url|bg_css">            
                </div>
              </md-card-title-media>
            </md-card-title>
-           <md-card-actions layout="row" layout-align="end center"> 
+           <md-card-actions class="account-card-actions" layout="row" layout-align="end center"> 
            <md-switch ng-model="account.active" aria-label="Switch 1" ng-change="activate(account.accountId)"></md-switch>
             <md-button class="md-raised" ng-href="#/accounts/{{account.accountId}}">{{'details'|translate}}</md-button>
           </md-card-actions>

@@ -22,6 +22,17 @@ angular.module('app.filters', [])
         return (!value) ? '' : value.replace(/ /g, '');
     };
 })
+
+.filter('default_val', function() {
+	return function (ori, def) {
+		if(!ori) {
+			return def;
+		} else {
+			return ori;
+		}
+	};
+})
+
 .filter('rd', function(){
 	return function(value, opt){
 		switch(opt){

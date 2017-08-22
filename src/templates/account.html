@@ -42,6 +42,10 @@
 								<label class="large form-label">{{'socialMedia' | translate}}</label>
 								<input class="large form-input" ng-model="account.socialMedia" disabled>
 							</md-input-container>
+							<md-input-container class="md-block">
+								<label class="large form-label">{{'tag' | translate}}</label>
+								<input class="large form-input" ng-model="account.tag">
+							</md-input-container>
 							<div layout="row" layout-align="space-between center">									
 								<md-input-container class="md-block">
 									<label class="large">{{'birthday' | translate}}</label>
@@ -89,7 +93,7 @@
 									<md-option value="date" ng-click="order()">{{'latest'|translate}}</md-option>
 									<md-option value="username" ng-click="order()">{{'username'|translate}}</md-option>
 									<md-option value="active" ng-click="order()">{{'active'|translate}}</md-option>
-								</md-select>				
+								</md-select>
 							</div> 
 							<div>
 								<span>{{'create'|translate}}</span>
@@ -102,20 +106,21 @@
 						<md-divider></md-divider>
 
 						<md-content layout="row" layout-wrap>				
-							<div ng-repeat="item in bookings" flex="100" flex-gt-xs="50" flex-gt-md="33">
+							<div ng-repeat="item in bookings|orderBy:itemsOrder:reverse" flex="100" flex-gt-xs="50" flex-gt-md="33">
 								<md-card id="bookingCard">
 									<md-card-title>
 										<md-card-title-text>
-											<span class="md-headline large"><i class="fa fa-book" aria-hidden="true"></i>
+											<span class="md-headline large"><i class="fa fa-book fa-fw" aria-hidden="true"></i>
 											{{'id'|translate|text_fmt:2}}: {{item.bookingId}}</span>
-											<span class="sub-head medium"><i class="fa fa-clock-o" aria-hidden="true"></i>
+											<span class="sub-head medium"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
 											{{'start'|translate}}: {{ item.startDate|rd:1 }}</span>
-											<span class="sub-head medium"><i class="fa fa-clock-o" aria-hidden="true"></i>
+											<span class="sub-head medium"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
 											{{'end'|translate}}: {{ item.endDate|rd:1 }}</span>
-											<span class="sub-head medium"><i class="fa fa-map-marker" aria-hidden="true"></i>: {{ item.destinationName}}</span>
+											<span class="sub-head medium"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i>: {{ item.destinationName}}</span>
 											<span class="sub-head medium">
-												<i class="fa fa-motorcycle" aria-hidden="true"></i>: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
-											</span>						
+												<i class="fa fa-motorcycle fa-fw" aria-hidden="true"></i>: <a class="sub-head" ng-href="{{'#/scooters/'+item.scooter.scooterId}}">{{item.scooter.name}}</a>		
+											</span>
+											<span class="sub-head medium"><i class="fa fa-book fa-fw"></i>: {{'status'|translate}}: {{item.status|booking_status|text_fmt: 1}}</span>					
 										</md-card-title-text>
 									</md-card-title>
 									<md-card-actions layout="row" layout-align="end center">							
